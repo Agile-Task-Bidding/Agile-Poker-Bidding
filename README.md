@@ -1,2 +1,2 @@
 # Agile-Poker-Bidding
-A site where Agile/Scrum teams can utilize in bidding upcoming tasks.
+A site that Agile/Scrum teams can utilize in bidding upcoming tasks.
