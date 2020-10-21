@@ -16,11 +16,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Serve up files from the build directory
+console.log(__dirname);
 app.use(express.static(path.join(__dirname, '../ui/build')));
 
 // The home page
 app.get(/^\/(?!api).*/, function(req, res) {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../ui/build', 'index.html'));
 });
 
 // Listen on the specified port for traffic
