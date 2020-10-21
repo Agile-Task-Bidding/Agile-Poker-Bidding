@@ -1,12 +1,17 @@
 const express = require('express');
+const socketIo = require('socket.io');
 const http = require('http');
-const app = express();
-const server = http.createServer(app);
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
-const PORT = 80;
+
+const PORT = 3000;
+const SOCKET_PORT = 3001;
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // Set the app to use some libraries
 app.use(cors());
@@ -17,10 +22,24 @@ app.use(express.static(path.join(__dirname, '../ui/build')));
 
 // The home page
 app.get(/^\/(?!api).*/, function(req, res) {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
+    //res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 // Listen on the specified port for traffic
 app.listen(PORT, function() {
     console.log('Server is running on Port: ' + PORT);
 });
+
+// Listen for Socket.io connections
+io.on('connection', (socket) => {
+    console.log('New Connection!');
+    socket.on('disconnect', () => {
+        console.log('Disconnected!');
+    })
+    socket.on('client_info', (clientInfo) => {
+        console.log('Client Name: ' + clientInfo.name);
+        console.log('Greeting: ' + clientInfo.greeting);
+    });
+});
+
+io.listen(SOCKET_PORT);
