@@ -38,6 +38,7 @@ class HomePage extends Component {
                     Click for Socket.io Emit!
                 </Button>
             </>
+
         );
     }
 }

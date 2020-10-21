@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, '../ui/build')));
 
 // The home page
 app.get(/^\/(?!api).*/, function(req, res) {
-    //res.sendFile(path.join(__dirname, '../build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 // Listen on the specified port for traffic
