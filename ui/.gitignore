@@ -6,6 +6,10 @@
 .pnp.js
 package-lock.json
 
+# Config file (which should be different between localhost
+# and server)
+/src/config.js
+
 # testing
 /coverage
 

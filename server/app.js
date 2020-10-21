@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const socketIo = require('socket.io');
 const http = require('http');
@@ -5,9 +6,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
-
-const PORT = 3000;
-const SOCKET_PORT = 3001;
 
 const app = express();
 const server = http.createServer(app);
@@ -26,7 +24,7 @@ app.get(/^\/(?!api).*/, function(req, res) {
 });
 
 // Listen on the specified port for traffic
-app.listen(PORT, function() {
+app.listen(process.env.WEBSITE_PORT, function() {
     console.log('Server is running on Port: ' + PORT);
 });
 
@@ -42,4 +40,4 @@ io.on('connection', (socket) => {
     });
 });
 
-io.listen(SOCKET_PORT);
+io.listen(process.env.SOCKET_PORT);
