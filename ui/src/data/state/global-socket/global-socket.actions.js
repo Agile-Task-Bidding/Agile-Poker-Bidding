@@ -7,7 +7,7 @@ export function createGlobalSocket() {
     return async(dispatch, getState) => {
         try {
             if (!globalSocketSelector(getState())) {
-                const socket = io(settings.WEBSOCKET_URL);
+                const socket = io(settings.SOCKET_URL, { path: settings.ROOM_SERVICE_SOCKET });
                 socket.on('connect', () => {
                     console.log('Connected!');
                     dispatch({ type: types.SET_GLOBAL_SOCKET, socket });
