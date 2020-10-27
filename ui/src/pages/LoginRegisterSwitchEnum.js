@@ -1,0 +1,4 @@
+export default {
+    LOGIN_STATE: 'LOGIN_STATE',
+    REGISTER_STATE: 'REGISTER_STATE',
+};
