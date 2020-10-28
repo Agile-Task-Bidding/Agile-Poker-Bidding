@@ -1,4 +1,3 @@
-const { throttle } = require('lodash');
 const socketIo = require('socket.io');
 const roomAPI = require('./room');
 
@@ -26,7 +25,7 @@ class RoomService {
         // Handle a user disconnecting from the room service socket.
         socket.on('disconnect', () => this.onDisconnect(socket));
         // Handle a user joining the room. Can also be used for the host to start the room (socket logic only).
-        socket.on('join_room', event => this.clientJoinRoomEvent(event, socket));
+        socket.on('join_room', eventInfo => this.clientJoinRoomEvent(eventInfo, socket));
     }
 
     /**
@@ -62,23 +61,23 @@ class RoomService {
      * NOTE: A separate call should be made to check if the room is active in the server before
      * calling this function.
      */
-    clientJoinRoomEvent(event, socket) {
+    clientJoinRoomEvent(eventInfo, socket) {
         if (
-            !event.roomID
-            || !event.username
+            !eventInfo.roomID
+            || !eventInfo.username
         ) {
             console.log('Invalid event info passed to clientJoinRoom.');
         } else {
             // If the specified roomID is not already in the list of active rooms, create it
-            if (!this.activeRoomsByID[event.roomID]) {
-                this.createRoom(event.roomID);
+            if (!this.activeRoomsByID[eventInfo.roomID]) {
+                this.createRoom(eventInfo.roomID);
             }
             // Grab the correct room from the list of active rooms
-            const room = this.activeRoomsByID[event.roomID];
+            const room = this.activeRoomsByID[eventInfo.roomID];
             // Join the user to the room
-            room.joinUserToRoom(event.username, socket);
+            room.joinUserToRoom(eventInfo.username, socket);
             // Update the socket info
-            this.activeSocketsByID[socket.id].connectedTo = event.roomID;
+            this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
         }
     }
 }
