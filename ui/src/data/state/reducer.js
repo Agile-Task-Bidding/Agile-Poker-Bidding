@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import globalSocket from './global-socket/global-socket.reducer';
+import roomService from './room-service/room-service.reducer';
 
 const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
-    globalSocket,
+    roomService,
 });
 
 export default createRootReducer;
