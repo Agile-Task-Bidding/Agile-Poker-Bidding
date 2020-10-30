@@ -5,22 +5,24 @@ import { roomServiceSocketSelector } from './room-service.selectors';
 
 export function createRoomServiceConnection() {
     return async (dispatch, getState) => {
-        try {
-            if (!roomServiceSocketSelector(getState())) {
-                const socket = io(settings.SOCKET_URL, { path: settings.ROOM_SERVICE_SOCKET });
-                socket.on('connect', () => {
-                    console.log('Connected!');
-                });
-                socket.on('disconnect', () => {
-                    console.log('Disconnected');
-                });
-                dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket });
+        return new Promise((resolve, reject) => {
+            try {
+                if (!roomServiceSocketSelector(getState())) {
+                    const socket = io(settings.SOCKET_URL, { path: settings.ROOM_SERVICE_SOCKET });
+                    socket.on('connect', () => {
+                        console.log('Connected!');
+                        resolve(socket);
+                    });
+                    socket.on('disconnect', () => {
+                        console.log('Disconnected');
+                    });
+                    dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket });
+                }
+            } catch (err) {
+                dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket: null });
+                reject(err);
             }
-        } catch (err) {
-            dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket: null });
-            console.error(err);
-            throw err;
-        }
+        });
     }
 }
 

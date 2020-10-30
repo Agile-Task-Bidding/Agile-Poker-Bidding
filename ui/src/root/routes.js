@@ -1,6 +1,7 @@
 import React from 'react';
 import{ Redirect, Route, Switch } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
+import CreatePage from '../pages/create/CreatePage';
 
 export default (
     <Switch>
@@ -8,6 +9,11 @@ export default (
             exact
             path='/'
             component={HomePage}
+        />
+        <Route
+            exact
+            path='/create'
+            component={CreatePage}
         />
     </Switch>
 );
