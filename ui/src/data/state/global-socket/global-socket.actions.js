@@ -7,18 +7,24 @@ export function createGlobalSocket() {
   return async (dispatch, getState) => {
     try {
       if (!globalSocketSelector(getState())) {
-        const socket = io(settings.SOCKET_URL, {
-          path: settings.ROOM_SERVICE_SOCKET,
+        return new Promise((resolve, reject) => {
+          const socket = io(settings.WEBSOCKET_URL, {
+            origins: '*:*', //TODO probably security vulnerability
+          })
+          socket.on('connect', () => {
+            console.log('Connected!')
+            dispatch({ type: types.SET_GLOBAL_SOCKET, socket })
+            resolve(socket)
+          })
+          socket.on('error', (err) => {
+            reject(err)
+          })
+          socket.on('reconnect', () => console.log('reconnecting...'))
+          socket.on('disconnect', () => {
+            console.log('Disconnected')
+            dispatch({ type: types.SET_GLOBAL_SOCKET, socket: null })
+          })
         })
-        socket.on('connect', () => {
-          console.log('Connected!')
-          dispatch({ type: types.SET_GLOBAL_SOCKET, socket })
-        })
-        socket.on('disconnect', () => {
-          console.log('Disconnected')
-          dispatch({ type: types.SET_GLOBAL_SOCKET, socket: null })
-        })
-        return socket
       }
     } catch (err) {
       dispatch({ type: types.SET_GLOBAL_SOCKET, socket: null })

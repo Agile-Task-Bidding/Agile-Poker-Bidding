@@ -11,6 +11,8 @@ import {
   CardActionArea,
   CardActions,
 } from '@material-ui/core'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import { globalSocketSelector } from '../data/state/global-socket/global-socket.selectors'
 import { createGlobalSocket } from '../data/state/global-socket/global-socket.actions'
 
@@ -72,7 +74,7 @@ const EditBiddingCard = ({
   )
 }
 
-const EditZone = () => {
+const EditZoneRaw = ({ createGlobalSocket }) => {
   const history = useHistory()
   const [launched, setLaunched] = useState(false)
   const [cards, setCards] = useState([
@@ -130,34 +132,34 @@ const EditZone = () => {
   const startGame = async () => {
     try {
       setLaunched(true)
+
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword('ryglaspey@knights.ucf.edu', 'password')
+
+      const idToken = await firebase.auth().currentUser.getIdToken(true)
+
       const config = {
-        allowSitOut: true,
+        allowAbstain: true,
         deck: cards,
       }
-      console.log(
-        'socket',
+
+      console.log('api_call', '/SaveConfig', { idToken, config })
+      console.log('socket_emit', 'start_game', { idToken, config })
+
+      const socket = await createGlobalSocket()
+      socket.emit('client_info', 'yes')
+      socket.emit(
         'start_game',
         JSON.stringify({
-          authToken: 'BEARER KSDLFJ894WJ89AHF9HASDF', //this is nonsense
+          idToken,
           config,
         })
       )
-      console.log('api_call', '/SaveConfig', { config })
-
-      //   const socket = await createGlobalSocket()
-      //   socket.send(
-      //     'start_game',
-      //     JSON.stringify({
-      //       authToken: 'BEARER KSDLFJ894WJ89AHF9HASDF', //this is nonsense
-      //       config: {
-      //         allowSitOut: true,
-      //         deck: cards,
-      //       },
-      //     })
-      //   )
 
       history.push('/room/afdafsd')
     } catch (err) {
+      console.error(err)
       setLaunched(false)
     }
   }
@@ -184,6 +186,16 @@ const EditZone = () => {
     </div>
   )
 }
+const mapStateToPropsEdit = (state) => {
+  return {}
+}
+const mapDispatchToPropsEdit = {
+  createGlobalSocket,
+}
+const EditZone = connect(
+  mapStateToPropsEdit,
+  mapDispatchToPropsEdit
+)(EditZoneRaw)
 
 const CreatePage = ({ createGlobalSocket }) => {
   return (
