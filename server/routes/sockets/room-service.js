@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const roomAPI = require('./room');
+const admin = require('firebase-admin');
 
 // Set up the socket server
 class RoomService {
@@ -26,6 +27,8 @@ class RoomService {
         socket.on('disconnect', () => this.onDisconnect(socket));
         // Handle a user joining the room. Can also be used for the host to start the room (socket logic only).
         socket.on('join_room', eventInfo => this.clientJoinRoomEvent(eventInfo, socket));
+        // Handle authentication test
+        socket.on('verify_me', eventInfo => this.onVerifyMe(eventInfo, socket));
     }
 
     /**
@@ -78,6 +81,19 @@ class RoomService {
             room.joinUserToRoom(eventInfo.username, socket);
             // Update the socket info
             this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
+        }
+    }
+
+    async onVerifyMe(eventInfo, socket) {
+        try {
+            const decoded = await admin.auth().verifyIdToken(eventInfo.idToken)
+            console.log(decoded);
+            socket.emit('verified', { verified: true });
+        } catch (err) {
+            console.log(err);
+            if (err.code === 'INVALID_ID_TOKEN') {
+                socket.emit('verified', { verified: false });
+            }
         }
     }
 }
