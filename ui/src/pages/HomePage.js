@@ -11,7 +11,7 @@ import {
 class HomePage extends Component {
     state = {
         roomID: '',
-        username: '',
+        nickname: '',
     };
 
     async componentDidMount() {
@@ -21,11 +21,11 @@ class HomePage extends Component {
     }
 
     onUserJoined(event) {
-        console.log(event.username + ' has joined the room!');
+        console.log(event.nickname + ' has joined the room!');
     }
 
     onUserDisconnected(event) {
-        console.log(event.username + ' has disconnected from the room!');
+        console.log(event.nickname + ' has disconnected from the room!');
     }
 
     render() {
@@ -37,11 +37,11 @@ class HomePage extends Component {
                     onChange={event => this.setState({ roomID: event.target.value })}
                 />
                 <TextField
-                    placeholder={'Username'}
-                    value={this.state.username}
-                    onChange={event => this.setState({ username: event.target.value })}
+                    placeholder={'Nickname'}
+                    value={this.state.nickname}
+                    onChange={event => this.setState({ nickname: event.target.value })}
                 />
-                <Button onClick={() => this.props.joinRoom(this.state.roomID, this.state.username)}>
+                <Button onClick={() => this.props.joinRoom(this.state.roomID, this.state.nickname)}>
                     Join Room
                 </Button>
             </>
