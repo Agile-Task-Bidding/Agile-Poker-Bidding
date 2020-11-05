@@ -1,19 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../components/icon/logo.svg'
 import './Login.css'
 import { Login, Register } from '../components/login/index'
+import { AppProvider } from '../components/login/context'
+import { makeStyles } from '@material-ui/core/styles'
+
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+// import { Modal } from '../components/login/modal'
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
 class LoginRegisterPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isLogginActive: true,
+      isModalOn: false,
+      user: {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      },
     }
   }
+
+  // showModal() {
+  //   const { isModalOn } = this.state
+
+  //   if (isModalOn) {
+  //     this.signModal.classList.remove('modal')
+  //   } else {
+  //     this.signModal.classList.add('modal')
+  //   }
+  //   this.setState((prevState) => ({
+  //     isModalOn: !prevState.isModalOn,
+  //   }))
+  // }
+
+  // showModal = () => {
+  //   this.setState({ show: true })
+  // }
+
+  // hideModal = () => {
+  //   this.setState({ show: false })
+  // }
 
   componentDidMount() {
     //Add .right by default
     this.rightSide.classList.add('right')
+  }
+
+  handleChange = (event) => {
+    const { user } = this.state
+    user[event.target.name] = event.target.value
+    this.setState({ user })
   }
 
   changeState() {
@@ -33,14 +79,79 @@ class LoginRegisterPage extends React.Component {
 
   render() {
     const { isLogginActive } = this.state
+    const { email } = this.state
+    const { isModalOn } = this.state
+    const { user } = this.state
     const current = isLogginActive ? 'Register' : 'Login'
     const currentActive = isLogginActive ? 'login' : 'register'
+
+    const handleClickOpen = () => {
+      this.setState({ isModalOn: true })
+    }
+
+    const handleClose = () => {
+      this.setState({ isModalOn: false })
+    }
+
     return (
       <div className='App'>
         <div className='login'>
+          {/* <Modal /> */}
+
+          <Dialog
+            open={this.state.isModalOn}
+            aria-labelledby='form-dialog-title'
+          >
+            <DialogTitle id='form-dialog-title'>Forgot Password?</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Enter your email below to reset your password
+              </DialogContentText>
+
+              <ValidatorForm
+                ref='form'
+                onSubmit={this.handleSubmit}
+                onError={(errors) => console.log(errors)}
+              >
+                <div ClassName='form-group'>
+                  <TextValidator
+                    label='E-mail'
+                    onChange={this.handleChange}
+                    name='email'
+                    value={user.email}
+                    validators={['required', 'isEmail']}
+                    errorMessages={['Required Field', 'Email is invalid']}
+                    variant='filled'
+                    margin='dense'
+                    InputProps={{ disableUnderline: true }}
+                    fullWidth
+                  />
+                  {/* <input type='text' name='email' placeholder='E-mail' /> */}
+                </div>
+              </ValidatorForm>
+            </DialogContent>
+            <DialogActions>
+              {/* <Button onClick={handleClose} type='button' className='btn'>
+                Cancel
+              </Button>
+              <Button onClick={handleClose} type='button' className='btn'>
+                Reset
+              </Button> */}
+              <button onClick={handleClose} type='button' className='btn'>
+                Cancel
+              </button>
+              <button onClick={handleClose} type='button' className='btn'>
+                Reset
+              </button>
+            </DialogActions>
+          </Dialog>
+
           <div className='container' ref={(ref) => (this.container = ref)}>
             {isLogginActive && (
-              <Login containerRef={(ref) => (this.current = ref)} />
+              <Login
+                containerRef={(ref) => (this.current = ref)}
+                onForgotPassword={handleClickOpen}
+              />
             )}
             {!isLogginActive && (
               <Register containerRef={(ref) => (this.current = ref)} />

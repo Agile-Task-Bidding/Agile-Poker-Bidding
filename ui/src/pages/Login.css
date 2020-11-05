@@ -3,7 +3,18 @@
 /* body {
   margin: 0;
 } */
+
+body {
+  height: 100%;
+  background: rgba(43, 132, 237, 1);
+  background: radial-gradient(
+    circle,
+    rgba(234, 243, 253, 1) 0%,
+    rgba(44, 99, 201, 1) 100%
+  );
+}
 .App {
+  min-height: 100vh;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -73,7 +84,7 @@
   flex-direction: column;
   justify-content: center;
   height: 90%;
-  background-color: #1608b5;
+  background-color: #2b84ed;
   width: 100%;
   position: absolute;
   right: -34%;
@@ -108,14 +119,15 @@
   font-size: 21px;
   padding: 5px 20px;
   border: 0;
-  background-color: #1608b5;
+  background-color: #2b84ed;
   color: #fff;
   border-radius: 3px;
   transition: all 250ms ease-in-out;
   cursor: pointer;
+  margin: 0.25em;
 }
 .btn:hover {
-  background-color: #0c064b;
+  background-color: #1e5ca6;
 }
 .btn:focus {
   outline: none;
