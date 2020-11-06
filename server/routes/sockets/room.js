@@ -81,6 +81,10 @@ class Room {
         _.remove(this.roomState.connectedUsers, (user) => {
             return user.socket.id === socket.id;
         });
+        // Remove mention of the user's vote from the voteByUserID object
+        _.remove(this.roomState.voteByUserID, (user) => {
+            return user.socket.id === socket.id;
+        });
         // Emit a room_state_changed message.
         this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
     }
