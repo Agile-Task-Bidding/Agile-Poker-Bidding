@@ -4,7 +4,7 @@ import { Paper } from '@material-ui/core'
 
 const CardFrame = ({children, className, ...thruProps}) => {
     return (
-        <Paper className={css(styles.card, className)} elevation={1} {...thruProps}>
+        <Paper className={css(styles.card) + (className ? ' ' + className : '')} elevation={1} {...thruProps}>
             {children}
         </Paper>
     );

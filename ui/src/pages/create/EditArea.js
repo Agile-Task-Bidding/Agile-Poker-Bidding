@@ -10,7 +10,7 @@ import EditCardGrid from './EditCardGrid'
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors';
 import { createRoomServiceConnection } from '../../data/state/room-service/room-service.actions';
 
-const EditArea = ({ onSave, onSubmit, createRoomServiceConnection }) => {
+const EditArea = ({ onSave, onSubmit, roomServiceSocket, createRoomServiceConnection }) => {
   const [loading, setLoading] = useState(false)
   const [cards, setCards] = useState([
     {
@@ -66,19 +66,22 @@ const EditArea = ({ onSave, onSubmit, createRoomServiceConnection }) => {
 
       const socket = await createRoomServiceConnection()
       console.log(socket);
-      socket.on('verified', (data) => {
-        console.log('verified', data);
-      })
-      socket.emit('verify_me', { idToken })
-      socket.emit(
-        'start_game',
-        {
-          idToken,
-          config,
-        }
-      )
-
-      history.push('/room/afdafsd')
+      socket.on('connect', () => {
+        console.log('herer');
+        socket.on('verified', (data) => {
+          console.log('verified', data);
+        })
+        socket.emit('verify_me', { idToken })
+        socket.emit(
+          'start_game',
+          {
+            idToken,
+            config,
+          }
+        )
+  
+        history.push('/room/afdafsd')
+      });
     } catch (err) {
       console.error(err)
       setLoading(false)
@@ -125,7 +128,9 @@ const EditArea = ({ onSave, onSubmit, createRoomServiceConnection }) => {
 }
 
 const mapStateToProps = (state) => {
-  roomServiceSocket: roomServiceSocketSelector(state)
+  return {
+    roomServiceSocket: roomServiceSocketSelector(state)
+  }
 };
 
 const mapDispatchToProps = {
