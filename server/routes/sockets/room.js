@@ -36,10 +36,10 @@ class Room {
      */
     checkIfVotingComplete() {
         // Check if a vote exists for each user in the list of voted users
-        const allUsersVoted = true;
+        let allUsersVoted = true;
         for (const user of this.roomState.connectedUsers) {
-            const voteValue = this.roomState.voteByUserID[user.socket.id];
-            if (!voteValue) {
+            const voteValue = this.roomState.voteByUserID[user.socketID];
+            if (voteValue === null) {
                 allUsersVoted = false;
                 break;
             }
@@ -55,7 +55,7 @@ class Room {
      */
     getUserFromState(socket) {
         return _.find(this.roomState.connectedUsers, (user) => {
-            return socket.id === user.socket.id;
+            return socket.id === user.socketID;
         });
     }
 
@@ -70,7 +70,7 @@ class Room {
      * Emit the specified event to the specific user from connectedUsers array.
      */
     emitUserEvent(event, user, eventInfo) {
-        this.ioRef.to(user.socket.id).emit(event, eventInfo);
+        this.ioRef.to(user.socketID).emit(event, eventInfo);
     }
 
     /**
@@ -79,11 +79,11 @@ class Room {
     disconnectUserFromRoom(socket) {
         // Remove the user from the list of connected users.
         _.remove(this.roomState.connectedUsers, (user) => {
-            return user.socket.id === socket.id;
+            return user.socketID === socket.id;
         });
         // Remove mention of the user's vote from the voteByUserID object
         _.remove(this.roomState.voteByUserID, (user) => {
-            return user.socket.id === socket.id;
+            return user.socketID === socket.id;
         });
         // Emit a room_state_changed message.
         this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
@@ -96,7 +96,7 @@ class Room {
     disconnectAllUsers() {
         for (const user of this.roomState.connectedUsers) {
             // Disconnect the user from the room channel.
-            user.socket.leave(this.roomID);
+            this.ioRef.sockets.sockets[user.socketID].leave(this.roomID);
             // Emit a host_closed_connection event to the user.
             this.emitUserEvent('host_closed_connection', user);
         }
@@ -107,13 +107,13 @@ class Room {
      */
     kickUser(user) {
         // Check if the user is in the list of connectedUsers.
-        const existingUser = this.getUserFromState(user.socket);
+        const existingUser = this.getUserFromState(this.ioRef.sockets.sockets[user.socketID]);
         if (existingUser) {
             // Disconnect the user from the room channel.
-            existingUser.socket.leave(this.roomID);
+            this.ioRef.sockets.sockets[existingUser.socketID].leave(this.roomID);
             // Remove the user from the list of connected users.
             _.remove(this.roomState.connectedUsers, (connectedUser) => {
-                return user.socket.id === connectedUser.socket.id;
+                return user.socketID === connectedUser.socketID;
             });
             // Emit a room_state_changed message to everyone in the room.
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
@@ -136,7 +136,7 @@ class Room {
             // Store info about the connection in the connectedUsers array
             this.roomState.connectedUsers.push({
                 nickname,
-                socket,
+                socketID: socket.id,
             });
             // Set the user's vote to null to signify they have not voted yet
             this.roomState.voteByUserID[socket.id] = null;
@@ -145,7 +145,7 @@ class Room {
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', socket, { roomState });
+            this.emitUserEvent('join_success', socket, { roomState: this.roomState });
         }
     }
 
@@ -160,7 +160,7 @@ class Room {
             this.emitUserEvent('not_in_room_error', socket, { roomID });
         } else {
             // Set the user's vote in the roomState
-            this.roomState[voteByUserID] = this.roomState.deck[cardIndex].value;
+            this.roomState.voteByUserID[socket.id] = this.roomState.deck[cardIndex].value;
             // Check if the phase should be updated
             this.checkIfVotingComplete();
             // Emit a room_state_changed event to everyone in the room
@@ -181,7 +181,7 @@ class Room {
             this.emitUserEvent('not_in_room_error', socket, { roomID });
         } else {
             // Cancel the user's vote in the roomState
-            this.roomState[voteByUserID] = null;
+            this.roomState.voteByUserID[socket.id] = null;
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a vote_cancel_success event to the user
@@ -199,7 +199,7 @@ class Room {
             this.roomState.phase = Constants.VOTING_PHASE;
             // Reset everyone's votes
             for (const user of this.roomState.connectedUsers) {
-                this.roomState.voteByUserID[user.socket.id] = null;
+                this.roomState.voteByUserID[user.socketID] = null;
             }
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
