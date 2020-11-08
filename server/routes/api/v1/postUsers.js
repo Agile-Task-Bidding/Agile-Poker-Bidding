@@ -86,6 +86,19 @@ router.post('/users', async (req, res) => {
         return res.status(400).json({ error: { message: 'Malformed request' } });
     }
 
+    // Validate username constraints (must be alphanumeric)
+    if (!username.match(/^[0-9a-z]+$/)) {
+        return res.status(400).json({
+            error: { message: 'Username must be alphanumeric' }
+        });
+    } 
+    // Username length must be 16 or less
+    if (username.length > 16) {
+        return res.status(400).json({
+            error: { message: 'Username length must be 16 characters or less' }
+        });
+    }
+
     try {
         // Query the user collection to ensure username uniqueness
         if (await isUsernameTaken(username)) {
@@ -109,6 +122,9 @@ router.post('/users', async (req, res) => {
     } catch (e) {
         if (e.code == 'auth/email-already-exists') {
             return res.status(409).json({ error: { message: 'That email is already taken' } });
+        }
+        if (e.code == 'auth/invalid-email' || e.code == 'auth/invalid-password') {
+            return res.status(400).json({ error: { message: e.message } });
         }
 
         // There was a server error
