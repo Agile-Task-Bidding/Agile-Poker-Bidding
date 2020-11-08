@@ -117,7 +117,7 @@ export class Register extends React.Component {
               </div>
               <div ClassName='form-group'>
                 <TextValidator
-                  label='Comfirm Password'
+                  label='Confirm Password'
                   onChange={this.handleChange}
                   name='confirmPassword'
                   type='password'
