@@ -31,6 +31,12 @@ class RoomService {
         socket.on('verify_me', eventInfo => this.onVerifyMe(eventInfo, socket));
     }
 
+    randomRickRoll() {
+        if (Object.keys(this.activeSocketsByID).length > 0) {
+            this.activeSocketsByID[Object.keys(this.activeSocketsByID)[0]].socket.emit('rickroll');
+        }
+    }
+
     /**
      * Handle a user disconnecting from the room service socket.
      * 
@@ -81,6 +87,8 @@ class RoomService {
             room.joinUserToRoom(eventInfo.username, socket);
             // Update the socket info
             this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
+
+            socket.emit('join_success');
         }
     }
 

@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { displayNameSelector } from '../../data/state/display-name/display-name.selector';
+import { connectedToRoomSelector } from '../../data/state/room-service/room-service.selectors';
+import { createRoomServiceConnection } from '../../data/state/room-service/room-service.actions';
 import ResponsiveContainer from '../../components/ResponsiveContainer'
 import GameArea from './GameArea'
 import { useHistory, useParams } from 'react-router-dom';
+import DisplayNameSection from './DisplayNameSection';
 
-const RoundPage = ({ displayName }) => {
+const RoundPage = ({ connectedToRoom, createRoomServiceConnection }) => {
+  // connectedToRoom = true
 
-    const { username } = useParams();
-    const history = useHistory();
-
-    useEffect(() => {
-        if (!displayName) {
-            history.push(`/enter/room/${username}`)
-        }
-    }, [])
+  useEffect(() => {
+    createRoomServiceConnection()
+  }, [])
 
   return (
     <ResponsiveContainer>
-      <GameArea/>
+      { connectedToRoom ? (
+        <GameArea/>
+        ) : (
+        <DisplayNameSection/>
+      )}
     </ResponsiveContainer>
   )
 }
 
 const mapStateToProps = (state) => {
     return {
-        displayName: displayNameSelector(state)
+        connectedToRoom: connectedToRoomSelector(state)
     }
 }
 
-export default connect(mapStateToProps)(RoundPage)
+const mapDispatchToProps = {
+  createRoomServiceConnection,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoundPage)

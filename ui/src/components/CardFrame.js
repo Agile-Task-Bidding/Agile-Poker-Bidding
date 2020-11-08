@@ -12,13 +12,16 @@ const CardFrame = ({children, className, ...thruProps}) => {
 
 const styles = StyleSheet.create({
     card: {
+        borderRadius: '1em',
+        background: '#CBE1F7',
+        border: '0.5em solid rgba(0, 0, 0, 0.25)',
         '@media (max-width: 599px)': {
             width: 100,
-            height: 140,
+            height: 150,
         },
         '@media (min-width: 600px)': {
-            width: 250,
-            height: 375,
+            width: 200,
+            height: 300,
         },
     }
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 import { Typography, TextField, Button } from '@material-ui/core'
-import CardFrame from './CardFrame';
+import CardFrame from '../../components/CardFrame';
 
 
 const EditCard = ({ card, setCard, deleteCard }) => {

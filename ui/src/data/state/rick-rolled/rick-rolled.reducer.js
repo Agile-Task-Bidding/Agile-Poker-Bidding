@@ -1,15 +1,15 @@
 import * as types from '../action-types';
 
 const initialState = {
-    displayName: ''
-};
+    playing: false
+}
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case types.SET_DISPLAY_NAME:
+        case types.SET_RICK_ROLL_PLAYING:
             return {
                 ...state,
-                displayName: action.displayName,
+                playing: action.playing,
             };
         default:
             return state;

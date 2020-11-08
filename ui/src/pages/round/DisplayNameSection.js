@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import ResponsiveContainer from '../../components/ResponsiveContainer'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, CircularProgress } from '@material-ui/core'
 import {
     createRoomServiceConnection,
     joinRoom,
 } from '../../data/state/room-service/room-service.actions';
-import { setDisplayName } from '../../data/state/display-name/display-name.actions';
+import { setDisplayName } from '../../data/state/app-data/app-data.actions';
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors';
-import { displayNameSelector } from '../../data/state/display-name/display-name.selector';
+import { displayNameSelector } from '../../data/state/app-data/app-data.selector';
 
-const DisplayNamePage = ({ setDisplayName, roomServiceSocket }) => {
-    const history = useHistory()
+const DisplayNameSection = ({ displayName, setDisplayName, roomServiceSocket, joinRoom }) => {
+
     const { username } = useParams();
-
     const [formDisplayName, setFormDisplayName] = useState('');
 
     useEffect(() => {
@@ -27,11 +26,10 @@ const DisplayNamePage = ({ setDisplayName, roomServiceSocket }) => {
     const submit = async () => {
         localStorage.setItem('displayName', formDisplayName);
         setDisplayName(formDisplayName)
-        joinRoom(username, formDisplayName);
-        history.push(`/room/${username}`)
+        joinRoom(username, formDisplayName)
     }
 
-    const displayNameInvalid = formDisplayName.length == 0
+    const displayNameInvalid = (formDisplayName.length === 0)
     return (
         <ResponsiveContainer>
             <form
@@ -47,9 +45,12 @@ const DisplayNamePage = ({ setDisplayName, roomServiceSocket }) => {
                     error={displayNameInvalid}
                     onChange={event => setFormDisplayName(event.target.value)}
                 />
-                <Button type='submit' disabled={displayNameInvalid}>
+                <Button type='submit' disabled={displayNameInvalid || !!displayName}>
                     Continue
                 </Button>
+                {
+                    !!displayName ? (<CircularProgress/>) : null
+                }
             </form>
         </ResponsiveContainer>
     )
@@ -57,13 +58,15 @@ const DisplayNamePage = ({ setDisplayName, roomServiceSocket }) => {
 
 const mapStateToProps = (state) => {
   return {
-    roomServiceSocket: roomServiceSocketSelector(state)
+    roomServiceSocket: roomServiceSocketSelector(state),
+    displayName: displayNameSelector(state),
   }
 };
 
 const mapDispatchToProps = {
   createRoomServiceConnection,
   setDisplayName,
+  joinRoom,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayNamePage)
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayNameSection)

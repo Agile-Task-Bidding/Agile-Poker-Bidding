@@ -6,7 +6,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import EditCard from './EditCard'
 import AddCard from './AddCard'
-import EditCardGrid from './EditCardGrid'
+import EditCardGrid from '../../components/EditCardGrid'
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors';
 import { createRoomServiceConnection } from '../../data/state/room-service/room-service.actions';
 

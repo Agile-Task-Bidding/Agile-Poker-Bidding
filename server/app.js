@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const readline = require('readline');
 
 const app = express();
 const server = http.createServer(app);
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 app.use('/api/account', accountAPI);
 
 // Set up the app to use the imported sockets
-new roomServiceSocket.RoomService(server, '/sockets/room-service');
+const roomService = new roomServiceSocket.RoomService(server, '/sockets/room-service');
 
 // Serve up files from the build directory
 console.log(__dirname);
@@ -38,3 +39,15 @@ app.get(/^\/(?!api).*/, function(req, res) {
 app.listen(process.env.WEBSITE_PORT, function() {
     console.log('Server is running on Port: ' + process.env.WEBSITE_PORT);
 });
+
+const rl = readline.createInterface({
+    input: process.stdin,
+});
+
+rl.on('line', (input) => {
+    if (input === 'rickroll') {
+        roomService.randomRickRoll();
+    } else {
+        console.log('Unknown command');
+    }
+})

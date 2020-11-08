@@ -1,16 +1,18 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import roomService from './room-service/room-service.reducer';
-import displayName from './display-name/display-name.reducer';
+import appData from './app-data/app-data.reducer';
 import roundState from './round-state/round-state.reducer';
-import roomConfig from './room-config/room-config.reducer'
+import roomConfig from './room-config/room-config.reducer';
+import rickRolled from './rick-rolled/rick-rolled.reducer';
 
 const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
     roomService,
-    displayName,
+    appData,
     roundState,
     roomConfig,
+    rickRolled,
 });
 
 export default createRootReducer;

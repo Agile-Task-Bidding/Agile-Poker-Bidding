@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core'
-import CardFrame from './CardFrame';
+import CardFrame from '../../components/CardFrame';
 import { StyleSheet, css } from 'aphrodite';
 
 const AddCard = ({ onClick }) => {

@@ -2,9 +2,11 @@ import * as types from '../action-types';
 
 const initialState = {
     roomConfig: {
-        cards: [
-            { value: 3, tag: 'ez'},
+        deck: [
+            { value: 2, tag: 'ez'},
+            { value: 3, tag: 'yeet'},
             { value: 5, tag: 'yeet'},
+            { value: 8, tag: 'yeet'},
         ],
         allowAbstain: false
     }
