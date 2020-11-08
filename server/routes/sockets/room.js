@@ -205,6 +205,19 @@ class Room {
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
         }
     }
+
+    /**
+     * Force end the bidding phase in the room and proceed to the results phase.
+     */
+    forceEndBidding() {
+        // Check if the room is in the VOTING phase
+        if (this.roomState.phase === Constants.VOTING_PHASE) {
+            // Reset the room phase
+            this.roomState.phase = Constants.RESULTS_PHASE;
+            // Emit a room_state_changed event to everyone in the room
+            this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
+        }
+    }
 }
 
 module.exports.Room = Room;

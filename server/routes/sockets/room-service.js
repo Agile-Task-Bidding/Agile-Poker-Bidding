@@ -46,6 +46,8 @@ class RoomService {
         socket.on('kick_user', eventInfo => this.clientKickUserEvent(eventInfo, socket));
         // Handle a user starting a new round of voting. (Host)
         socket.on('start_new_round', eventInfo => this.clientStartNewRoundEvent(eventInfo, socket));
+        // Handle a user forcing the round to be over. (Host)
+        socket.on('force_end_bidding', eventInfo => this.clientForceEndBidding(eventInfo, socket));
     }
 
     /**
@@ -217,6 +219,23 @@ class RoomService {
             if (room) {
                 // Start a new round of voting in the room
                 room.startNewRound();
+            }
+        }
+    }
+
+    /**
+     * Have the user force end bidding in the specified room and proceed to the
+     * results phase.
+     */
+    clientForceEndBidding(eventInfo, socket) {
+        if (!eventInfo.roomID) {
+            Utils.DebugLog('Invalid event info passed to clientForceEndBidding.');
+        } else {
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Force end bidding in the room
+                room.forceEndBidding();
             }
         }
     }
