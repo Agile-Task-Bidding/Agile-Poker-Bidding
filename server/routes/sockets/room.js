@@ -85,6 +85,8 @@ class Room {
         _.remove(this.roomState.voteByUserID, (user) => {
             return user.socketID === socket.id;
         });
+        // Check if the voting phase can move to the results phase now
+        this.checkIfVotingComplete();
         // Emit a room_state_changed message.
         this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
     }
@@ -115,6 +117,8 @@ class Room {
             _.remove(this.roomState.connectedUsers, (connectedUser) => {
                 return user.socketID === connectedUser.socketID;
             });
+            // Check if the voting phase can move to the results phase now
+            this.checkIfVotingComplete();
             // Emit a room_state_changed message to everyone in the room.
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a host_closed_connection event to the kicked user.
