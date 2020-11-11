@@ -48,7 +48,12 @@ export function createRoomServiceConnection() {
     }
 }
 
-export function joinRoom(roomID, username) {
+/**
+ * Emits the specified event on to the room service socket hosted
+ * on the server; eventInfo stores the JavaScript object that should
+ * be sent with the event.
+ */
+export function emitEvent(event, eventInfo) {
     return async (dispatch, getState) => {
         try {
             const roomServiceSocket = roomServiceSocketSelector(getState());
@@ -56,11 +61,8 @@ export function joinRoom(roomID, username) {
                 console.error('You are not connected to the room service socket.');
             } else {
                 roomServiceSocket.emit(
-                    'join_room',
-                    {
-                        roomID,
-                        username,
-                    }
+                    event,
+                    eventInfo
                 );
             }
         } catch (err) {

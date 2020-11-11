@@ -7,7 +7,7 @@ const DisplayCard = ({ card, setCard, deleteCard }) => {
     return (
         <ButtonBase style={{ textDecoration: 'none' }}>
             <CardFrame elevation={1} className={css(styles.container)}>
-                <Typography variant='h4'>{card.value}</Typography>
+                <Typography variant='h1'>{card.value}</Typography>
                 <Typography variant='h5'>{card.tag}</Typography>
             </CardFrame>
         </ButtonBase>

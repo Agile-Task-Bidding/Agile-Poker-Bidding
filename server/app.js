@@ -6,9 +6,12 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const readline = require('readline');
+const admin = require('firebase-admin');
 
 const app = express();
 const server = http.createServer(app);
+
+admin.initializeApp()
 
 // Import all other API's that are going to be used
 const accountAPI = require('./routes/api/account');

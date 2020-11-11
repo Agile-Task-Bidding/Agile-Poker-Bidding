@@ -11,6 +11,9 @@ package-lock.json
 /src/config.js
 /src/firebaseConfig.js
 
+# Firebase config file
+/src/firebaseConfig.js
+
 # testing
 /coverage
 
