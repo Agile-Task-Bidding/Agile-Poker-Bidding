@@ -111,6 +111,7 @@ class Room {
         // Check if the user is in the list of connectedUsers.
         const existingUser = this.getUserFromState(this.ioRef.sockets.sockets[user.socketID]);
         if (existingUser) {
+            this.ioRef.sockets.sockets[existingUser.socketID].emit('kicked');
             // Disconnect the user from the room channel.
             this.ioRef.sockets.sockets[existingUser.socketID].leave(this.roomID);
             // Remove the user from the list of connected users.
@@ -137,11 +138,12 @@ class Room {
             // User is already in the list of connected users.
             this.emitUserEvent('user_already_in_room', existingUser);
         } else {
-            // Store info about the connection in the connectedUsers array
-            this.roomState.connectedUsers.push({
+            const newUser = {
                 nickname,
                 socketID: socket.id,
-            });
+            };
+            // Store info about the connection in the connectedUsers array
+            this.roomState.connectedUsers.push(newUser);
             // Set the user's vote to null to signify they have not voted yet
             this.roomState.voteByUserID[socket.id] = null;
             // Join the user's socket to the correct channel
@@ -149,7 +151,7 @@ class Room {
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', socket, { roomState: this.roomState });
+            this.emitUserEvent('join_success', newUser, { roomState: this.roomState });
         }
     }
 

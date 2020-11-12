@@ -3,12 +3,15 @@ import { StyleSheet, css } from 'aphrodite';
 import { Typography, TextField, Button, ButtonBase } from '@material-ui/core'
 import CardFrame from '../../components/CardFrame';
 
-const DisplayCard = ({ card, setCard, deleteCard }) => {
+const DisplayCard = ({ card, setCard, deleteCard, onClick }) => {
     return (
-        <ButtonBase style={{ textDecoration: 'none' }}>
+        <ButtonBase 
+            onClick={onClick} 
+            style={{ textDecoration: 'none' }}
+        >
             <CardFrame elevation={1} className={css(styles.container)}>
-                <Typography variant='h1'>{card.value}</Typography>
-                <Typography variant='h5'>{card.tag}</Typography>
+                <Typography variant='h1'>{card.number}</Typography>
+                <Typography variant='h5'>{card.hint}</Typography>
             </CardFrame>
         </ButtonBase>
     );

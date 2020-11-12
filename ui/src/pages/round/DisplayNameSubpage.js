@@ -5,13 +5,14 @@ import ResponsiveContainer from '../../components/ResponsiveContainer'
 import { TextField, Button, CircularProgress } from '@material-ui/core'
 import {
     createRoomServiceConnection,
-    joinRoom,
+    emitEvent,
 } from '../../data/state/room-service/room-service.actions';
 import { setDisplayName } from '../../data/state/app-data/app-data.actions';
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors';
 import { displayNameSelector } from '../../data/state/app-data/app-data.selector';
+import { setAppState } from '../../data/state/app-data/app-data.actions';
 
-const DisplayNameSection = ({ displayName, setDisplayName, roomServiceSocket, joinRoom }) => {
+const DisplayNameSubpage = ({ displayName, setDisplayName, roomServiceSocket, emitEvent }) => {
 
     const { username } = useParams();
     const [formDisplayName, setFormDisplayName] = useState('');
@@ -26,7 +27,13 @@ const DisplayNameSection = ({ displayName, setDisplayName, roomServiceSocket, jo
     const submit = async () => {
         localStorage.setItem('displayName', formDisplayName);
         setDisplayName(formDisplayName)
-        joinRoom(username, formDisplayName)
+        emitEvent(
+            'join_room',
+            {
+                roomID: username,
+                nickname: formDisplayName
+            }
+        );
     }
 
     const displayNameInvalid = (formDisplayName.length === 0)
@@ -66,7 +73,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   createRoomServiceConnection,
   setDisplayName,
-  joinRoom,
+  emitEvent,
+  setAppState,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayNameSection)
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayNameSubpage)

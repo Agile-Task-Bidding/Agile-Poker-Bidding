@@ -11,16 +11,16 @@ const ResponsiveContainer = ({...thruProps}) => {
 };
 
 const styles = StyleSheet.create({
-    page: {
-        backgroundColor: '#eeeeff',
-    },
+    // page: {
+    //     backgroundColor: '#eeeeff',
+    // },
     container: {
         '@media (max-width: 599px)': {
             paddingLeft: 0,
             paddingRight: 0,
         },
-        background: 'white',
-        minHeight: '98vh', //TODO figure out how to remove padding from body and why the other page does it
+        // background: 'gray',
+        minHeight: '100vh', //TODO figure out how to remove padding from body and why the other page does it
     }
 })
 

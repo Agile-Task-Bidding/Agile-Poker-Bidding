@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
@@ -8,9 +8,12 @@ import EditCard from './EditCard'
 import AddCard from './AddCard'
 import EditCardGrid from '../../components/EditCardGrid'
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors';
-import { createRoomServiceConnection } from '../../data/state/room-service/room-service.actions';
+import {
+  createRoomServiceConnection,
+  emitEvent,
+} from '../../data/state/room-service/room-service.actions';
 
-const EditArea = ({ onSave, onSubmit, roomServiceSocket, createRoomServiceConnection }) => {
+const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomServiceConnection }) => {
   const [loading, setLoading] = useState(false)
   const [cards, setCards] = useState([
     {
@@ -29,6 +32,27 @@ const EditArea = ({ onSave, onSubmit, roomServiceSocket, createRoomServiceConnec
   const [allowAbstain, setAllowAbstain] = useState(false)
   const history = useHistory()
 
+  useEffect(() => {
+    (async () => {
+      const socket = await createRoomServiceConnection()
+      socket.on('connect', () => {
+        console.log('Connected!');
+      });
+      socket.on('disconnect', () => {
+          console.log('Disconnected');
+          // dispatch({ type: types.SET_DISPLAY_NAME, displayName: '' })
+          // dispatch({ type: types.SET_CONNECTED_TO_ROOM, connectedToRoom: false })
+      });
+      socket.on('room_already_created', event => {
+        console.log('room_already_created', event)
+      });
+      socket.on('create_success', event => {
+        console.log('create_success')
+        history.push('/room/falc')
+      });
+    })()
+  }, [])
+
   const genChangeCard = (idx) => {
     return (card) => {
       const cardsCopy = [...cards]
@@ -46,7 +70,7 @@ const EditArea = ({ onSave, onSubmit, roomServiceSocket, createRoomServiceConnec
   }
 
   //TODO move this to action or somewhere else
-  const onStart = async (cards, allowAbstain) => {
+  const onStart = async () => {
     try {
       setLoading(true)
 
@@ -61,26 +85,10 @@ const EditArea = ({ onSave, onSubmit, roomServiceSocket, createRoomServiceConnec
         allowAbstain,
       }
 
-      console.log('api_call', '/SaveConfig', { idToken, config })
-      console.log('socket_emit', 'start_game', { idToken, config })
-
-      const socket = await createRoomServiceConnection()
-      console.log(socket);
-      socket.on('connect', () => {
-        console.log('herer');
-        socket.on('verified', (data) => {
-          console.log('verified', data);
-        })
-        socket.emit('verify_me', { idToken })
-        socket.emit(
-          'start_game',
-          {
-            idToken,
-            config,
-          }
-        )
-  
-        history.push('/room/afdafsd')
+      console.log('create_room')
+      emitEvent('create_room', {
+          roomID: 'falc',
+          roomConfig: config,
       });
     } catch (err) {
       console.error(err)
@@ -134,7 +142,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  createRoomServiceConnection
+  createRoomServiceConnection,
+  emitEvent,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditArea)
