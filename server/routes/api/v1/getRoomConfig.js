@@ -1,24 +1,17 @@
-const admin = require('firebase-admin');
-const router = require('express').Router();
+const UserService = require('../../../services/user');
 
-/**
- * This endpoint may also benefit from some form of GET authentication
- */
+module.exports = async (req, res) => {
+    const uid = req.params.uid;
 
-router.get('/users/:uid/roomConfig', async (req, res) => {
-    const snapshot = await admin
-        .firestore()
-        .collection('users')
-        .doc(req.params.uid)
-        .get();
-
-    if (!snapshot.exists) {
-        return res.status(404).json({ error: { message: 'User not found' } });
+    let user;
+    try {
+        user = await UserService.getUser(uid);
+    } catch (e) {
+        if (e.name === 'apb/user/not-found') {
+            return res.status(404).json({ error: { message: e.message } });
+        }
+        throw e;
     }
 
-    const roomConfig = snapshot.data().roomConfig;
-
-    res.json({ roomConfig });
-});
-
-module.exports = router;
+    return res.json({ roomConfig: user.roomConfig });
+};

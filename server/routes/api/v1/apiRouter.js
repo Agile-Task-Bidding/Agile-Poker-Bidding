@@ -1,10 +1,19 @@
+const authMiddleware = require('./authMiddleware');
+
 const router = require('express').Router();
 
 router
-    .use(require('./createUser'))
-    .use(require('./getUser'))
-    .use(require('./getRoomConfig'))
-    .use(require('./updateRoomConfig'))
-    .use(require('./ping'));
+    .get('/users/:uid', 
+        authMiddleware, 
+        require('./getUser'))
+    .post('/users', 
+        require('./createUser'))
+    .get('/users/:uid/roomConfig', 
+        authMiddleware, 
+        require('./getRoomConfig'))
+    .put('/users/:uid/roomconfig',
+        authMiddleware,
+        require('./updateRoomConfig'))
+    .all('/ping', require('./ping'));
 
 module.exports = router;
