@@ -17,8 +17,9 @@ export class Login extends React.Component {
   }
 
   handleChange = (event) => {
-    const email = event.target.value
-    this.setState({ email })
+    const { user } = this.state
+    user[event.target.name] = event.target.value
+    this.setState({ user })
   }
   handleSubmit = () => {
     // your submit logic
@@ -40,26 +41,27 @@ export class Login extends React.Component {
             >
               <div ClassName='form-group'>
                 <TextValidator
-                  label='Username'
+                  label='E-mail'
                   onChange={this.handleChange}
-                  name='username'
-                  value={user.username}
-                  validators={['unknown']}
-                  errorMessages={['Username is unknown']}
+                  name='email'
+                  value={user.email}
+                  validators={['required', 'isEmail']}
+                  errorMessages={['Required Field', 'Email is invalid']}
                   variant='filled'
+                  margin='dense'
                   InputProps={{ disableUnderline: true }}
                   fullWidth
                 />
-                {/* <input type='text' name='username' placeholder='Username' /> */}
+                {/* <input type='text' name='email' placeholder='E-mail' /> */}
               </div>
-
               <div ClassName='form-group'>
                 <TextValidator
                   label='Password'
+                  onChange={this.handleChange}
                   name='password'
                   type='password'
-                  validators={['incorrect']}
-                  errorMessages={['Password is incorrect']}
+                  validators={['required']}
+                  errorMessages={['Password is required']}
                   value={user.password}
                   variant='filled'
                   margin='dense'

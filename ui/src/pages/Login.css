@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
-/* body {
-  margin: 0;
-} */
-
 body {
+  margin: 0;
+}
+
+.App {
+  min-height: 100vh;
   height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+}
+.radiant-background {
   background: rgba(43, 132, 237, 1);
   background: radial-gradient(
     circle,
     rgba(234, 243, 253, 1) 0%,
     rgba(44, 99, 201, 1) 100%
   );
-}
-.App {
-  min-height: 100vh;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Open Sans', sans-serif;
 }
 
 .App-logo {
@@ -84,7 +84,7 @@ body {
   flex-direction: column;
   justify-content: center;
   height: 90%;
-  background-color: #2b84ed;
+  background-color: rgba(44, 99, 201, 1);
   width: 100%;
   position: absolute;
   right: -34%;
@@ -112,8 +112,9 @@ body {
   font-size: 21px;
   font-weight: 500;
   color: #fff;
-  margin-right: 3em;
-  margin-left: 3em;
+  margin-right: 2.5em;
+  margin-left: 2.5em;
+  transform: rotate(90deg);
 }
 .btn {
   font-size: 21px;
@@ -125,6 +126,7 @@ body {
   transition: all 250ms ease-in-out;
   cursor: pointer;
   margin: 0.25em;
+  width: 100%;
 }
 .btn:hover {
   background-color: #1e5ca6;

@@ -67,18 +67,21 @@ export class Register extends React.Component {
                   value={user.username}
                   validators={[
                     'required',
-                    'minStringLength: 5',
-                    'maxStringLength: 12',
+                    'minStringLength: 1',
+                    'maxStringLength: 15',
                   ]}
                   errorMessages={[
                     'Username is required',
-                    'Username must be at least 5 characters long',
-                    'Username can have maximum 12 characters',
+                    'Username must be at least have 1 character',
+                    'Username can have maximum 15 characters',
                   ]}
                   variant='filled'
                   InputProps={{ disableUnderline: true }}
                   fullWidth
+                  variant='filled'
+                  margin='dense'
                 />
+
                 {/* <input type='text' name='username' placeholder='Username' /> */}
               </div>
               <div ClassName='form-group'>
@@ -102,10 +105,10 @@ export class Register extends React.Component {
                   onChange={this.handleChange}
                   name='password'
                   type='password'
-                  validators={['required', 'minStringLength: 7']}
+                  validators={['required', 'minStringLength: 6']}
                   errorMessages={[
                     'Password is required',
-                    'Password must be at least 7 characters long',
+                    'Password must be at least 6 characters long',
                   ]}
                   value={user.password}
                   variant='filled'
@@ -117,7 +120,7 @@ export class Register extends React.Component {
               </div>
               <div ClassName='form-group'>
                 <TextValidator
-                  label='Comfirm Password'
+                  label='Confirm Password'
                   onChange={this.handleChange}
                   name='confirmPassword'
                   type='password'

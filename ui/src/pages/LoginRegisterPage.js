@@ -82,7 +82,7 @@ class LoginRegisterPage extends React.Component {
     const { email } = this.state
     const { isModalOn } = this.state
     const { user } = this.state
-    const current = isLogginActive ? 'Register' : 'Login'
+    const current = isLogginActive ? 'No account?' : 'Already have account!'
     const currentActive = isLogginActive ? 'login' : 'register'
 
     const handleClickOpen = () => {
@@ -95,74 +95,76 @@ class LoginRegisterPage extends React.Component {
 
     return (
       <div className='App'>
-        <div className='login'>
-          {/* <Modal /> */}
+        <div className='radiant-background'>
+          <div className='login'>
+            {/* <Modal /> */}
 
-          <Dialog
-            open={this.state.isModalOn}
-            aria-labelledby='form-dialog-title'
-          >
-            <DialogTitle id='form-dialog-title'>Forgot Password?</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Enter your email below to reset your password
-              </DialogContentText>
+            <Dialog
+              open={this.state.isModalOn}
+              aria-labelledby='form-dialog-title'
+            >
+              <DialogTitle id='form-dialog-title'>Forgot Password?</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Enter your email below to reset your password
+                </DialogContentText>
 
-              <ValidatorForm
-                ref='form'
-                onSubmit={this.handleSubmit}
-                onError={(errors) => console.log(errors)}
-              >
-                <div ClassName='form-group'>
-                  <TextValidator
-                    label='E-mail'
-                    onChange={this.handleChange}
-                    name='email'
-                    value={user.email}
-                    validators={['required', 'isEmail']}
-                    errorMessages={['Required Field', 'Email is invalid']}
-                    variant='filled'
-                    margin='dense'
-                    InputProps={{ disableUnderline: true }}
-                    fullWidth
-                  />
-                  {/* <input type='text' name='email' placeholder='E-mail' /> */}
-                </div>
-              </ValidatorForm>
-            </DialogContent>
-            <DialogActions>
-              {/* <Button onClick={handleClose} type='button' className='btn'>
+                <ValidatorForm
+                  ref='form'
+                  onSubmit={this.handleSubmit}
+                  onError={(errors) => console.log(errors)}
+                >
+                  <div ClassName='form-group'>
+                    <TextValidator
+                      label='E-mail'
+                      onChange={this.handleChange}
+                      name='email'
+                      value={user.email}
+                      validators={['required', 'isEmail']}
+                      errorMessages={['Required Field', 'Email is invalid']}
+                      variant='filled'
+                      margin='dense'
+                      InputProps={{ disableUnderline: true }}
+                      fullWidth
+                    />
+                    {/* <input type='text' name='email' placeholder='E-mail' /> */}
+                  </div>
+                </ValidatorForm>
+              </DialogContent>
+              <DialogActions>
+                {/* <Button onClick={handleClose} type='button' className='btn'>
                 Cancel
               </Button>
               <Button onClick={handleClose} type='button' className='btn'>
                 Reset
               </Button> */}
-              <button onClick={handleClose} type='button' className='btn'>
-                Cancel
-              </button>
-              <button onClick={handleClose} type='button' className='btn'>
-                Reset
-              </button>
-            </DialogActions>
-          </Dialog>
+                <button onClick={handleClose} type='button' className='btn'>
+                  Cancel
+                </button>
+                <button onClick={handleClose} type='button' className='btn'>
+                  Reset
+                </button>
+              </DialogActions>
+            </Dialog>
 
-          <div className='container' ref={(ref) => (this.container = ref)}>
-            {isLogginActive && (
-              <Login
-                containerRef={(ref) => (this.current = ref)}
-                onForgotPassword={handleClickOpen}
-              />
-            )}
-            {!isLogginActive && (
-              <Register containerRef={(ref) => (this.current = ref)} />
-            )}
+            <div className='container' ref={(ref) => (this.container = ref)}>
+              {isLogginActive && (
+                <Login
+                  containerRef={(ref) => (this.current = ref)}
+                  onForgotPassword={handleClickOpen}
+                />
+              )}
+              {!isLogginActive && (
+                <Register containerRef={(ref) => (this.current = ref)} />
+              )}
+            </div>
+            <RightSide
+              current={current}
+              currentActive={currentActive}
+              containerRef={(ref) => (this.rightSide = ref)}
+              onClick={this.changeState.bind(this)}
+            />
           </div>
-          <RightSide
-            current={current}
-            currentActive={currentActive}
-            containerRef={(ref) => (this.rightSide = ref)}
-            onClick={this.changeState.bind(this)}
-          />
         </div>
       </div>
     )
