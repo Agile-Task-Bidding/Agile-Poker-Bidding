@@ -1,13 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
 body {
-  height: 100%;
-  background: rgba(43, 132, 237, 1);
-  background: radial-gradient(
-    circle,
-    rgba(234, 243, 253, 1) 0%,
-    rgba(44, 99, 201, 1) 100%
-  );
+  margin: 0;
 }
 .App {
   min-height: 100vh;
@@ -16,6 +10,14 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
+}
+.radiant-background {
+  background: rgba(43, 132, 237, 1);
+  background: radial-gradient(
+    circle,
+    rgba(234, 243, 253, 1) 0%,
+    rgba(44, 99, 201, 1) 100%
+  );
 }
 
 .login {
@@ -42,8 +44,8 @@ body {
   padding: 17px 10px;
 }
 .btn {
-  font-size: 21px;
-  padding: 5px 20px;
+  font-size: 18px;
+  padding: 4px 12px;
   border: 0;
   background-color: #2b84ed;
   color: #fff;

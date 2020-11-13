@@ -23,6 +23,7 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-loader-spinner": "^3.1.14",
+    "react-material-ui-form-validator": "^2.1.1",
     "react-media": "^1.10.0",
     "react-p5-wrapper": "^2.3.0",
     "react-redux": "^7.2.1",

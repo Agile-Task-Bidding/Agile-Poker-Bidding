@@ -13,9 +13,11 @@ class HomePage extends React.Component {
   render() {
     return (
       <div className='App'>
-        <div className='login'>
-          <div className='container'>
-            <Home />
+        <div className='radiant-background'>
+          <div className='login'>
+            <div className='container'>
+              <Home />
+            </div>
           </div>
         </div>
       </div>
