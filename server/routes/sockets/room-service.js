@@ -1,6 +1,6 @@
 const socketIo = require('socket.io');
 const roomAPI = require('./room');
-const Utils = require('../../utils').Utils;
+const Utils = require('../../utils');
 
 // Set up the socket server
 class RoomService {

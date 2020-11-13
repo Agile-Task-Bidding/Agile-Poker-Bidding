@@ -37,7 +37,7 @@ class Room {
     checkIfVotingComplete() {
         // Check if a vote exists for each user in the list of voted users
         let allUsersVoted = true;
-        for (const userID of this.roomState.connectedUsersByID) {
+        for (const userID in this.roomState.connectedUsersByID) {
             const voteValue = this.roomState.voteByUserID[userID];
             if (voteValue === null) {
                 allUsersVoted = false;
@@ -90,7 +90,7 @@ class Room {
      * connectedUsers array in this class since the class will be deleted later.
      */
     disconnectAllUsers() {
-        for (const userID of this.roomState.connectedUsersByID) {
+        for (const userID in this.roomState.connectedUsersByID) {
             // Disconnect the user from the room channel.
             this.ioRef.sockets.sockets[userID].leave(this.roomID);
             // Emit a host_closed_connection event to the user.
@@ -194,7 +194,7 @@ class Room {
             // Reset the room phase
             this.roomState.phase = Constants.VOTING_PHASE;
             // Reset everyone's votes
-            for (const userID of this.roomState.connectedUsersByID) {
+            for (const userID in this.roomState.connectedUsersByID) {
                 this.roomState.voteByUserID[userID] = null;
             }
             // Emit a room_state_changed event to everyone in the room
