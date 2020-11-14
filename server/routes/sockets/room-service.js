@@ -2,8 +2,6 @@ const socketIo = require('socket.io');
 const roomAPI = require('./room');
 const Utils = require('../../utils');
 const AuthService = require('../../services/auth');
-const e = require('express');
-const { valid } = require('joi');
 
 // Set up the socket server
 class RoomService {
@@ -20,10 +18,17 @@ class RoomService {
     }
 
     /**
+     * Function to get the UID of a user given an auth token
+     */
+    async getUID(authToken) {
+        return await AuthService.getUIDFromToken(authToken);
+    }
+
+    /**
      * Checks if the user is authorized via the server to take an action.
      */
-    async checkIfUserAuthorized(uid, authToken, socket, eventInfoOnError) {
-        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
+    async checkIfUserAuthorized(authToken, socket, eventInfoOnError) {
+        const validated = authToken && await this.getUID(authToken).catch(err => false);
         if (validated) {
             return true;
         } else {
@@ -33,36 +38,16 @@ class RoomService {
     }
 
     /**
-     * Checks if the user is authorized for a room if a UID is not passed to the event.
-     * Cannot be used for actions if the user is outside of the room itself and thus may
-     * be connecting via a different socket.
-     * 
-     * Example: A host kicking a user from a room can only happen if the host is currently connected to the room.
+     * Checks if the user is authorized for a room (as a host).
      */
     async checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
-        const uid = room.getUIDFromSocket(socket);
-        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
-        if (room.hostUID === uid && validated) {
+        const hostUID = room.hostUID;
+        const validated = authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
+        if (validated) {
             return true;
         } else {
             this.emitUserEvent('not_authorized', socket, eventInfoOnError);
             return false;
-        }
-    }
-
-    /**
-     * Checks if the user is authorized for a room if a UID is passed to the event.
-     * Can be used for actions even if the user is outside of the room itself and if they
-     * may be connecting via different socket.
-     * 
-     * Example: Closing a room may take place even if the host is not currently connected to the room.
-     */
-    async checkIfUserAuthorizedForRoomGivenUID(room, authToken, uid, socket, eventInfoOnError) {
-        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
-        if (room.hostUID === uid && validated) {
-            return true;
-        } else {
-            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
         }
     }
 
@@ -160,7 +145,6 @@ class RoomService {
                 const user = {
                     nickname: eventInfo.nickname,
                     socketID: socket.id,
-                    uid: eventInfo.uid,
                 }
                 // Grab the correct room from the list of active rooms
                 const room = this.activeRoomsByID[eventInfo.roomID];
@@ -188,7 +172,7 @@ class RoomService {
         try {
             // First we need to check if the user is authorized for this action.
             if (!await this.checkIfUserAuthorized(
-                eventInfo.uid, eventInfo.authToken, socket,
+                eventInfo.authToken, socket,
                 {
                     "title": "Failed to Create Room",
                     "message": "We could not authorize your attempt to create a room."
@@ -200,8 +184,10 @@ class RoomService {
             if (this.activeRoomsByID[eventInfo.roomID]) {
                 this.emitUserEvent('room_already_created', socket);
             } else {
+                // Get the UID from the token to set as the room's host.
+                const hostUID = await this.getUID(eventInfo.authToken);
                 // Create the new room and store the info in the list of rooms
-                this.createRoom(eventInfo.roomID, eventInfo.roomConfig, eventInfo.uid);
+                this.createRoom(eventInfo.roomID, eventInfo.roomConfig, hostUID);
                 // Emit a create_success event to the host
                 this.emitUserEvent('create_success', socket);
             }
@@ -229,8 +215,8 @@ class RoomService {
                 return;
             }
             // Check if the user is authorized as the host of a room.
-            if (!await this.checkIfUserAuthorizedForRoomGivenUID(
-                room, eventInfo.authToken, eventInfo.uid, socket,
+            if (!await this.checkIfUserAuthorizedForRoom(
+                room, eventInfo.authToken, socket,
                 {
                     "title": "Failed to Close Room",
                     "message": "We could not authorize your attempt to close this room."

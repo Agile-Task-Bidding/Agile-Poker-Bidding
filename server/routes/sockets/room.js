@@ -60,14 +60,6 @@ class Room {
     }
 
     /**
-     * Grab a user's ID from the room given a socket.
-     */
-    getUIDFromSocket(socket) {
-        const user = this.getUserFromState(socket);
-        return user ? user.uid : null;
-    }
-
-    /**
      * Emit the specified event to everyone in the room.
      */
     emitRoomEvent(event, eventInfo) {
