@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Constants = require('../../constants');
 
 class Room {
-    constructor(ioRef, roomID, roomConfig) {
+    constructor(ioRef, roomID, roomConfig, hostUID) {
         // This is the reference to the io server
         this.ioRef = ioRef;
         // The reference to the appropriate io room ("channel")
@@ -11,6 +11,8 @@ class Room {
         this.roomConfig = {...roomConfig};
         // The reference to the room's deck
         this.deck = this.roomConfig.deck;
+        // The host's user ID for authentication
+        this.hostUID = hostUID;
 
         // If the allowAbstain property is set, we need to add an
         // abstain option to the room's deck
@@ -55,6 +57,13 @@ class Room {
      */
     getUserFromState(socket) {
         return this.roomState.connectedUsersByID[socket.id];
+    }
+
+    /**
+     * Grab a user's ID from the room given a socket.
+     */
+    getUIDFromSocket(socket) {
+        return this.getUserFromState(socket).uid;
     }
 
     /**
@@ -122,26 +131,23 @@ class Room {
      * Join a user to the room if they aren't already joined to the room.
      * The user object consists of a nickname and a socket.
      */
-    joinUserToRoom(nickname, socket) {
+    joinUserToRoom(user) {
         // Check if the user's socket is already in the list of connected users.
-        const existingUser = this.getUserFromState(socket);
+        const existingUser = this.roomState.connectedUsersByID[user.socketID];
         if (existingUser) {
             // User is already in the list of connected users.
             this.emitUserEvent('user_already_in_room', existingUser);
         } else {
             // Store info about the connection in the connectedUsers array
-            this.roomState.connectedUsersByID[socket.id] = {
-                nickname,
-                socketID: socket.id,
-            };
+            this.roomState.connectedUsersByID[user.socketID] = user;
             // Set the user's vote to null to signify they have not voted yet
-            this.roomState.voteByUserID[socket.id] = null;
+            this.roomState.voteByUserID[user.socketID] = null;
             // Join the user's socket to the correct channel
             socket.join(this.roomID);
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', {socketID: socket.id}, { roomState: this.roomState });
+            this.emitUserEvent('join_success', {socketID: user.socketID}, { roomState: this.roomState });
         }
     }
 
