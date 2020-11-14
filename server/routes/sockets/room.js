@@ -63,7 +63,8 @@ class Room {
      * Grab a user's ID from the room given a socket.
      */
     getUIDFromSocket(socket) {
-        return this.getUserFromState(socket).uid;
+        const user = this.getUserFromState(socket);
+        return user ? user.uid : null;
     }
 
     /**
@@ -131,7 +132,7 @@ class Room {
      * Join a user to the room if they aren't already joined to the room.
      * The user object consists of a nickname and a socket.
      */
-    joinUserToRoom(user) {
+    joinUserToRoom(user, socket) {
         // Check if the user's socket is already in the list of connected users.
         const existingUser = this.roomState.connectedUsersByID[user.socketID];
         if (existingUser) {
@@ -159,7 +160,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID: this.roomState.roomID });
         } else {
             // Set the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = this.roomState.deck[cardIndex].value;
@@ -180,7 +181,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID: this.roomState.roomID });
         } else {
             // Cancel the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = null;

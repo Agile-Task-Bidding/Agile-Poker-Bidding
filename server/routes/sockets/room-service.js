@@ -3,6 +3,7 @@ const roomAPI = require('./room');
 const Utils = require('../../utils');
 const AuthService = require('../../services/auth');
 const e = require('express');
+const { valid } = require('joi');
 
 // Set up the socket server
 class RoomService {
@@ -21,8 +22,9 @@ class RoomService {
     /**
      * Checks if the user is authorized via the server to take an action.
      */
-    checkIfUserAuthorized(uid, authToken, socket, eventInfoOnError) {
-        if (AuthService.validateToken(authToken, uid)) {
+    async checkIfUserAuthorized(uid, authToken, socket, eventInfoOnError) {
+        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
+        if (validated) {
             return true;
         } else {
             this.emitUserEvent('not_authorized', socket, eventInfoOnError);
@@ -37,9 +39,10 @@ class RoomService {
      * 
      * Example: A host kicking a user from a room can only happen if the host is currently connected to the room.
      */
-    checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
+    async checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
         const uid = room.getUIDFromSocket(socket);
-        if (uid && room.hostUID === uid && AuthService.validateToken(authToken, uid)) {
+        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
+        if (room.hostUID === uid && validated) {
             return true;
         } else {
             this.emitUserEvent('not_authorized', socket, eventInfoOnError);
@@ -54,11 +57,12 @@ class RoomService {
      * 
      * Example: Closing a room may take place even if the host is not currently connected to the room.
      */
-    checkIfUserAuthorizedForRoomGivenUID(room, authToken, uid, socket, eventInfoOnError) {
-        if (room.hostUID === uid && AuthService.validateToken(authToken, uid)) {
+    async checkIfUserAuthorizedForRoomGivenUID(room, authToken, uid, socket, eventInfoOnError) {
+        const validated = authToken && uid && await AuthService.validateToken(authToken, uid).catch(err => false);
+        if (room.hostUID === uid && validated) {
             return true;
         } else {
-            this.emitUserEvent('not_authorized', socket)
+            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
         }
     }
 
@@ -143,7 +147,6 @@ class RoomService {
         if (
             !eventInfo.roomID
             || !eventInfo.nickname
-            || !eventInfo.uid
         ) {
             Utils.DebugLog('Invalid event info passed to clientJoinRoomEvent.');
             return;
@@ -162,7 +165,7 @@ class RoomService {
                 // Grab the correct room from the list of active rooms
                 const room = this.activeRoomsByID[eventInfo.roomID];
                 // Join the user to the room
-                room.joinUserToRoom(user);
+                room.joinUserToRoom(user, socket);
                 // Update the socket info
                 this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
             }
@@ -174,19 +177,17 @@ class RoomService {
     /**
      * Have the user create a room if it doesn't already exist. Does not join the user to the room.
      */
-    clientStartRoomEvent(eventInfo, socket) {
+    async clientStartRoomEvent(eventInfo, socket) {
         if (
             !eventInfo.roomID
             || !eventInfo.roomConfig
-            || !eventInfo.uid
-            || !eventInfo.authToken
         ) {
             Utils.DebugLog('Invalid event info passed to clientStartRoomEvent.');
             return;
         }
         try {
             // First we need to check if the user is authorized for this action.
-            if (!this.checkIfUserAuthorized(
+            if (!await this.checkIfUserAuthorized(
                 eventInfo.uid, eventInfo.authToken, socket,
                 {
                     "title": "Failed to Create Room",
@@ -212,11 +213,9 @@ class RoomService {
     /**
      * Have the user close the specified room.
      */
-    clientCloseRoomEvent(eventInfo, socket) {
+    async clientCloseRoomEvent(eventInfo, socket) {
         if (
             !eventInfo.roomID
-            || !eventInfo.uid
-            || !eventInfo.authToken
         ) {
             Utils.DebugLog('Invalid event info passed to clientCloseRoomEvent.');
             return;
@@ -230,7 +229,7 @@ class RoomService {
                 return;
             }
             // Check if the user is authorized as the host of a room.
-            if (!this.checkIfUserAuthorizedForRoomGivenUID(
+            if (!await this.checkIfUserAuthorizedForRoomGivenUID(
                 room, eventInfo.authToken, eventInfo.uid, socket,
                 {
                     "title": "Failed to Close Room",
@@ -251,11 +250,10 @@ class RoomService {
     /**
      * Have the user kick another user from the specified room.
      */
-    clientKickUserEvent(eventInfo, socket) {
+    async clientKickUserEvent(eventInfo, socket) {
         if (
             !eventInfo.roomID
             || !eventInfo.user
-            || !eventInfo.authToken
         ) {
             Utils.DebugLog('Invalid event info passed to clientKickUserEvent.');
             return;
@@ -267,7 +265,7 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized to take this action
-            if (!this.checkIfUserAuthorizedForRoom(
+            if (!await this.checkIfUserAuthorizedForRoom(
                 room, eventInfo.authToken, socket,
                 {
                     "title": "Failed to Kick User",
@@ -329,10 +327,9 @@ class RoomService {
     /**
      * Have the user start a new round of voting in the specified room.
      */
-    clientStartNewRoundEvent(eventInfo, socket) {
+    async clientStartNewRoundEvent(eventInfo, socket) {
         if (
             !eventInfo.roomID
-            || !eventInfo.authToken
         ) {
             Utils.DebugLog('Invalid event info passed to clientStartNewRoundEvent.');
             return;
@@ -344,7 +341,7 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!this.checkIfUserAuthorizedForRoom(
+            if (!await this.checkIfUserAuthorizedForRoom(
                 room, eventInfo.authToken, socket,
                 {
                     "title": "Failed to Start New Round",
@@ -364,10 +361,9 @@ class RoomService {
      * Have the user force end bidding in the specified room and proceed to the
      * results phase.
      */
-    clientForceEndBidding(eventInfo, socket) {
+    async clientForceEndBidding(eventInfo, socket) {
         if (
             !eventInfo.roomID
-            || !eventInfo.authToken
         ) {
             Utils.DebugLog('Invalid event info passed to clientForceEndBidding.');
             return;
@@ -379,7 +375,7 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!this.checkIfUserAuthorizedForRoom(
+            if (!await this.checkIfUserAuthorizedForRoom(
                 room, eventInfo.authToken, socket,
                 {
                     "title": "Failed to Force End Bidding",
