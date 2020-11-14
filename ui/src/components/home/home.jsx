@@ -12,7 +12,7 @@ export class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isUserLoggedIn: false,
+      isUserLoggedIn: true,
       user: {
         username: 'Magda',
         email: '',
