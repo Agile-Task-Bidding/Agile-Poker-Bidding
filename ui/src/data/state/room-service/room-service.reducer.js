@@ -6,7 +6,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case types.SET_GLOBAL_SOCKET:
+        case types.SET_ROOM_SERVICE_CONNECTION:
             return {
                 ...state,
                 socket: action.socket,

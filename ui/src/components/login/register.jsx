@@ -1,5 +1,7 @@
 import React from 'react'
 import loginImg from '../icon/logo.svg'
+import { Link } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
@@ -142,9 +144,9 @@ export class Register extends React.Component {
           </div>
         </div>
         <div className='footer'>
-          <button type='button' className='btn'>
+          <Button type='button' className='btn' component={Link} to={'/home'}>
             Sign Up
-          </button>
+          </Button>
         </div>
       </div>
     )

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import loginImg from '../icon/logo.svg'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
+import { Link } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 export class Login extends React.Component {
   constructor(props) {
@@ -75,9 +77,9 @@ export class Login extends React.Component {
         </div>
         <div className='footer'>
           <div>
-            <button type='button' className='btn'>
+            <Button type='button' className='btn' component={Link} to={'/home'}>
               Log In
-            </button>
+            </Button>
           </div>
           <div>
             <button

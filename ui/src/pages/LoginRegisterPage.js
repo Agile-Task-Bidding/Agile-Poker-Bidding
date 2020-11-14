@@ -82,7 +82,7 @@ class LoginRegisterPage extends React.Component {
     const { email } = this.state
     const { isModalOn } = this.state
     const { user } = this.state
-    const current = isLogginActive ? 'No account?' : 'Already have account!'
+    const current = isLogginActive ? 'Register' : 'Login'
     const currentActive = isLogginActive ? 'login' : 'register'
 
     const handleClickOpen = () => {

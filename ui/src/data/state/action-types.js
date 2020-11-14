@@ -1,4 +1,4 @@
 // ----------------------------------
-//  Global Socket Actions
+//  Room Service Actions
 // ----------------------------------
-export const SET_GLOBAL_SOCKET = 'SET_GLOBAL_SOCKET';
+export const SET_ROOM_SERVICE_CONNECTION = 'SET_ROOM_SERVICE_CONNECTION';
