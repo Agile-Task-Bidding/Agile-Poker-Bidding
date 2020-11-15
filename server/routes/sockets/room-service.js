@@ -1,7 +1,6 @@
 const socketIo = require('socket.io');
 const roomAPI = require('./room');
-const admin = require('firebase-admin');
-const Utils = require('../../utils').Utils;
+const Utils = require('../../utils');
 
 // Set up the socket server
 class RoomService {
@@ -35,8 +34,6 @@ class RoomService {
         socket.on('disconnect', () => this.onDisconnect(socket));
         // Handle a user joining the room.
         socket.on('join_room', eventInfo => this.clientJoinRoomEvent(eventInfo, socket));
-        // Handle authentication test
-        socket.on('verify_me', eventInfo => this.onVerifyMe(eventInfo, socket));
         // Handle a user voting on an option.
         socket.on('user_vote', eventInfo => this.clientVoteEvent(eventInfo, socket));
         // Handle a user cancelling their vote.
@@ -51,12 +48,6 @@ class RoomService {
         socket.on('start_new_round', eventInfo => this.clientStartNewRoundEvent(eventInfo, socket));
         // Handle a user forcing the round to be over. (Host)
         socket.on('force_end_bidding', eventInfo => this.clientForceEndBidding(eventInfo, socket));
-    }
-
-    randomRickRoll() {
-        if (Object.keys(this.activeSocketsByID).length > 0) {
-            this.activeSocketsByID[Object.keys(this.activeSocketsByID)[0]].socket.emit('rickroll');
-        }
     }
 
     /**
@@ -108,22 +99,22 @@ class RoomService {
             || !eventInfo.nickname
         ) {
             Utils.DebugLog('Invalid event info passed to clientJoinRoomEvent.');
-        } else {
-            try {
-                // If the specified roomID is not in the list of active rooms, we cannot join. Emit an error event.
-                if (!this.activeRoomsByID[eventInfo.roomID]) {
-                    this.emitUserEvent('room_inactive', socket);
-                } else {
-                    // Grab the correct room from the list of active rooms
-                    const room = this.activeRoomsByID[eventInfo.roomID];
-                    // Join the user to the room
-                    room.joinUserToRoom(eventInfo.nickname, socket);
-                    // Update the socket info
-                    this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // If the specified roomID is not in the list of active rooms, we cannot join. Emit an error event.
+            if (!this.activeRoomsByID[eventInfo.roomID]) {
+                this.emitUserEvent('room_inactive', socket);
+            } else {
+                // Grab the correct room from the list of active rooms
+                const room = this.activeRoomsByID[eventInfo.roomID];
+                // Join the user to the room
+                room.joinUserToRoom(eventInfo.nickname, socket);
+                // Update the socket info
+                this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -136,20 +127,20 @@ class RoomService {
             || !eventInfo.roomConfig
         ) {
             Utils.DebugLog('Invalid event info passed to clientStartRoomEvent.');
-        } else {
-            try {
-                // If the specified roomID is already in the list of active rooms, we do not want to start another. Emit an error event.
-                if (this.activeRoomsByID[eventInfo.roomID]) {
-                    this.emitUserEvent('room_already_created', socket);
-                } else {
-                    // Create the new room and store the info in the list of rooms
-                    this.createRoom(eventInfo.roomID, eventInfo.roomConfig);
-                    // Emit a create_success event to the host
-                    this.emitUserEvent('create_success', socket);
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // If the specified roomID is already in the list of active rooms, we do not want to start another. Emit an error event.
+            if (this.activeRoomsByID[eventInfo.roomID]) {
+                this.emitUserEvent('room_already_created', socket);
+            } else {
+                // Create the new room and store the info in the list of rooms
+                this.createRoom(eventInfo.roomID, eventInfo.roomConfig);
+                // Emit a create_success event to the host
+                this.emitUserEvent('create_success', socket);
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -159,22 +150,22 @@ class RoomService {
     clientCloseRoomEvent(eventInfo, socket) {
         if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientCloseRoomEvent.');
-        } else {
-            try {
-                // If the specified roomID is not in the list of active rooms, we cannot close the room. Emit an error event.
-                if (!this.activeRoomsByID[eventInfo.roomID]) {
-                    this.emitUserEvent('host_room_closed_failure', socket);
-                } else {
-                    // Grab the correct room from the list of active rooms
-                    const room = this.activeRoomsByID[eventInfo.roomID];
-                    // Close the room
-                    this.closeRoom(room);
-                    // Emit a success message
-                    this.emitUserEvent('host_room_closed_success', socket);
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // If the specified roomID is not in the list of active rooms, we cannot close the room. Emit an error event.
+            if (!this.activeRoomsByID[eventInfo.roomID]) {
+                this.emitUserEvent('host_room_closed_failure', socket);
+            } else {
+                // Grab the correct room from the list of active rooms
+                const room = this.activeRoomsByID[eventInfo.roomID];
+                // Close the room
+                this.closeRoom(room);
+                // Emit a success message
+                this.emitUserEvent('host_room_closed_success', socket);
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -187,17 +178,17 @@ class RoomService {
             || !eventInfo.user
         ) {
             Utils.DebugLog('Invalid event info passed to clientKickUserEvent.');
-        } else {
-            try {
-                // Make sure the room is active.
-                const room = this.activeRoomsByID[eventInfo.roomID];
-                if (room) {
-                    // Kick the user from the room
-                    room.kickUser(eventInfo.user);
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Kick the user from the room
+                room.kickUser(eventInfo.user);
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -210,17 +201,17 @@ class RoomService {
             || eventInfo.cardIndex === null
         ) {
             Utils.DebugLog('Invalid event info passed to clientVoteEvent.');
-        } else {
-            try {
-                // Make sure the room is active.
-                const room = this.activeRoomsByID[eventInfo.roomID];
-                if (room) {
-                    // Have the user vote in the room
-                    room.userVote(eventInfo.cardIndex, socket);
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Have the user vote in the room
+                room.userVote(eventInfo.cardIndex, socket);
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -230,17 +221,17 @@ class RoomService {
     clientCancelVoteEvent(eventInfo, socket) {
         if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientCancelVoteEvent.');
-        } else {
-            try {
-                // Make sure the room is active.
-                const room = this.activeRoomsByID[eventInfo.roomID];
-                if (room) {
-                    // Cancel the user's vote in the room
-                    room.userCancelVote(socket);
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Cancel the user's vote in the room
+                room.userCancelVote(socket);
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -250,17 +241,17 @@ class RoomService {
     clientStartNewRoundEvent(eventInfo, socket) {
         if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientStartNewRoundEvent.');
-        } else {
-            try {
-                // Make sure the room is active.
-                const room = this.activeRoomsByID[eventInfo.roomID];
-                if (room) {
-                    // Start a new round of voting in the room
-                    room.startNewRound();
-                }
-            } catch (err) {
-                console.log(err);
+            return;
+        }
+        try {
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Start a new round of voting in the room
+                room.startNewRound();
             }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -271,38 +262,17 @@ class RoomService {
     clientForceEndBidding(eventInfo, socket) {
         if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientForceEndBidding.');
-        } else {
-            try {
-                // Make sure the room is active.
-                const room = this.activeRoomsByID[eventInfo.roomID];
-                if (room) {
-                    // Force end bidding in the room
-                    room.forceEndBidding();
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            // Grab the correct room from the list of active rooms
-            const room = this.activeRoomsByID[eventInfo.roomID];
-            // Join the user to the room
-            room.joinUserToRoom(eventInfo.username, socket);
-            // Update the socket info
-            this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
-
-            socket.emit('join_success');
+            return;
         }
-    }
-
-    async onVerifyMe(eventInfo, socket) {
         try {
-            const decoded = await admin.auth().verifyIdToken(eventInfo.idToken)
-            console.log(decoded);
-            socket.emit('verified', { verified: true });
+            // Make sure the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            if (room) {
+                // Force end bidding in the room
+                room.forceEndBidding();
+            }
         } catch (err) {
             console.log(err);
-            if (err.code === 'INVALID_ID_TOKEN') {
-                socket.emit('verified', { verified: false });
-            }
         }
     }
 }

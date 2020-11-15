@@ -119,7 +119,8 @@ class DemoPage extends Component {
     renderConnectedUsers() {
         if (this.state.roomState) {
             const users = [];
-            for (const user of this.state.roomState.connectedUsers) {
+            for (const userID in this.state.roomState.connectedUsersByID) {
+                const user = this.state.roomState.connectedUsersByID[userID];
                 users.push(<li>{user.nickname}</li>);
             }
             return users;
@@ -238,23 +239,6 @@ class DemoPage extends Component {
                         Available cards:
                         {this.renderAvailableCards()}
                     </ul>
-                </div>
-                <div>
-                    <Button
-                        onClick={() => {
-                            if (this.state.roomState && this.state.roomState.connectedUsers && this.state.roomState.connectedUsers[1]) {
-                                this.props.emitEvent(
-                                    'kick_user',
-                                    {
-                                        roomID: this.state.joinRoomID,
-                                        user: this.state.roomState.connectedUsers[1],
-                                    }
-                                );
-                            }
-                        }}
-                    >
-                        Kick Second User
-                    </Button>
                 </div>
                 <div>
                     <Button

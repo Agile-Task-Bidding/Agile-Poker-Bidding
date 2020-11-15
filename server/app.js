@@ -1,36 +1,34 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const mongoose = require('mongoose');
-const readline = require('readline');
+
+// Initialize Firebase Admin
 const admin = require('firebase-admin');
+const serviceAccount = require('./config/firebase-credential.json');
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DB_URL
+});
 
 const app = express();
 const server = http.createServer(app);
-
-admin.initializeApp()
-
-// Import all other API's that are going to be used
-const accountAPI = require('./routes/api/account');
 
 // Import all other sockets that are going to be used (they will automatically listen)
 const roomServiceSocket = require('./routes/sockets/room-service');
 
 // Set the app to use some libraries
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Set the app to use the imported API's
-app.use('/api/account', accountAPI);
+// Use the API router
+app.use('/api/v1', require('./routes/api/v1/apiRouter'));
 
 // Set up the app to use the imported sockets
 const roomService = new roomServiceSocket.RoomService(server, '/sockets/room-service');
 
 // Serve up files from the build directory
-console.log(__dirname);
 app.use(express.static(path.join(__dirname, '../ui/build')));
 
 // The home page

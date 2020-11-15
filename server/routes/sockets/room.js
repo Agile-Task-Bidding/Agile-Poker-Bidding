@@ -7,8 +7,8 @@ class Room {
         this.ioRef = ioRef;
         // The reference to the appropriate io room ("channel")
         this.roomID = roomID;
-        // The reference to the roomConfig
-        this.roomConfig = roomConfig;
+        // The copy of the roomConfig
+        this.roomConfig = {...roomConfig};
         // The reference to the room's deck
         this.deck = this.roomConfig.deck;
 
@@ -26,7 +26,7 @@ class Room {
         this.roomState = {
             phase: Constants.VOTING_PHASE,
             voteByUserID: {},
-            connectedUsers: [],
+            connectedUsersByID: {},
             deck: this.deck,
         };
     }
@@ -37,8 +37,8 @@ class Room {
     checkIfVotingComplete() {
         // Check if a vote exists for each user in the list of voted users
         let allUsersVoted = true;
-        for (const user of this.roomState.connectedUsers) {
-            const voteValue = this.roomState.voteByUserID[user.socketID];
+        for (const userID in this.roomState.connectedUsersByID) {
+            const voteValue = this.roomState.voteByUserID[userID];
             if (voteValue === null) {
                 allUsersVoted = false;
                 break;
@@ -54,9 +54,7 @@ class Room {
      * if the user is not in state.
      */
     getUserFromState(socket) {
-        return _.find(this.roomState.connectedUsers, (user) => {
-            return socket.id === user.socketID;
-        });
+        return this.roomState.connectedUsersByID[socket.id];
     }
 
     /**
@@ -78,13 +76,9 @@ class Room {
      */
     disconnectUserFromRoom(socket) {
         // Remove the user from the list of connected users.
-        _.remove(this.roomState.connectedUsers, (user) => {
-            return user.socketID === socket.id;
-        });
+        delete this.roomState.connectedUsersByID[socket.id];
         // Remove mention of the user's vote from the voteByUserID object
-        _.remove(this.roomState.voteByUserID, (user) => {
-            return user.socketID === socket.id;
-        });
+        delete this.roomState.voteByUserID[socket.id];
         // Check if the voting phase can move to the results phase now
         this.checkIfVotingComplete();
         // Emit a room_state_changed message.
@@ -96,11 +90,11 @@ class Room {
      * connectedUsers array in this class since the class will be deleted later.
      */
     disconnectAllUsers() {
-        for (const user of this.roomState.connectedUsers) {
+        for (const userID in this.roomState.connectedUsersByID) {
             // Disconnect the user from the room channel.
-            this.ioRef.sockets.sockets[user.socketID].leave(this.roomID);
+            this.ioRef.sockets.sockets[userID].leave(this.roomID);
             // Emit a host_closed_connection event to the user.
-            this.emitUserEvent('host_closed_connection', user);
+            this.emitUserEvent('host_closed_connection', this.roomState.connectedUsersByID[userID]);
         }
     }
 
@@ -111,13 +105,10 @@ class Room {
         // Check if the user is in the list of connectedUsers.
         const existingUser = this.getUserFromState(this.ioRef.sockets.sockets[user.socketID]);
         if (existingUser) {
-            this.ioRef.sockets.sockets[existingUser.socketID].emit('kicked');
             // Disconnect the user from the room channel.
             this.ioRef.sockets.sockets[existingUser.socketID].leave(this.roomID);
             // Remove the user from the list of connected users.
-            _.remove(this.roomState.connectedUsers, (connectedUser) => {
-                return user.socketID === connectedUser.socketID;
-            });
+            delete this.roomState.connectedUsersByID[user.socketID];
             // Check if the voting phase can move to the results phase now
             this.checkIfVotingComplete();
             // Emit a room_state_changed message to everyone in the room.
@@ -138,12 +129,11 @@ class Room {
             // User is already in the list of connected users.
             this.emitUserEvent('user_already_in_room', existingUser);
         } else {
-            const newUser = {
+            // Store info about the connection in the connectedUsers array
+            this.roomState.connectedUsersByID[socket.id] = {
                 nickname,
                 socketID: socket.id,
             };
-            // Store info about the connection in the connectedUsers array
-            this.roomState.connectedUsers.push(newUser);
             // Set the user's vote to null to signify they have not voted yet
             this.roomState.voteByUserID[socket.id] = null;
             // Join the user's socket to the correct channel
@@ -151,7 +141,7 @@ class Room {
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', newUser, { roomState: this.roomState });
+            this.emitUserEvent('join_success', {socketID: socket.id}, { roomState: this.roomState });
         }
     }
 
@@ -163,7 +153,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', socket, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
         } else {
             // Set the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = this.roomState.deck[cardIndex].value;
@@ -184,7 +174,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', socket, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
         } else {
             // Cancel the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = null;
@@ -204,8 +194,8 @@ class Room {
             // Reset the room phase
             this.roomState.phase = Constants.VOTING_PHASE;
             // Reset everyone's votes
-            for (const user of this.roomState.connectedUsers) {
-                this.roomState.voteByUserID[user.socketID] = null;
+            for (const userID in this.roomState.connectedUsersByID) {
+                this.roomState.voteByUserID[userID] = null;
             }
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });

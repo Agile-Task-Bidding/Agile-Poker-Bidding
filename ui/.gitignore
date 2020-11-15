@@ -14,6 +14,9 @@ package-lock.json
 # Firebase config file
 /src/firebaseConfig.js
 
+# Firebase config file
+/src/firebaseConfig.js
+
 # testing
 /coverage
 
