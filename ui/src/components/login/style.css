@@ -22,15 +22,6 @@
   align-items: center;
 }
 
-/* .base-container .header {
-  width: 105%;
-  background-color: #1608b5;
-  font-size: 24px;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
-  color: #fff;
-} */
-
 .base-container .content {
   width: 70%;
   display: flex;
@@ -41,51 +32,15 @@
   margin-left: auto;
   margin-right: auto;
   width: 50%;
-  margin-bottom: 25px;
+  margin-bottom: 0;
 }
 
 .base-container .content .image img {
   width: 100%;
   height: 100%;
-  margin-top: 15px;
+  margin-top: 0px;
   margin-bottom: 25px;
 }
-
-/* .form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: fit-content;
-  margin-top: 12px;
-  min-width: 18em;
-  height: 37px;
-  padding: 0px 10px;
-  font-size: 16px;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #f3f3f3;
-  border: 0;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  transition: all 250ms ease-in-out;
-} */
-
-/* .form-group label {
-  font-size: 20px;
-} */
-
-/* input {
-  margin-top: 6px;
-  min-width: 18em;
-  height: 37px;
-  padding: 0px 10px;
-  font-size: 16px;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #f3f3f3;
-  border: 0;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  transition: all 250ms ease-in-out;
-} */
 
 input:hover {
   background-color: #fff;
@@ -100,14 +55,6 @@ input:focus {
 .footer {
   margin-top: 1em;
 }
-/* 
-.footer .forgot {
-  background-color: #1608b5;
-  font-size: 24px;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
-  color: #fff;
-} */
 
 /*=============== Modal =============== */
 .modal-overlay {

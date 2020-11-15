@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
 body {
   margin: 0;
 }
@@ -22,40 +22,6 @@ body {
   );
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 .login {
   width: 27em;
   height: 40em;
@@ -115,7 +81,7 @@ body {
   margin-right: 2.5em;
   margin-left: 2.5em;
 }
-.btn {
+/* .btn {
   font-size: 21px;
   padding: 5px 20px;
   border: 0;
@@ -132,4 +98,4 @@ body {
 }
 .btn:focus {
   outline: none;
-}
+} */

@@ -3,7 +3,7 @@ import logo from '../components/icon/logo.svg'
 import './Login.css'
 import { Login, Register } from '../components/login/index'
 import { AppProvider } from '../components/login/context'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -15,6 +15,30 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 // import { Modal } from '../components/login/modal'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
+import { createMuiTheme } from '@material-ui/core/styles'
+import { FormGroup, Typography } from '@material-ui/core'
+
+const font = "'Reem Kufi', sans-serif"
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#7FBAF7',
+      main: '#2b84ed',
+      dark: '#223496',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#fff',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+  typography: {
+    fontFamily: font,
+  },
+})
 class LoginRegisterPage extends React.Component {
   constructor(props) {
     super(props)
@@ -29,27 +53,6 @@ class LoginRegisterPage extends React.Component {
       },
     }
   }
-
-  // showModal() {
-  //   const { isModalOn } = this.state
-
-  //   if (isModalOn) {
-  //     this.signModal.classList.remove('modal')
-  //   } else {
-  //     this.signModal.classList.add('modal')
-  //   }
-  //   this.setState((prevState) => ({
-  //     isModalOn: !prevState.isModalOn,
-  //   }))
-  // }
-
-  // showModal = () => {
-  //   this.setState({ show: true })
-  // }
-
-  // hideModal = () => {
-  //   this.setState({ show: false })
-  // }
 
   componentDidMount() {
     //Add .right by default
@@ -94,79 +97,90 @@ class LoginRegisterPage extends React.Component {
     }
 
     return (
-      <div className='App'>
-        <div className='radiant-background'>
-          <div className='login'>
-            {/* <Modal /> */}
+      <MuiThemeProvider theme={theme}>
+        <div className='App'>
+          <div className='radiant-background'>
+            <div className='login'>
+              <Dialog
+                open={this.state.isModalOn}
+                aria-labelledby='form-dialog-title'
+              >
+                <DialogTitle id='form-dialog-title'>
+                  Forgot Password?
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Enter your email below to reset your password
+                  </DialogContentText>
 
-            <Dialog
-              open={this.state.isModalOn}
-              aria-labelledby='form-dialog-title'
-            >
-              <DialogTitle id='form-dialog-title'>Forgot Password?</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Enter your email below to reset your password
-                </DialogContentText>
+                  <ValidatorForm
+                    ref='form'
+                    onSubmit={this.handleSubmit}
+                    onError={(errors) => console.log(errors)}
+                  >
+                    <div ClassName='form-group'>
+                      <TextValidator
+                        label='E-mail'
+                        onChange={this.handleChange}
+                        name='email'
+                        value={user.email}
+                        validators={['required', 'isEmail']}
+                        errorMessages={['Required Field', 'Email is invalid']}
+                        variant='filled'
+                        margin='dense'
+                        InputProps={{ disableUnderline: true }}
+                        fullWidth
+                      />
+                    </div>
+                  </ValidatorForm>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    fullWidth
+                    style={{
+                      margin: '15px',
+                    }}
+                    onClick={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    fullWidth
+                    style={{
+                      margin: '15px',
+                    }}
+                    onClick={handleClose}
+                  >
+                    Reset
+                  </Button>
+                </DialogActions>
+              </Dialog>
 
-                <ValidatorForm
-                  ref='form'
-                  onSubmit={this.handleSubmit}
-                  onError={(errors) => console.log(errors)}
-                >
-                  <div ClassName='form-group'>
-                    <TextValidator
-                      label='E-mail'
-                      onChange={this.handleChange}
-                      name='email'
-                      value={user.email}
-                      validators={['required', 'isEmail']}
-                      errorMessages={['Required Field', 'Email is invalid']}
-                      variant='filled'
-                      margin='dense'
-                      InputProps={{ disableUnderline: true }}
-                      fullWidth
-                    />
-                    {/* <input type='text' name='email' placeholder='E-mail' /> */}
-                  </div>
-                </ValidatorForm>
-              </DialogContent>
-              <DialogActions>
-                {/* <Button onClick={handleClose} type='button' className='btn'>
-                Cancel
-              </Button>
-              <Button onClick={handleClose} type='button' className='btn'>
-                Reset
-              </Button> */}
-                <button onClick={handleClose} type='button' className='btn'>
-                  Cancel
-                </button>
-                <button onClick={handleClose} type='button' className='btn'>
-                  Reset
-                </button>
-              </DialogActions>
-            </Dialog>
-
-            <div className='container' ref={(ref) => (this.container = ref)}>
-              {isLogginActive && (
-                <Login
-                  containerRef={(ref) => (this.current = ref)}
-                  onForgotPassword={handleClickOpen}
-                />
-              )}
-              {!isLogginActive && (
-                <Register containerRef={(ref) => (this.current = ref)} />
-              )}
+              <div className='container' ref={(ref) => (this.container = ref)}>
+                {isLogginActive && (
+                  <Login
+                    containerRef={(ref) => (this.current = ref)}
+                    onForgotPassword={handleClickOpen}
+                  />
+                )}
+                {!isLogginActive && (
+                  <Register containerRef={(ref) => (this.current = ref)} />
+                )}
+              </div>
+              <RightSide
+                current={current}
+                currentActive={currentActive}
+                containerRef={(ref) => (this.rightSide = ref)}
+                onClick={this.changeState.bind(this)}
+              />
             </div>
-            <RightSide
-              current={current}
-              currentActive={currentActive}
-              containerRef={(ref) => (this.rightSide = ref)}
-              onClick={this.changeState.bind(this)}
-            />
           </div>
         </div>
-      </div>
+      </MuiThemeProvider>
     )
   }
 }
@@ -178,8 +192,10 @@ const RightSide = (props) => {
       ref={props.containerRef}
       onClick={props.onClick}
     >
-      <div className='inner-container'>
-        <div className='text'>{props.current}</div>
+      <div className='inner-container' className='text'>
+        <Typography variant='h4' color='secondary'>
+          {props.current}
+        </Typography>
       </div>
     </div>
   )

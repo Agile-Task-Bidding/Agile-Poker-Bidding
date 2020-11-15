@@ -2,6 +2,7 @@ import React from 'react'
 import loginImg from '../icon/logo.svg'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
+import { FormGroup, Typography } from '@material-ui/core'
 
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
@@ -54,6 +55,11 @@ export class Register extends React.Component {
         <div className='content'>
           <div className='image'>
             <img src={loginImg} />
+          </div>
+          <div>
+            <Typography variant='h1' color='primary'>
+              PilePlan
+            </Typography>
           </div>
           <div className='form'>
             <ValidatorForm
@@ -144,7 +150,13 @@ export class Register extends React.Component {
           </div>
         </div>
         <div className='footer'>
-          <Button type='button' className='btn' component={Link} to={'/home'}>
+          <Button
+            variant='contained'
+            color='primary'
+            fullWidth
+            component={Link}
+            to={'/home'}
+          >
             Sign Up
           </Button>
         </div>

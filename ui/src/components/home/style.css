@@ -31,7 +31,7 @@
   flex-direction: column;
 }
 
-.base-container .content .image {
+/* .base-container .content .image {
   margin-left: auto;
   margin-right: auto;
   width: 60%;
@@ -43,4 +43,4 @@
   height: 100%;
   margin-top: 15px;
   margin-bottom: 25px;
-}
+} */

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
 
 body {
   margin: 0;
@@ -43,7 +44,7 @@ body {
   z-index: 99;
   padding: 17px 10px;
 }
-.btn {
+/* .btn {
   font-size: 18px;
   padding: 4px 12px;
   border: 0;
@@ -71,4 +72,4 @@ body {
   width: 100%;
   margin-top: 0.6em;
   margin-bottom: 0.6em;
-}
+} */

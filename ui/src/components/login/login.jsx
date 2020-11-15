@@ -3,6 +3,7 @@ import loginImg from '../icon/logo.svg'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
+import { Typography } from '@material-ui/core'
 
 export class Login extends React.Component {
   constructor(props) {
@@ -34,6 +35,11 @@ export class Login extends React.Component {
         <div className='content'>
           <div className='image'>
             <img src={loginImg} />
+          </div>
+          <div>
+            <Typography variant='h1' color='primary'>
+              PilePlan
+            </Typography>
           </div>
           <div className='form'>
             <ValidatorForm
@@ -77,18 +83,34 @@ export class Login extends React.Component {
         </div>
         <div className='footer'>
           <div>
-            <Button type='button' className='btn' component={Link} to={'/home'}>
+            <Button
+              variant='contained'
+              color='primary'
+              fullWidth
+              style={{
+                marginTop: '15px',
+                marginBottom: '15px',
+              }}
+              // style={{
+              //   maxHeight: '60px',
+              //   minHeight: '60px',
+              //   fontSize: 28,
+              // }}
+              component={Link}
+              to={'/home'}
+            >
               Log In
             </Button>
           </div>
           <div>
-            <button
+            <Button
               onClick={this.props.onForgotPassword}
-              type='button'
-              className='btn'
+              variant='text'
+              color='primary'
+              fullWidth
             >
               Forgot Password?
-            </button>
+            </Button>
           </div>
         </div>
       </div>
