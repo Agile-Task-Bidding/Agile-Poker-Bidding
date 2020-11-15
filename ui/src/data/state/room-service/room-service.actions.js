@@ -2,23 +2,20 @@ import * as types from '../action-types';
 import io from 'socket.io-client';
 import settings from '../../../config';
 import { roomServiceSocketSelector } from './room-service.selectors';
+import AppState from '../../../services/AppState';
 
 export function createRoomServiceConnection() {
     return async (dispatch, getState) => {
         try {
             if (!roomServiceSocketSelector(getState())) {
                 const socket = io(settings.SOCKET_URL, { path: settings.ROOM_SERVICE_SOCKET });
-                socket.on('connect', () => {
-                    console.log('Connected!');
-                });
-                socket.on('disconnect', () => {
-                    console.log('Disconnected');
-                });
                 dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket });
+                return socket;
+            } else {
+                return roomServiceSocketSelector(getState())
             }
         } catch (err) {
             dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket: null });
-            console.error(err);
             throw err;
         }
     }

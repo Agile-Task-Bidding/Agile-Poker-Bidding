@@ -1,22 +1,23 @@
 import * as types from '../action-types';
+import AppState from '../../../services/AppState';
 
 const initialState = {
-    socket: null,
-    connectedToRoom: false,
+    displayName: '',
+    appState: AppState.PICK_DISPLAY_NAME,
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case types.SET_ROOM_SERVICE_CONNECTION:
+        case types.SET_DISPLAY_NAME:
             return {
                 ...state,
-                socket: action.socket,
+                displayName: action.displayName,
             };
-        case types.SET_CONNECTED_TO_ROOM:
+        case types.SET_APP_STATE:
             return {
                 ...state,
-                connectedToRoom: action.connectedToRoom,
-            }
+                appState: action.appState
+            };
         default:
             return state;
     }
