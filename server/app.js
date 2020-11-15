@@ -5,6 +5,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const readline = require('readline');
+
+// Initialize Firebase Admin
+const admin = require('firebase-admin');
+const serviceAccount = require('./config/firebase-credential.json');
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DB_URL
+});
 
 const app = express();
 const server = http.createServer(app);
