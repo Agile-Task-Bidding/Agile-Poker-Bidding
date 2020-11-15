@@ -20,13 +20,12 @@ export class Home extends React.Component {
         username: 'Magda',
         email: '',
       },
-      roomNumber: '123abc',
+      roomNumber: '',
     }
   }
 
   handleChange = (event) => {
-    const { roomNumber } = this.state
-    this.setState({ roomNumber })
+    this.setState({ roomNumber: event.target.value })
   }
 
   render() {

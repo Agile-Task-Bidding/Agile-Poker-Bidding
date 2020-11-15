@@ -12,28 +12,33 @@ import {
   createRoomServiceConnection,
   emitEvent,
 } from '../../data/state/room-service/room-service.actions';
+import { setAccount } from '../../data/state/account/account.actions';
+import { accountSelector } from '../../data/state/account/account.selector';
+import { SET_ACCOUNT } from '../../data/state/action-types'
 
 const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomServiceConnection }) => {
   const [loading, setLoading] = useState(false)
   const [cards, setCards] = useState([
     {
-      number: 1,
-      hint: 'ezz',
+      value: 1,
+      tag: 'ezz',
     },
     {
-      number: 2,
-      hint: 'ez',
+      value: 2,
+      tag: 'ez',
     },
     {
-      number: 3,
-      hint: 'hard',
+      value: 3,
+      tag: 'hard',
     },
   ])
-  const [allowAbstain, setAllowAbstain] = useState(false)
+  const [allowAbstain, setAllowAbstain] = useState(false);
+  const [roomExistsError, setRoomExistsError ] = useState(false);
   const history = useHistory()
 
   useEffect(() => {
     (async () => {
+      setAccount({ username: 'falc' });
       const socket = await createRoomServiceConnection()
       socket.on('connect', () => {
         console.log('Connected!');
@@ -44,7 +49,7 @@ const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomSe
           // dispatch({ type: types.SET_CONNECTED_TO_ROOM, connectedToRoom: false })
       });
       socket.on('room_already_created', event => {
-        console.log('room_already_created', event)
+        console.log(event);
       });
       socket.on('create_success', event => {
         console.log('create_success')
@@ -108,7 +113,7 @@ const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomSe
   elements.push(
     <AddCard
       key='add'
-      onClick={() => setCards(cards.concat({ number: 1, hint: 'ez' }))}
+      onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
     />
   )
   return (
@@ -137,6 +142,7 @@ const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomSe
 
 const mapStateToProps = (state) => {
   return {
+    account: accountSelector,
     roomServiceSocket: roomServiceSocketSelector(state)
   }
 };

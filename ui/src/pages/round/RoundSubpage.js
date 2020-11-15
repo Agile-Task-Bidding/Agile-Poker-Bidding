@@ -14,34 +14,42 @@ import EditCardGrid from '../../components/EditCardGrid'
 import GameState from '../../services/GameState';
 import { Dialog, Typography, Button } from '@material-ui/core';
 import RickRolled from './RickRolled';
+import MemberRow from './MemberRow';
 
 const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, roundState, roomServiceSocket, emitEvent, ...thruProps }) => {
 
-    useEffect(() => {
-        (async ()=>{
-            const socket = await createRoomServiceConnection();
-        })()
-    }, []);
+    const { username } = useParams();
 
     const renderBiddingPhase = () => {
+      const picked = roundState.voteByUserID[roomServiceSocket.id]
+      console.log(roomServiceSocket.id)
+      console.log(picked)
       const cardUi = roundState.deck.map((it, idx) => (
         <DisplayCard 
           key={it.number} 
           card={it}
+          selected={idx==picked}
           onClick={()=>{
+            console.log('user_vote', {
+                roomID: username,
+                cardIndex: idx,
+            })
             emitEvent('user_vote', {
-                roomID: 'falc',
+                roomID: username,
                 cardIndex: idx,
             })
         }}
         />
       ));
-      const players = Object.keys(roundState.voteByUserID).map(id => (
-        <Typography variant='body1' key={id}>{id}:{roundState.voteByUserID[id]}</Typography>
-      ));
+      const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
+        const vote = roundState.voteByUserID[socketID];
+        return (
+          <MemberRow displayName={nickname} vote={vote}/>
+        )
+      });
       return (
         <>
-          <RickRolled rickRollPlaying={true}/>
+          <RickRolled/>
           <EditCardGrid>
             {cardUi}
           </EditCardGrid>
@@ -51,14 +59,17 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
     }
 
     const renderResultsPhase = () => {
-      const players = Object.keys(roundState.voteByUserID).map(id => (
-        <Typography variant='body1' key={id}>{id}:{roundState.voteByUserID[id]}</Typography>
-      ))
+      const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
+        const vote = roundState.voteByUserID[socketID];
+        return (
+          <MemberRow displayName={nickname} vote={vote}/>
+        )
+      });
       return (
         <>
           {players}
           <Button onClick={() => {
-            emitEvent('start_new_round', {roomID: 'falc'})
+            emitEvent('start_new_round', {roomID: username})
           }}>Next Round</Button>
         </>
       )

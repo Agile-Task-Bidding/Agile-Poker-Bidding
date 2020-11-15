@@ -4,7 +4,7 @@ import { Container, Grid, Paper, Typography } from '@material-ui/core'
 
 const EditCardGrid = ({children}) => {
     const items = children.map((it, idx) => (
-        <Grid key={idx} item xs={6} sm={6} md={4} lg={3} xl={3} className={css(styles.cardHolder)}>{it}</Grid>
+        <Grid key={idx} item className={css(styles.cardHolder)}>{it}</Grid>
     ))
     return (
         <Grid container justify="flex-start" spacing={2}>
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     cardHolder: {
         display: 'flex', 
         justifyContent: 'center',
-    }
+    },
 });
 
 

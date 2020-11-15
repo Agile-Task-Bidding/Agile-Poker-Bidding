@@ -9,6 +9,7 @@ import RoundPage from '../pages/round/RoundPage';
 export default (
   <Switch>
     <Route exact path='/' component={HomePage} />
+    <Route exact path='/demo' component={DemoPage} />
     <Route exact path='/login' component={LoginRegisterPage} />
     <Route exact path='/home' component={HomePage} />
     <Route exact path='/login' component={HomePage} />
