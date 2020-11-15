@@ -12,4 +12,4 @@ ReactDOM.render(
     <Root store={store} history={history} />
   </React.StrictMode>,
   document.getElementById('root')
-);
+)

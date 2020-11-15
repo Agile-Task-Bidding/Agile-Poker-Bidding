@@ -2,22 +2,25 @@ import React, { useState, useEffect } from 'react'
 import mainImg from '../icon/logo.svg'
 import userImg from '../icon/girl.svg'
 import './style.css'
-import { FormGroup } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import { Link } from 'react-router-dom'
+
+import { Typography } from '@material-ui/core'
 
 export class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isUserLoggedIn: true,
+      isUserLoggedIn: false,
       user: {
         username: 'Magda',
         email: '',
       },
-      roomNumber: '',
+      roomNumber: '123abc',
     }
   }
 
@@ -30,6 +33,7 @@ export class Home extends React.Component {
     const { user } = this.state
     const { roomNumber } = this.state
     const { isUserLoggedIn } = this.state
+
     return (
       <div className='base-container' ref={this.props.containerRef}>
         {isUserLoggedIn && (
@@ -61,9 +65,15 @@ export class Home extends React.Component {
                 </Box>
               </Grid>
               <Grid>
-                <button type='button' className='btn'>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  component={Link}
+                  to={'/home'}
+                  disableElevation
+                >
                   Log Out
-                </button>
+                </Button>
               </Grid>
             </Grid>
           </div>
@@ -77,9 +87,15 @@ export class Home extends React.Component {
               alignItems='center'
             >
               <Grid>
-                <button type='button' className='btn'>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  component={Link}
+                  to={'/login'}
+                  disableElevation
+                >
                   Log In
-                </button>
+                </Button>
               </Grid>
             </Grid>
           </div>
@@ -88,30 +104,24 @@ export class Home extends React.Component {
           <div className='image'>
             <img src={mainImg} />
           </div>
-          <div className='buttons'>
-            <div>
-              <button type='button' className='btn hostjoin'>
-                HOST ROOM
-              </button>
-            </div>
-            <div style={{ marginTop: 10 }}>
-              {/* <ValidatorForm
-                ref='form'
-                onSubmit={this.handleSubmit}
-                onError={(errors) => console.log(errors)}
-              > */}
-              {/* <TextValidator
-                  label='Room ID'
-                  onChange={this.handleChange}
-                  name='roomid'
-                  validators={['required']}
-                  errorMessages={['Room ID is required']}
-                  value={roomNumber}
-                  variant='filled'
-                  margin='dense'
-                  InputProps={{ disableUnderline: true }}
-                  fullWidth
-                ></TextValidator> */}
+          <Typography variant='h1' color='primary'>
+            PilePlan
+          </Typography>
+          <div style={{ marginTop: 20 }}>
+            <Button
+              variant='contained'
+              color='primary'
+              fullWidth
+              style={{
+                fontSize: 25,
+              }}
+              component={Link}
+              to={'/create'}
+            >
+              HOST ROOM
+            </Button>
+
+            <div style={{ marginTop: 20 }}>
               <TextField
                 onChange={this.handleChange}
                 name='roomid'
@@ -123,14 +133,21 @@ export class Home extends React.Component {
                 InputProps={{ disableUnderline: true }}
                 fullWidth
               />
-              <button
-                type='button'
-                className='btn hostjoin'
-                style={{ margin: 0 }}
+
+              <Button
+                variant='contained'
+                color='primary'
+                fullWidth
+                style={{
+                  maxHeight: '50px',
+                  minHeight: '50px',
+                  fontSize: 25,
+                }}
+                component={Link}
+                to={'/room/' + this.state.roomNumber}
               >
                 JOIN ROOM
-              </button>
-              {/* </ValidatorForm> */}
+              </Button>
             </div>
           </div>
         </div>
