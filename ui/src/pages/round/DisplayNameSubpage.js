@@ -61,7 +61,15 @@ const DisplayNameSubpage = ({
                     submit()
                   }}
                 >
-                  <div style={{ marginTop: 40 }}>
+                  <div style={{ marginTop: 30 }}>
+                    <Typography variant='h6' color='primary'>
+                      You are joining{' '}
+                      {username.charAt(0).toUpperCase() + username.slice(1)}'s
+                      room!
+                    </Typography>
+                    <Typography variant='h7' color='primary'>
+                      Enter a nickname to Join
+                    </Typography>
                     <TextField
                       variant='filled'
                       margin='dense'
@@ -69,13 +77,14 @@ const DisplayNameSubpage = ({
                       errorMessages={['Display Name is required']}
                       InputProps={{ disableUnderline: true }}
                       fullWidth
-                      label='Display Name'
+                      label='Nickname'
                       value={formDisplayName}
                       required
                       error={displayNameInvalid}
                       onChange={(event) =>
                         setFormDisplayName(event.target.value)
                       }
+                      style={{ marginTop: 30, marginBottom: 0 }}
                     />
                     <Button
                       variant='contained'
@@ -83,11 +92,13 @@ const DisplayNameSubpage = ({
                       fullWidth
                       style={{
                         fontSize: 15,
+                        borderTopLeftRadius: 0,
+                        borderTopRightRadius: 0,
                       }}
                       type='submit'
                       disabled={displayNameInvalid || !!displayName}
                     >
-                      Continue
+                      Join
                     </Button>
                   </div>
                   {!!displayName ? <CircularProgress /> : null}

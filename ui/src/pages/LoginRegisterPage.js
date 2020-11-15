@@ -193,7 +193,7 @@ const RightSide = (props) => {
       onClick={props.onClick}
     >
       <div className='inner-container' className='text'>
-        <Typography variant='h4' color='secondary'>
+        <Typography variant='h5' color='secondary'>
           {props.current}
         </Typography>
       </div>

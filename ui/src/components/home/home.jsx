@@ -15,7 +15,7 @@ export class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isUserLoggedIn: false,
+      isUserLoggedIn: true,
       user: {
         username: 'Magda',
         email: '',
@@ -68,7 +68,7 @@ export class Home extends React.Component {
                   variant='contained'
                   color='primary'
                   component={Link}
-                  to={'/home'}
+                  to={'/'}
                   disableElevation
                 >
                   Log Out
@@ -131,6 +131,7 @@ export class Home extends React.Component {
                 errorMessages={['Room ID is required']}
                 InputProps={{ disableUnderline: true }}
                 fullWidth
+                style={{ marginBottom: 0 }}
               />
 
               <Button
@@ -141,6 +142,8 @@ export class Home extends React.Component {
                   maxHeight: '50px',
                   minHeight: '50px',
                   fontSize: 25,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
                 }}
                 component={Link}
                 to={'/room/' + this.state.roomNumber}
