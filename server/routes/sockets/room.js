@@ -156,11 +156,7 @@ class Room {
             this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
         } else {
             // Set the user's vote in the roomState
-<<<<<<< HEAD
             this.roomState.voteByUserID[socket.id] = cardIndex;
-=======
-            this.roomState.voteByUserID[socket.id] = this.roomState.deck[cardIndex].value;
->>>>>>> 715f0e57bb7c0e27bf5bae2a1c0ce1eb3db3adb0
             // Check if the phase should be updated
             this.checkIfVotingComplete();
             // Emit a room_state_changed event to everyone in the room
