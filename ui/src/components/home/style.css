@@ -1,0 +1,46 @@
+.radiant-background {
+  height: 100%;
+  width: 100%;
+  background: rgba(43, 132, 237, 1);
+  background: radial-gradient(
+    circle,
+    rgba(234, 243, 253, 1) 0%,
+    rgba(234, 243, 253, 1) 30%,
+    rgba(44, 99, 201, 1) 100%
+  );
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+.userCredentials {
+  color: #2b84ed;
+}
+.base-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.base-container .content {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .base-container .content .image {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  margin-bottom: 45px;
+}
+
+.base-container .content .image img {
+  width: 100%;
+  height: 100%;
+  margin-top: 15px;
+  margin-bottom: 25px;
+} */

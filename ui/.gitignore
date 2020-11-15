@@ -10,7 +10,7 @@ package-lock.json
 # and server)
 /src/config.js
 
-# firebase config file
+# Firebase config file
 /src/firebaseConfig.js
 
 # testing

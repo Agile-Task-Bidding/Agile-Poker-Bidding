@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
+
+body {
+  margin: 0;
+}
+.App {
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+}
+.radiant-background {
+  background: rgba(43, 132, 237, 1);
+  background: radial-gradient(
+    circle,
+    rgba(234, 243, 253, 1) 0%,
+    rgba(44, 99, 201, 1) 100%
+  );
+}
+
+.login {
+  width: 27em;
+  height: 40em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 99;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+  border-radius: 4px;
+  position: relative;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  padding: 17px 10px;
+}
+/* .btn {
+  font-size: 18px;
+  padding: 4px 12px;
+  border: 0;
+  background-color: #2b84ed;
+  color: #fff;
+  border-radius: 3px;
+  transition: all 250ms ease-in-out;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: #1e5ca6;
+}
+.btn:focus {
+  outline: none;
+}
+.hostjoin {
+  font-size: 30px;
+  padding: 7px 20px;
+  border: 0;
+  background-color: #2b84ed;
+  color: #fff;
+  border-radius: 3px;
+  transition: all 250ms ease-in-out;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+} */

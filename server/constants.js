@@ -1,0 +1,6 @@
+module.exports = {
+    VOTING_PHASE: 'VOTING_PHASE',
+    RESULTS_PHASE: 'RESULTS_PHASE',
+    
+    ABSTAIN_VALUE: 'ABSTAIN',
+};

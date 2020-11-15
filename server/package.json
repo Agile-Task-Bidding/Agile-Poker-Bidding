@@ -15,7 +15,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.9",
+    "firebase-admin": "^9.3.0",
+    "joi": "^17.3.0",
+    "lodash": "^4.17.20",
     "socket.io": "^2.3.0"
   }
 }

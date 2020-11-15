@@ -1,15 +1,15 @@
 import * as types from '../action-types';
 
 const initialState = {
-    socket: null
-};
+    playing: false
+}
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case types.SET_GLOBAL_SOCKET:
+        case types.SET_RICK_ROLL_PLAYING:
             return {
                 ...state,
-                socket: action.socket,
+                playing: action.playing,
             };
         default:
             return state;
