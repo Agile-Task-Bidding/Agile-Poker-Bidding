@@ -3,6 +3,8 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
+const readline = require('readline');
 
 // Initialize Firebase Admin
 const admin = require('firebase-admin');
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use('/api/v1', require('./routes/api/v1/apiRouter'));
 
 // Set up the app to use the imported sockets
-new roomServiceSocket.RoomService(server, '/sockets/room-service');
+const roomService = new roomServiceSocket.RoomService(server, '/sockets/room-service');
 
 // Serve up files from the build directory
 app.use(express.static(path.join(__dirname, '../ui/build')));
@@ -40,3 +42,15 @@ app.get(/^\/(?!api).*/, function(req, res) {
 app.listen(process.env.WEBSITE_PORT, function() {
     console.log('Server is running on Port: ' + process.env.WEBSITE_PORT);
 });
+
+const rl = readline.createInterface({
+    input: process.stdin,
+});
+
+rl.on('line', (input) => {
+    if (input === 'rickroll') {
+        roomService.randomRickRoll();
+    } else {
+        console.log('Unknown command');
+    }
+})

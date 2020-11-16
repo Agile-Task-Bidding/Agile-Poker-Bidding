@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
-
 body {
   margin: 0;
 }
+
 .App {
   min-height: 100vh;
+  height: 100%;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -44,32 +45,57 @@ body {
   z-index: 99;
   padding: 17px 10px;
 }
+.right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90%;
+  background-color: rgba(44, 99, 201, 1);
+  width: 100%;
+  position: absolute;
+  right: -34%;
+  border-radius: 6px;
+  z-index: 1;
+  transition: all 400ms ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.281);
+}
+.right-side.right {
+  right: -40%;
+  align-items: flex-end;
+}
+.right-side.right:hover {
+  right: -45%;
+}
+.right-side.left {
+  right: 40%;
+  align-items: flex-start;
+}
+.right-side.left:hover {
+  right: 45%;
+}
+.right-side .text {
+  font-size: 21px;
+  font-weight: 500;
+  color: #fff;
+  margin-right: 2.5em;
+  margin-left: 2.5em;
+}
 /* .btn {
-  font-size: 18px;
-  padding: 4px 12px;
+  font-size: 21px;
+  padding: 5px 20px;
   border: 0;
   background-color: #2b84ed;
   color: #fff;
   border-radius: 3px;
   transition: all 250ms ease-in-out;
   cursor: pointer;
+  margin: 0.25em;
+  width: 100%;
 }
 .btn:hover {
   background-color: #1e5ca6;
 }
 .btn:focus {
   outline: none;
-}
-.hostjoin {
-  font-size: 30px;
-  padding: 7px 20px;
-  border: 0;
-  background-color: #2b84ed;
-  color: #fff;
-  border-radius: 3px;
-  transition: all 250ms ease-in-out;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 0.6em;
-  margin-bottom: 0.6em;
 } */

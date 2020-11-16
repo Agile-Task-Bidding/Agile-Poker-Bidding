@@ -3,7 +3,6 @@ import logo from '../components/icon/logo.svg'
 import './Home.css'
 import { Home } from '../components/home/index'
 import { AppProvider } from '../components/home/context'
-import { makeStyles } from '@material-ui/core/styles'
 
 class HomePage extends React.Component {
   constructor(props) {
