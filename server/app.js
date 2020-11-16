@@ -3,7 +3,6 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const path = require('path');
-const mongoose = require('mongoose');
 const readline = require('readline');
 
 // Initialize Firebase Admin
