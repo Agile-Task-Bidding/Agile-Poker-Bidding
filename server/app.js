@@ -3,7 +3,6 @@ const express = require('express');
 const initServer = require('./initServer');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 const readline = require('readline');
 
 // Initialize Firebase Admin
