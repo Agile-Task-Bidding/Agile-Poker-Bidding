@@ -3,6 +3,12 @@
 
 body {
   margin: 0;
+  background: rgba(43, 132, 237, 1);
+  background: radial-gradient(
+    circle,
+    rgba(234, 243, 253, 1) 0%,
+    rgba(44, 99, 201, 1) 100%
+  );
 }
 .App {
   min-height: 100vh;

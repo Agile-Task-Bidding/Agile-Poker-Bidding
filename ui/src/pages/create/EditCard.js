@@ -23,7 +23,7 @@ const EditCard = ({ card, setCard, deleteCard }) => {
       >
         value
       </TextField>
-      <Button variant='contained' color='#9dc6fb' onClick={() => deleteCard()}>
+      <Button variant='contained' color='primary' onClick={() => deleteCard()}>
         Delete
       </Button>
     </CardFrame>

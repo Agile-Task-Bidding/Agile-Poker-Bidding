@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     padding: 15,
     display: 'flex',
     justifyContent: 'center',
-    background:
-      'radial-gradient(circle, rgba(234,243,253,1) 0%, rgba(44,90,201,1) 100%)',
   },
 })
 
