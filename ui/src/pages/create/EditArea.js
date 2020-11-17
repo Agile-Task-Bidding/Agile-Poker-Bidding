@@ -18,7 +18,6 @@ import { SET_ACCOUNT } from '../../data/state/action-types'
 import '..//Styling.css'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
-import UserPanel from '../../components/UserPanel'
 
 const EditArea = ({
   onSave,
