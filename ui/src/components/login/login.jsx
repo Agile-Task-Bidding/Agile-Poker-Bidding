@@ -47,7 +47,13 @@ export class Login extends React.Component {
               onSubmit={this.handleSubmit}
               onError={(errors) => console.log(errors)}
             >
-              <div ClassName='form-group'>
+              <div
+                ClassName='form-group'
+                style={{
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5000,
+                }}
+              >
                 <TextValidator
                   label='E-mail'
                   onChange={this.handleChange}
