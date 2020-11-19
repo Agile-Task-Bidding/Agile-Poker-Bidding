@@ -4,18 +4,22 @@ import { accountSelector } from '../../data/state/account/account.selector';
 import MemberRow from './MemberRow';
 import { roundStateSelector } from '../../data/state/round-state/round-state.selector';
 import { StyleSheet, css } from 'aphrodite';
-import { Paper } from '@material-ui/core';
+import { Paper, List, ListItem } from '@material-ui/core';
 
 const MemberList = ({ roundState, account, className, ...thruProps }) => {
     const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
         const vote = roundState.voteByUserID[socketID];
         return (
-            <MemberRow displayName={nickname} vote={vote}/>
+            <ListItem>
+                <MemberRow key={socketID} displayName={nickname} socketID={socketID} voted={vote !== null}/>
+            </ListItem>
         )
       });
     return (
         <Paper className={css(styles.container) + (className ? ' ' + className : '')} {...thruProps}>
-            {players}
+            <List>
+                {players}
+            </List>
         </Paper>
     );
 };

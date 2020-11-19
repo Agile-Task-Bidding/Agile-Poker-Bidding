@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         },
         // background: 'gray',
         minHeight: '100vh', //TODO figure out how to remove padding from body and why the other page does it
+        paddingTop: 12,
     }
 })
 

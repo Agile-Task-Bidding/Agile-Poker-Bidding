@@ -9,8 +9,8 @@ const EditCard = ({ card, setCard, deleteCard }) => {
       <TextField
         label='Number'
         inputProps={{ style: { textAlign: 'center' } }}
-        value={card.number}
-        onChange={(event) => setCard({ ...card, number: event.target.value })}
+        value={card.value}
+        onChange={(event) => setCard({ ...card, value: event.target.value })}
         color='primary'
       >
         Value
@@ -18,8 +18,8 @@ const EditCard = ({ card, setCard, deleteCard }) => {
       <TextField
         label='Tag'
         inputProps={{ style: { textAlign: 'center' } }}
-        value={card.value}
-        onChange={(event) => setCard({ ...card, value: event.target.value })}
+        value={card.tag}
+        onChange={(event) => setCard({ ...card, tag: event.target.value })}
       >
         value
       </TextField>

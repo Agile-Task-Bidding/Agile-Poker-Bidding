@@ -2,10 +2,7 @@ import * as types from '../action-types';
 import GameState from '../../../services/GameState';
 
 const initialState = {
-    account: {
-        username: 'jefrey',
-        deck: [],
-    }
+    account: null
 }
 
 export default function(state = initialState, action) {

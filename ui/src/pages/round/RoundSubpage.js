@@ -53,6 +53,8 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
           <MemberRow displayName={nickname} vote={vote}/>
         )
       });
+      const voted = Object.values(roundState.connectedUsersByID).filter(({ socketID }) => roundState.voteByUserID[socketID] != null).length;
+      const total = Object.values(roundState.connectedUsersByID).length;
       return (
         <>
           <RickRolled/>
@@ -77,6 +79,7 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
             secondary={(
               <MemberList className={css(styles.container)}/>
             )}
+            buttonText={`${voted}/${total}`}
           />
           )}
         </>
@@ -87,7 +90,7 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
       const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
         const vote = roundState.voteByUserID[socketID];
         return (
-          <MemberRow displayName={nickname} vote={vote}/>
+          <Typography>{nickname}:{vote}</Typography>
         )
       });
       return (

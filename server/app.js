@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
@@ -6,14 +5,6 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const readline = require('readline');
-=======
-require('dotenv').config()
-const express = require('express')
-const http = require('http')
-const cors = require('cors')
-const path = require('path')
-const readline = require('readline')
->>>>>>> origin/APB-56-Styling-cards-result
 
 // Initialize Firebase Admin
 const admin = require('firebase-admin')

@@ -199,7 +199,7 @@ class Room {
       // Emit a vote_cancel_success event to the user
       this.emitUserEvent('vote_cancel_success', existingUser)
     }
-<<<<<<< HEAD
+  }
 
     /**
      * Register the user's vote in the room.
@@ -239,7 +239,6 @@ class Room {
             // Emit a vote_cancel_success event to the user
             this.emitUserEvent('vote_cancel_success', existingUser);
         }
-=======
   }
 
   /**
@@ -256,7 +255,6 @@ class Room {
       }
       // Emit a room_state_changed event to everyone in the room
       this.emitRoomEvent('room_state_changed', { roomState: this.roomState })
->>>>>>> origin/APB-56-Styling-cards-result
     }
   }
 

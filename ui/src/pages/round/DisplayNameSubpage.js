@@ -67,7 +67,7 @@ const DisplayNameSubpage = ({
                       {username.charAt(0).toUpperCase() + username.slice(1)}'s
                       room!
                     </Typography>
-                    <Typography variant='h7' color='primary'>
+                    <Typography variant='h6' color='primary'>
                       Enter a nickname to Join
                     </Typography>
                     <TextField

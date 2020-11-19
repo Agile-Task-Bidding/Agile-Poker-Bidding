@@ -19,8 +19,10 @@ import axios from 'axios';
 import '..//Styling.css'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
+import { loginUser } from '../../services/login'
 
 const EditArea = ({
+  account,
   onSave,
   emitEvent,
   onSubmit,
@@ -28,43 +30,40 @@ const EditArea = ({
   createRoomServiceConnection,
 }) => {
   const [loading, setLoading] = useState(false)
-  const [cards, setCards] = useState([
-    {
-      value: 1,
-      tag: 'ezz',
-    },
-    {
-      value: 2,
-      tag: 'ez',
-    },
-    {
-      value: 3,
-      tag: 'hard',
-    },
-  ])
+  const [cards, setCards] = useState([])
   const [allowAbstain, setAllowAbstain] = useState(false)
   const [roomExistsError, setRoomExistsError] = useState(false)
   const history = useHistory()
 
   useEffect(() => {
-    ;(async () => {
-      setAccount({ username: 'falc' })
-      const socket = await createRoomServiceConnection()
-      socket.on('connect', () => {
-        console.log('Connected!')
-      })
-      socket.on('disconnect', () => {
-        console.log('Disconnected')
-        // dispatch({ type: types.SET_DISPLAY_NAME, displayName: '' })
-        // dispatch({ type: types.SET_CONNECTED_TO_ROOM, connectedToRoom: false })
-      })
-      socket.on('room_already_created', (event) => {
-        console.log(event)
-      })
-      socket.on('create_success', (event) => {
-        console.log('create_success')
-        history.push('/room/falc')
-      })
+     (async () => {
+      // await firebase
+      //   .auth()
+      //   .signInWithEmailAndPassword('ryglaspey@knights.ucf.edu', 'password');
+      // await firebase.auth().signOut();
+
+        loginUser(async (account) => {
+          console.log(account);
+          if (account) {
+            setCards(account.roomConfig.deck);
+            const socket = await createRoomServiceConnection()
+            socket.on('connect', () => {
+              console.log('Connected!')
+            })
+            socket.on('disconnect', () => {
+              console.log('Disconnected');
+            })
+            socket.on('room_already_created', (event) => {
+              console.log(event)
+            })
+            socket.on('create_success', (event) => {
+              console.log('create_success')
+              history.push('/room/falc')
+            })
+          } else {
+            history.push('/login');
+          }
+        });
     })()
   }, [])
 
@@ -79,7 +78,6 @@ const EditArea = ({
   const genOnDelete = (idx) => {
     return () => {
       const cardsCopy = [...cards.slice(0, idx), ...cards.slice(idx + 1)]
-      console.log(cardsCopy)
       setCards(cardsCopy)
     }
   }
@@ -89,28 +87,23 @@ const EditArea = ({
     try {
       setLoading(true)
 
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword('ryglaspey@knights.ucf.edu', 'password')
-
-      const idToken = await firebase.auth().currentUser.getIdToken(true)
-
-      const config = {
+      const roomConfig = {
         deck: cards,
         allowAbstain,
       }
 
-      // const res = await axios.get('http://localhost:80/api/v1/users', {
-      //   headers: {
-      //     'Authorization': 'Bearer ' + idToken
-      //   }
-      // });
-      // console.log(res);
+      const idToken = await firebase.auth().currentUser.getIdToken(false);
+      //TODO remove await
+      await axios.put(`http://localhost:80/api/v1/users/${firebase.auth().currentUser.uid}/roomConfig`, { roomConfig }, {
+        headers: {
+          'Authorization': 'Bearer ' + idToken
+        }
+      });
 
       console.log('create_room')
       emitEvent('create_room', {
-        roomID: 'falc',
-        roomConfig: config,
+        roomID: account.username,
+        roomConfig,
       })
     } catch (err) {
       console.error(err)

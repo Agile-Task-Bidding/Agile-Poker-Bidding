@@ -3,21 +3,22 @@ import { StyleSheet, css } from 'aphrodite';
 import { Button, IconButton, Typography, Dialog, Slide, AppBar, Toolbar, List, ListItem, Divider, ListItemText } from '@material-ui/core';
 import { Menu, Close } from '@material-ui/icons';
 
-const MobileView = ({ primary, secondary }) => {
+const MobileView = ({ primary, secondary, buttonText }) => {
 
     const [open, setOpen] = useState(false);
 
-    const Transition = React.forwardRef(function Transition(props, ref) {
-        return <Slide direction="up" ref={ref} {...props} />;
-    });
+    // Re-animates every time state changes...
+    // const Transition = React.forwardRef(function Transition(props, ref) {
+    //     return <Slide direction="up" ref={ref} {...props} />;
+    // });
 
     return (
         <div>
             {primary}
             <div className={css(styles.overlay)}>
-                <IconButton onClick={() => setOpen(true)}>
-                    <Menu/>
-                </IconButton>
+                <Button onClick={() => setOpen(true)}>
+                    {buttonText}
+                </Button>
             </div>
             <Dialog fullScreen open={open} onClose={() => setOpen(false)}>
                 <AppBar className={css(styles.appbar)}>
