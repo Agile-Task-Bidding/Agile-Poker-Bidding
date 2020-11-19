@@ -7,8 +7,8 @@ import CardFrame from '../../components/CardFrame';
 const EditCard = ({ card, setCard, deleteCard }) => {
     return (
         <CardFrame elevation={1} className={css(styles.container)}>
-            <TextField label='Number' inputProps={{ style: { textAlign: 'center' } }} value={card.number} onChange={(event) => setCard({...card, number: event.target.value})}>Value</TextField>
-            <TextField label='Tag' inputProps={{ style: { textAlign: 'center' } }} value={card.value} onChange={(event) => setCard({...card, value: event.target.value})}>value</TextField>
+            <TextField label='Number' inputProps={{ style: { textAlign: 'center' } }} value={card.value} onChange={(event) => setCard({...card, number: event.target.value})}>Value</TextField>
+            <TextField label='Tag' inputProps={{ style: { textAlign: 'center' } }} value={card.tag} onChange={(event) => setCard({...card, value: event.target.value})}>value</TextField>
             <Button onClick={() => deleteCard()}>Delete</Button>
         </CardFrame>
     );

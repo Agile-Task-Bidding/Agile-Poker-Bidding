@@ -5,7 +5,7 @@ import { StyleSheet, css } from 'aphrodite';
 const ResponsiveContainer = ({...thruProps}) => {
     return (
         <div className={css(styles.page)}>
-            <Container maxWidth="md" className={css(styles.container)} {...thruProps}></Container>
+            <Container className={css(styles.container)} {...thruProps}></Container>
         </div>
     );
 };

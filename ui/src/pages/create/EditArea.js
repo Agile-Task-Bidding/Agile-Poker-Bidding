@@ -15,6 +15,7 @@ import {
 import { setAccount } from '../../data/state/account/account.actions';
 import { accountSelector } from '../../data/state/account/account.selector';
 import { SET_ACCOUNT } from '../../data/state/action-types'
+import axios from 'axios';
 
 const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomServiceConnection }) => {
   const [loading, setLoading] = useState(false)
@@ -89,6 +90,13 @@ const EditArea = ({ onSave, emitEvent, onSubmit, roomServiceSocket, createRoomSe
         deck: cards,
         allowAbstain,
       }
+
+      // const res = await axios.get('http://localhost:80/api/v1/users', {
+      //   headers: {
+      //     'Authorization': 'Bearer ' + idToken
+      //   }
+      // });
+      // console.log(res);
 
       console.log('create_room')
       emitEvent('create_room', {

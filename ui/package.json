@@ -35,7 +35,9 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "smoothscroll-polyfill": "^0.4.4",
-    "socket.io-client": "^2.3.1"
+    "socket.io-client": "^2.3.1",
+    "react-material-ui-form-validator": "^2.1.1",
+    "react-responsive": "^8.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -57,9 +59,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-material-ui-form-validator": "^2.1.1",
-    "react-responsive": "^8.1.1"
   }
 }

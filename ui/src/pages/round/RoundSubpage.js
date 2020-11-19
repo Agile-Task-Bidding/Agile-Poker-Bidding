@@ -5,6 +5,7 @@ import {
   createRoomServiceConnection,
   emitEvent,
 } from '../../data/state/room-service/room-service.actions';
+import { StyleSheet, css } from 'aphrodite';
 import { useParams } from 'react-router-dom';
 import { displayNameSelector } from '../../data/state/app-data/app-data.selector';
 import { roomConfigSelector } from '../../data/state/room-config/room-config.selector';
@@ -15,10 +16,15 @@ import GameState from '../../services/GameState';
 import { Dialog, Typography, Button } from '@material-ui/core';
 import RickRolled from './RickRolled';
 import MemberRow from './MemberRow';
+import MemberList from './MemberList';
+import DesktopView from './DesktopView';
+import { useMediaQuery } from '@material-ui/core';
+import MobileView from './MobileView';
 
 const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, roundState, roomServiceSocket, emitEvent, ...thruProps }) => {
 
     const { username } = useParams();
+    const isDesktop = useMediaQuery('(min-width:600px)');
 
     const renderBiddingPhase = () => {
       const picked = roundState.voteByUserID[roomServiceSocket.id]
@@ -50,10 +56,29 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
       return (
         <>
           <RickRolled/>
-          <EditCardGrid>
-            {cardUi}
-          </EditCardGrid>
-          {players}
+          { isDesktop ? (
+            <DesktopView
+            primary={
+              <EditCardGrid>
+                {cardUi}
+              </EditCardGrid>
+            }
+            secondary={(
+              <MemberList className={css(styles.container)}/>
+            )}
+          />
+          ) : (
+            <MobileView
+            primary={
+              <EditCardGrid>
+                {cardUi}
+              </EditCardGrid>
+            }
+            secondary={(
+              <MemberList className={css(styles.container)}/>
+            )}
+          />
+          )}
         </>
       )
     }
@@ -84,19 +109,25 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
     )
 };
 
-const mapStateToProps = (state) => {
-    return {
-      roomServiceSocket: roomServiceSocketSelector(state),
-      displayName: displayNameSelector(state),
-      roundState: roundStateSelector(state),
-      roomConfig: roomConfigSelector(state),
-    }
-  };
-  
-  const mapDispatchToProps = {
-    createRoomServiceConnection,
-    emitEvent,
+const styles = StyleSheet.create({
+  container: {
+    padding: 12,
   }
+})
+
+const mapStateToProps = (state) => {
+  return {
+    roomServiceSocket: roomServiceSocketSelector(state),
+    displayName: displayNameSelector(state),
+    roundState: roundStateSelector(state),
+    roomConfig: roomConfigSelector(state),
+  }
+};
+  
+const mapDispatchToProps = {
+  createRoomServiceConnection,
+  emitEvent,
+}
   
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoundSubpage);
