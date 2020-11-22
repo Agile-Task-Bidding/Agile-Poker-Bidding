@@ -2,6 +2,7 @@ const socketIo = require('socket.io');
 const roomAPI = require('./room');
 const Utils = require('../../utils');
 const AuthService = require('../../services/auth');
+const constants = require('../../constants');
 const { valid } = require('joi');
 
 // Set up the socket server
@@ -62,6 +63,8 @@ class RoomService {
         socket.on('user_vote', eventInfo => this.clientVoteEvent(eventInfo, socket));
         // Handle a user cancelling their vote.
         socket.on('user_cancel_vote', eventInfo => this.clientCancelVoteEvent(eventInfo, socket));
+        // Handle a user attempting to fetch the status of a room.
+        socket.on('is_room_open', eventInfo => this.clientIsRoomOpenEvent(eventInfo, socket));
         // Handle a user creating a room. (Host)
         socket.on('create_room', eventInfo => this.clientStartRoomEvent(eventInfo, socket));
         // Handle a user closing a room. (Host)
@@ -281,6 +284,28 @@ class RoomService {
                 // Cancel the user's vote in the room
                 room.userCancelVote(socket);
             }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /**
+     * The client is attempting to see the status of a room (whether it is active or inactive).
+     */
+    clientIsRoomOpenEvent(eventInfo, socket) {
+        if (!eventInfo.roomID) {
+            Utils.DebugLog('Invalid event info passed to clientIsRoomOpenEvent.');
+            return;
+        }
+        try {
+            // See if the room is active.
+            const room = this.activeRoomsByID[eventInfo.roomID];
+            // Inform the user on the room's status.
+            this.emitUserEvent(
+                'room_status_fetched',
+                socket,
+                { status: room ? constants.ROOM_STATUS_ACTIVE : constants.ROOM_STATUS_INACTIVE }
+            );
         } catch (err) {
             console.log(err);
         }
