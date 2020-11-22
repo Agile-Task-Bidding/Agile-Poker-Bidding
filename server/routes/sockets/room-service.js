@@ -78,13 +78,6 @@ class RoomService {
     }
 
     /**
-     * Emit an event to the specified socket.
-     */
-    emitUserEvent(event, socket, eventInfo) {
-        this.io.to(socket.id).emit(event, eventInfo);
-    }
-
-    /**
      * Handle a user disconnecting from the room service socket.
      * 
      * TODO: Handle if host disconnects from active room; it should close the room in that case.
