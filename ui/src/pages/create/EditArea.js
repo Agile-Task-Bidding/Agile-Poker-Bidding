@@ -57,7 +57,7 @@ const EditArea = ({
             })
             socket.on('create_success', (event) => {
               console.log('create_success')
-              history.push('/room/falc')
+              history.push(`/room/${account.username}`)
             })
           } else {
             history.push('/login');
