@@ -29,12 +29,10 @@ class RoomService {
      */
     async checkIfUserAuthorized(authToken, socket, eventInfoOnError) {
         const validated = authToken && await this.getUID(authToken).catch(err => false);
-        if (validated) {
-            return true;
-        } else {
+        if (!validated) {
             this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-            return false;
         }
+        return validated;
     }
 
     /**
