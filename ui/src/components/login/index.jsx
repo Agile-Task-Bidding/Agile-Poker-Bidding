@@ -1,4 +1,4 @@
 import './style.css'
 
-export { Login } from './login'
+export { default as Login } from './login'
 export { Register } from './register'
