@@ -124,23 +124,28 @@ class Room {
      * Join a user to the room if they aren't already joined to the room.
      * The user object consists of a nickname and a socket.
      */
-    joinUserToRoom(user, socket) {
+    joinUserToRoom(nickname, socket) {
         // Check if the user's socket is already in the list of connected users.
-        const existingUser = this.roomState.connectedUsersByID[user.socketID];
+        const existingUser = this.roomState.connectedUsersByID[socket.id];
         if (existingUser) {
             // User is already in the list of connected users.
             this.emitUserEvent('user_already_in_room', existingUser);
         } else {
+            // Construct the user object
+            const user = {
+                nickname,
+                socketID: socket.id,
+            };
             // Store info about the connection in the connectedUsers array
-            this.roomState.connectedUsersByID[user.socketID] = user;
+            this.roomState.connectedUsersByID[socket.id] = user;
             // Set the user's vote to null to signify they have not voted yet
-            this.roomState.voteByUserID[user.socketID] = null;
+            this.roomState.voteByUserID[socket.id] = null;
             // Join the user's socket to the correct channel
             socket.join(this.roomID);
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', {socketID: user.socketID}, { roomState: this.roomState });
+            this.emitUserEvent('join_success', user, { roomState: this.roomState });
         }
     }
 

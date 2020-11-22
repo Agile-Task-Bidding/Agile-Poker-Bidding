@@ -138,15 +138,10 @@ class RoomService {
             if (!this.activeRoomsByID[eventInfo.roomID]) {
                 this.emitUserEvent('room_inactive', socket);
             } else {
-                // Construct the user object to pass to the room
-                const user = {
-                    nickname: eventInfo.nickname,
-                    socketID: socket.id,
-                }
                 // Grab the correct room from the list of active rooms
                 const room = this.activeRoomsByID[eventInfo.roomID];
                 // Join the user to the room
-                room.joinUserToRoom(user, socket);
+                room.joinUserToRoom(eventInfo.nickname, socket);
                 // Update the socket info
                 this.activeSocketsByID[socket.id].connectedTo = eventInfo.roomID;
             }
