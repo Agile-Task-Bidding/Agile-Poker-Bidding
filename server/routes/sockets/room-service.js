@@ -28,24 +28,16 @@ class RoomService {
     /**
      * Checks if the user is authorized via the server to take an action.
      */
-    async checkIfUserAuthorized(authToken, socket, eventInfoOnError) {
-        const validated = authToken && await this.getUID(authToken).catch(err => false);
-        if (!validated) {
-            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-        }
-        return validated;
+    async checkIfUserAuthorized(authToken) {
+        return authToken && await this.getUID(authToken).catch(err => false);
     }
 
     /**
      * Checks if the user is authorized for a room (as a host).
      */
-    async checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
+    async checkIfUserAuthorizedForRoom(room, authToken) {
         const hostUID = room.hostUID;
-        const validated = authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
-        if (!validated) {
-            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-        }
-        return validated;
+        return authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
     }
 
     /**
@@ -163,13 +155,11 @@ class RoomService {
         }
         try {
             // First we need to check if the user is authorized for this action.
-            if (!await this.checkIfUserAuthorized(
-                eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Create Room",
-                    "message": "We could not authorize your attempt to create a room."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorized(eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Create Room',
+                    'message': 'We could not authorize your attempt to create a room.'
+                });
                 return;
             }
             // If the specified roomID is already in the list of active rooms, we do not want to start another. Emit an error event.
@@ -207,13 +197,11 @@ class RoomService {
                 return;
             }
             // Check if the user is authorized as the host of a room.
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Close Room",
-                    "message": "We could not authorize your attempt to close this room."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Close Room',
+                    'message': 'We could not authorize your attempt to close this room.'
+                });
                 return;
             }
             // If we made it to this point, we can close the specified room.
@@ -243,13 +231,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized to take this action
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Kick User",
-                    "message": "We could not authorize your attempt to kick that user."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Kick User',
+                    'message': 'We could not authorize your attempt to kick that user.'
+                });
                 return;
             }
             // If we made it to here, we can kick the user from the room
@@ -319,13 +305,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Start New Round",
-                    "message": "We could not authorize your attempt to start a new round."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Start New Round',
+                    'message': 'We could not authorize your attempt to start a new round.'
+                });
                 return;
             }
             // If we made it to here, we can start a new round of voting in the room.
@@ -353,13 +337,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Force End Bidding",
-                    "message": "We could not authorize your attempt to force the bidding round to end."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Force End Bidding',
+                    'message': 'We could not authorize your attempt to force the bidding round to end.'
+                });
                 return;
             }
             // If we made it to here, we can force end bidding in the room
