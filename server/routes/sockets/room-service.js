@@ -182,9 +182,7 @@ class RoomService {
      * Have the user close the specified room.
      */
     async clientCloseRoomEvent(eventInfo, socket) {
-        if (
-            !eventInfo.roomID
-        ) {
+        if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientCloseRoomEvent.');
             return;
         }
@@ -292,9 +290,7 @@ class RoomService {
      * Have the user start a new round of voting in the specified room.
      */
     async clientStartNewRoundEvent(eventInfo, socket) {
-        if (
-            !eventInfo.roomID
-        ) {
+        if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientStartNewRoundEvent.');
             return;
         }
@@ -324,9 +320,7 @@ class RoomService {
      * results phase.
      */
     async clientForceEndBidding(eventInfo, socket) {
-        if (
-            !eventInfo.roomID
-        ) {
+        if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientForceEndBidding.');
             return;
         }
