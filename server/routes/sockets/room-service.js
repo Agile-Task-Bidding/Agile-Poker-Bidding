@@ -78,40 +78,6 @@ class RoomService {
     }
 
     /**
-     * Function to get the UID of a user given an auth token
-     */
-    async getUID(authToken) {
-        return await AuthService.getUIDFromToken(authToken);
-    }
-
-    /**
-     * Checks if the user is authorized via the server to take an action.
-     */
-    async checkIfUserAuthorized(authToken, socket, eventInfoOnError) {
-        const validated = authToken && await this.getUID(authToken).catch(err => false);
-        if (validated) {
-            return true;
-        } else {
-            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-            return false;
-        }
-    }
-
-    /**
-     * Checks if the user is authorized for a room (as a host).
-     */
-    async checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
-        const hostUID = room.hostUID;
-        const validated = authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
-        if (validated) {
-            return true;
-        } else {
-            this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-            return false;
-        }
-    }
-
-    /**
      * Emit an event to the specified socket.
      */
     emitUserEvent(event, socket, eventInfo) {
