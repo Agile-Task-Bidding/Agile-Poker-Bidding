@@ -3,6 +3,7 @@ const roomAPI = require('./room');
 const Utils = require('../../utils');
 const AuthService = require('../../services/auth');
 const constants = require('../../constants');
+const { valid } = require('joi');
 
 // Set up the socket server
 class RoomService {
@@ -16,6 +17,35 @@ class RoomService {
         this.activeRoomsByID = {};
         // Tracks the active sockets handled by the server
         this.activeSocketsByID = {};
+    }
+
+    /**
+     * Function to get the UID of a user given an auth token
+     */
+    async getUID(authToken) {
+        return await AuthService.getUIDFromToken(authToken);
+    }
+
+    /**
+     * Checks if the user is authorized via the server to take an action.
+     */
+    async checkIfUserAuthorized(authToken) {
+        return authToken && await this.getUID(authToken).catch(err => false);
+    }
+
+    /**
+     * Checks if the user is authorized for a room (as a host).
+     */
+    async checkIfUserAuthorizedForRoom(room, authToken) {
+        const hostUID = room.hostUID;
+        return authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
+    }
+
+    /**
+     * Emit an event to the specified socket.
+     */
+    emitUserEvent(event, socket, eventInfo) {
+        this.io.to(socket.id).emit(event, eventInfo);
     }
 
     /**
@@ -174,13 +204,11 @@ class RoomService {
         }
         try {
             // First we need to check if the user is authorized for this action.
-            if (!await this.checkIfUserAuthorized(
-                eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Create Room",
-                    "message": "We could not authorize your attempt to create a room."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorized(eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Create Room',
+                    'message': 'We could not authorize your attempt to create a room.'
+                });
                 return;
             }
             // If the specified roomID is already in the list of active rooms, we do not want to start another. Emit an error event.
@@ -203,9 +231,7 @@ class RoomService {
      * Have the user close the specified room.
      */
     async clientCloseRoomEvent(eventInfo, socket) {
-        if (
-            !eventInfo.roomID
-        ) {
+        if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientCloseRoomEvent.');
             return;
         }
@@ -218,13 +244,11 @@ class RoomService {
                 return;
             }
             // Check if the user is authorized as the host of a room.
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Close Room",
-                    "message": "We could not authorize your attempt to close this room."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Close Room',
+                    'message': 'We could not authorize your attempt to close this room.'
+                });
                 return;
             }
             // If we made it to this point, we can close the specified room.
@@ -254,13 +278,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized to take this action
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Kick User",
-                    "message": "We could not authorize your attempt to kick that user."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Kick User',
+                    'message': 'We could not authorize your attempt to kick that user.'
+                });
                 return;
             }
             // If we made it to here, we can kick the user from the room
@@ -352,13 +374,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Start New Round",
-                    "message": "We could not authorize your attempt to start a new round."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Start New Round',
+                    'message': 'We could not authorize your attempt to start a new round.'
+                });
                 return;
             }
             // If we made it to here, we can start a new round of voting in the room.
@@ -373,9 +393,7 @@ class RoomService {
      * results phase.
      */
     async clientForceEndBidding(eventInfo, socket) {
-        if (
-            !eventInfo.roomID
-        ) {
+        if (!eventInfo.roomID) {
             Utils.DebugLog('Invalid event info passed to clientForceEndBidding.');
             return;
         }
@@ -386,13 +404,11 @@ class RoomService {
                 return;
             }
             // Make sure the user is authorized as the host of the room
-            if (!await this.checkIfUserAuthorizedForRoom(
-                room, eventInfo.authToken, socket,
-                {
-                    "title": "Failed to Force End Bidding",
-                    "message": "We could not authorize your attempt to force the bidding round to end."
-                }
-            )) {
+            if (!await this.checkIfUserAuthorizedForRoom(room, eventInfo.authToken)) {
+                this.emitUserEvent('not_authorized', socket, {
+                    'title': 'Failed to Force End Bidding',
+                    'message': 'We could not authorize your attempt to force the bidding round to end.'
+                });
                 return;
             }
             // If we made it to here, we can force end bidding in the room

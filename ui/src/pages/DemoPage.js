@@ -243,6 +243,45 @@ class DemoPage extends Component {
                 </div>
                 <div>
                     <TextField
+                        placeholder={'Email'}
+                        value={this.state.email}
+                        onChange={event => this.setState({ email: event.target.value })}
+                    />
+                    <TextField
+                        placeholder={'Password'}
+                        value={this.state.password}
+                        onChange={event => this.setState({ password: event.target.value })}
+                    />
+                    <Button
+                        onClick={async () => {
+                            const result = await firebase.auth().signInWithEmailAndPassword(
+                                this.state.email,
+                                this.state.password
+                            ).catch(err => console.log(err));
+                            if (firebase.auth().currentUser) {
+                                const authToken = await firebase.auth().currentUser.getIdToken(true)
+                                    .catch(err => console.log(err));
+                                this.setState({
+                                    authToken,
+                                });
+                                console.log('"Signed in" successfully!');
+                            }
+                        }}
+                    >
+                        Login
+                    </Button>
+                    <Button
+                        onClick={async () => {
+                            const result = await firebase.auth().signOut()
+                                .catch(err => console.log(err));
+                            console.log('Signed out successfully!');
+                        }}
+                    >
+                        Sign Out
+                    </Button>
+                </div>
+                <div>
+                    <TextField
                         placeholder={'Host Room ID'}
                         value={this.state.hostRoomID}
                         onChange={event => this.setState({ hostRoomID: event.target.value })}
