@@ -6,7 +6,19 @@ import { ConnectedRouter } from 'connected-react-router/immutable'
 import routes from './routes'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles'
+import withFirebaseAuth from 'react-with-firebase-auth'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import firebaseConfig from '../firebaseConfig'
+
 const font = "'Reem Kufi', sans-serif"
+
+const firebaseApp = firebase.initializeApp(firebaseConfig)
+
+const firebaseAppAuth = firebaseApp.auth()
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+}
 
 const theme = createMuiTheme({
   palette: {
@@ -42,4 +54,7 @@ class Root extends Component {
   }
 }
 
-export default Root
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(Root)

@@ -1,7 +1,8 @@
-import * as types from '../action-types';
+import * as types from '../action-types'
 
 export function setAccount(account) {
-    return (dispatch) => {
-        dispatch({ type: types.SET_ACCOUNT, account });
-    }
+  return (dispatch) => {
+    console.log(account)
+    dispatch({ type: types.SET_ACCOUNT, account })
+  }
 }

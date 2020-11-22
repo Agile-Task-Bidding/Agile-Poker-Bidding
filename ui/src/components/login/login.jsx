@@ -4,8 +4,11 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { Typography } from '@material-ui/core'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import { withRouter } from 'react-router-dom'
 
-export class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -26,6 +29,26 @@ export class Login extends React.Component {
   }
   handleSubmit = () => {
     // your submit logic
+  }
+
+  doLogin = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        this.state.user.email,
+        this.state.user.password
+      )
+      .then((user) => {
+        // Signed in
+        // ...
+        this.props.history.push('/home')
+        console.log('we did it')
+      })
+      .catch((error) => {
+        var errorCode = error.code
+        console.log('oh no')
+        var errorMessage = error.message
+      })
   }
 
   render() {
@@ -102,8 +125,9 @@ export class Login extends React.Component {
               //   minHeight: '60px',
               //   fontSize: 28,
               // }}
-              component={Link}
-              to={'/home'}
+              // component={Link}
+              // to={''}
+              onClick={this.doLogin}
             >
               Log In
             </Button>
@@ -123,3 +147,5 @@ export class Login extends React.Component {
     )
   }
 }
+
+export default withRouter(Login)

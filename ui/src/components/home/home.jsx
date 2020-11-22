@@ -8,34 +8,50 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { Link } from 'react-router-dom'
-
+import { connect } from 'react-redux'
+import { accountSelector } from '../../data/state/account/account.selector'
 import { Typography } from '@material-ui/core'
+import { loginUser } from '../../services/login'
+import { setAccount } from '../../data/state/account/account.actions'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import { withRouter } from 'react-router-dom'
 
-export class Home extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isUserLoggedIn: true,
-      user: {
-        username: 'Magda',
-        email: '',
-      },
+      // user: {
+      //   username: 'RealRyan',
+      //   email: '',
+      // },
       roomNumber: '',
     }
+  }
+
+  componentDidMount = () => {
+    loginUser(() => {}, this.props.setAccount)
   }
 
   handleChange = (event) => {
     this.setState({ roomNumber: event.target.value })
   }
 
+  doSignOut = () => {
+    firebase.auth().signOut()
+  }
+
   render() {
-    const { user } = this.state
+    // const { user } = this.state
+    console.log(this.props.account)
+    const { account } = this.props
     const { roomNumber } = this.state
     const { isUserLoggedIn } = this.state
 
     return (
       <div className='base-container' ref={this.props.containerRef}>
-        {isUserLoggedIn && (
+        {!!account && (
           <div style={{ width: '80%' }}>
             <Grid
               container
@@ -59,16 +75,17 @@ export class Home extends React.Component {
                     <img src={userImg} />
                   </Box>
                   <Box>
-                    <h3 className='userCredentials'> {user.username}</h3>
+                    <h3 className='userCredentials'> {account.username}</h3>
                   </Box>
                 </Box>
               </Grid>
               <Grid>
                 <Button
+                  onClick={this.doSignOut}
                   variant='contained'
                   color='primary'
-                  component={Link}
-                  to={'/'}
+                  // component={Link}
+                  // to={'/'}
                   disableElevation
                 >
                   Log Out
@@ -77,7 +94,7 @@ export class Home extends React.Component {
             </Grid>
           </div>
         )}
-        {!isUserLoggedIn && (
+        {!!!account && (
           <div style={{ width: '80%' }}>
             <Grid
               container
@@ -157,3 +174,15 @@ export class Home extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    account: accountSelector(state),
+  }
+}
+
+const mapDispatchToProps = {
+  setAccount,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
