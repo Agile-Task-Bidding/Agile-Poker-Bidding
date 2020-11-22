@@ -14,7 +14,6 @@ import {
 } from '../../data/state/room-service/room-service.actions'
 import { setAccount } from '../../data/state/account/account.actions'
 import { accountSelector } from '../../data/state/account/account.selector'
-import { SET_ACCOUNT } from '../../data/state/action-types'
 import axios from 'axios';
 import '..//Styling.css'
 import Paper from '@material-ui/core/Paper'
@@ -63,7 +62,7 @@ const EditArea = ({
           } else {
             history.push('/login');
           }
-        });
+        }, setAccount);
     })()
   }, [])
 

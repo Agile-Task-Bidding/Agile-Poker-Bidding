@@ -7,6 +7,7 @@ import ResponsiveContainer from '../../components/ResponsiveContainer'
 import RoundSubpage from './RoundSubpage'
 import { useHistory, useParams } from 'react-router-dom';
 import DisplayNameSubpage from './DisplayNameSubpage';
+import { setAccount } from '../../data/state/account/account.actions'
 import { appStateSelector } from '../../data/state/app-data/app-data.selector';
 import { setAppState, setDisplayName } from '../../data/state/app-data/app-data.actions';
 import { setRickRollPlaying } from '../../data/state/rick-rolled/rick-rolled.actions';
@@ -53,7 +54,7 @@ const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRi
         socket.on('host_closed_connection', event => setAppState(AppState.ROOM_CLOSED));
         socket.on('host_room_closed_success', event => console.log);
         socket.on('rickroll', () => setRickRollPlaying(true));
-      });
+      }, setAccount);
     })()
   }, [])
 
