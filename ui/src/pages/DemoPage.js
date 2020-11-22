@@ -7,6 +7,11 @@ import {
     createRoomServiceConnection,
     emitEvent,
 } from '../data/state/room-service/room-service.actions';
+import firebase from 'firebase';
+import { firebaseConfig } from '../firebaseConfig';
+
+firebase.initializeApp(firebaseConfig);
+console.log('Current User:', firebase.auth().currentUser);
 
 class DemoPage extends Component {
     state = {
@@ -32,6 +37,9 @@ class DemoPage extends Component {
             ]
         },
         cardIndex: '',
+        authToken: '',
+        email: '',
+        password: '',
     };
 
     async componentDidMount() {
@@ -49,6 +57,11 @@ class DemoPage extends Component {
         this.props.roomServiceSocket.on('host_room_closed_failure', event => this.onHostRoomClosedFailure(event));
         this.props.roomServiceSocket.on('host_closed_connection', event => this.onHostClosedConnection(event));
         this.props.roomServiceSocket.on('host_room_closed_success', event => this.onHostRoomClosedSuccess(event));
+        this.props.roomServiceSocket.on('not_authorized', event => this.onNotAuthorized(event));
+    }
+
+    onNotAuthorized(event) {
+        console.log(event);
     }
 
     onRoomInactive(event) {
@@ -171,6 +184,45 @@ class DemoPage extends Component {
                 </div>
                 <div>
                     <TextField
+                        placeholder={'Email'}
+                        value={this.state.email}
+                        onChange={event => this.setState({ email: event.target.value })}
+                    />
+                    <TextField
+                        placeholder={'Password'}
+                        value={this.state.password}
+                        onChange={event => this.setState({ password: event.target.value })}
+                    />
+                    <Button
+                        onClick={async () => {
+                            const result = await firebase.auth().signInWithEmailAndPassword(
+                                this.state.email,
+                                this.state.password
+                            ).catch(err => console.log(err));
+                            if (firebase.auth().currentUser) {
+                                const authToken = await firebase.auth().currentUser.getIdToken(true)
+                                    .catch(err => console.log(err));
+                                this.setState({
+                                    authToken,
+                                });
+                                console.log('"Signed in" successfully!');
+                            }
+                        }}
+                    >
+                        Login
+                    </Button>
+                    <Button
+                        onClick={async () => {
+                            const result = await firebase.auth().signOut()
+                                .catch(err => console.log(err));
+                            console.log('Signed out successfully!');
+                        }}
+                    >
+                        Sign Out
+                    </Button>
+                </div>
+                <div>
+                    <TextField
                         placeholder={'Host Room ID'}
                         value={this.state.hostRoomID}
                         onChange={event => this.setState({ hostRoomID: event.target.value })}
@@ -182,6 +234,7 @@ class DemoPage extends Component {
                                 {
                                     roomID: this.state.hostRoomID,
                                     roomConfig: this.state.roomConfig,
+                                    authToken: this.state.authToken,
                                 }
                             )
                         }}
@@ -194,6 +247,7 @@ class DemoPage extends Component {
                                 'close_room',
                                 {
                                     roomID: this.state.hostRoomID,
+                                    authToken: this.state.authToken,
                                 }
                             );
                         }}
@@ -247,6 +301,7 @@ class DemoPage extends Component {
                                 'start_new_round',
                                 {
                                     roomID: this.state.joinRoomID,
+                                    authToken: this.state.authToken,
                                 }
                             );
                         }}
@@ -259,6 +314,7 @@ class DemoPage extends Component {
                                 'force_end_bidding',
                                 {
                                     roomID: this.state.joinRoomID,
+                                    authToken: this.state.authToken,
                                 }
                             );
                         }}

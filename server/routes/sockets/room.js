@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Constants = require('../../constants');
 
 class Room {
-    constructor(ioRef, roomID, roomConfig) {
+    constructor(ioRef, roomID, roomConfig, hostUID) {
         // This is the reference to the io server
         this.ioRef = ioRef;
         // The reference to the appropriate io room ("channel")
@@ -11,6 +11,8 @@ class Room {
         this.roomConfig = {...roomConfig};
         // The reference to the room's deck
         this.deck = this.roomConfig.deck;
+        // The host's user ID for authentication
+        this.hostUID = hostUID;
 
         // If the allowAbstain property is set, we need to add an
         // abstain option to the room's deck
@@ -124,16 +126,18 @@ class Room {
      */
     joinUserToRoom(nickname, socket) {
         // Check if the user's socket is already in the list of connected users.
-        const existingUser = this.getUserFromState(socket);
+        const existingUser = this.roomState.connectedUsersByID[socket.id];
         if (existingUser) {
             // User is already in the list of connected users.
             this.emitUserEvent('user_already_in_room', existingUser);
         } else {
-            // Store info about the connection in the connectedUsers array
-            this.roomState.connectedUsersByID[socket.id] = {
+            // Construct the user object
+            const user = {
                 nickname,
                 socketID: socket.id,
             };
+            // Store info about the connection in the connectedUsers array
+            this.roomState.connectedUsersByID[socket.id] = user;
             // Set the user's vote to null to signify they have not voted yet
             this.roomState.voteByUserID[socket.id] = null;
             // Join the user's socket to the correct channel
@@ -141,7 +145,7 @@ class Room {
             // Emit a room_state_changed event to everyone in the room
             this.emitRoomEvent('room_state_changed', { roomState: this.roomState });
             // Emit a join_success event to the user that just joined the room
-            this.emitUserEvent('join_success', {socketID: socket.id}, { roomState: this.roomState });
+            this.emitUserEvent('join_success', user, { roomState: this.roomState });
         }
     }
 
@@ -153,7 +157,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID: this.roomState.roomID });
         } else {
             // Set the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = cardIndex;
@@ -174,7 +178,7 @@ class Room {
         const existingUser = this.getUserFromState(socket);
         if (!existingUser) {
             // Emit a not_in_room_error event to the user
-            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID });
+            this.emitUserEvent('not_in_room_error', {socketID: socket.id}, { roomID: this.roomState.roomID });
         } else {
             // Cancel the user's vote in the roomState
             this.roomState.voteByUserID[socket.id] = null;
