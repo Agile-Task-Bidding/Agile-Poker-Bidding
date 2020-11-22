@@ -189,7 +189,7 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => {
   return {
-    account: accountSelector,
+    account: accountSelector(state),
     roomServiceSocket: roomServiceSocketSelector(state),
   }
 }

@@ -1,9 +1,8 @@
 import axios from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { setAccount } from '../data/state/account/account.actions';
 
-export const loginUser = (callback) => {
+export const loginUser = (callback, setAccount) => {
     firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
             const idToken = await firebase.auth().currentUser.getIdToken(false);
@@ -15,6 +14,7 @@ export const loginUser = (callback) => {
             setAccount(account);
             callback(account);
         } else {
+            setAccount(null);
             callback(null);
         }
     })
