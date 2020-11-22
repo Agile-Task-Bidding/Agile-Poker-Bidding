@@ -2,6 +2,7 @@ const socketIo = require('socket.io');
 const roomAPI = require('./room');
 const Utils = require('../../utils');
 const AuthService = require('../../services/auth');
+const { valid } = require('joi');
 
 // Set up the socket server
 class RoomService {
@@ -41,12 +42,10 @@ class RoomService {
     async checkIfUserAuthorizedForRoom(room, authToken, socket, eventInfoOnError) {
         const hostUID = room.hostUID;
         const validated = authToken && hostUID && await AuthService.validateToken(authToken, hostUID).catch(err => false);
-        if (validated) {
-            return true;
-        } else {
+        if (!validated) {
             this.emitUserEvent('not_authorized', socket, eventInfoOnError);
-            return false;
         }
+        return validated;
     }
 
     /**
