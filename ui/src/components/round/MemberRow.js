@@ -37,6 +37,7 @@ const MemberRow = ({
           <CheckCircleIcon
             style={{
               color: '#223496',
+              marginRight: 12,
             }}
             fontSize='large'
           />
@@ -44,6 +45,7 @@ const MemberRow = ({
           <CheckCircleOutlineIcon
             style={{
               color: '#223496',
+              marginRight: 12,
             }}
             fontSize='large'
           />

@@ -1,24 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { accountSelector } from '../../data/state/account/account.selector';
-import MemberRow from './MemberRow';
+import ResultRow from './ResultRow';
 import { roundStateSelector } from '../../data/state/round-state/round-state.selector';
 import { StyleSheet, css } from 'aphrodite';
 import { Paper, List, ListItem, Typography } from '@material-ui/core';
 
-const MemberList = ({ roundState, account, className, ...thruProps }) => {
+const ResultsList = ({ roundState, account, className, ...thruProps }) => {
     const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
         const vote = roundState.voteByUserID[socketID];
         return (
             <ListItem>
-                <MemberRow key={socketID} displayName={nickname} socketID={socketID} voted={vote !== null}/>
+                <ResultRow key={socketID} displayName={nickname} vote={vote}/>
             </ListItem>
         )
       });
     return (
         <Paper className={css(styles.container) + (className ? ' ' + className : '')} {...thruProps}>
             <div style={{ backgroundColor: 'aqua' }}>
-                <Typography variant='h4'>Online</Typography>
+                <Typography variant='h4'>Results</Typography>
             </div>
             <List>
                 {players}
@@ -40,4 +40,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, {})(MemberList);
+export default connect(mapStateToProps, {})(ResultsList);

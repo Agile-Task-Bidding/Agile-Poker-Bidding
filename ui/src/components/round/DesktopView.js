@@ -1,11 +1,14 @@
 import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 
-const DesktopView = ({ primary, secondary }) => {
+const DesktopView = ({ header, primary, secondary }) => {
     return (
-        <div className={css(styles.container)}>
-            {primary}
-            {secondary}
+        <div>
+            {header}
+            <div className={css(styles.container)}>
+                {primary}
+                {secondary}
+            </div>
         </div>
     )
 };

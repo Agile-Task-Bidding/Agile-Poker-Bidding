@@ -72,11 +72,7 @@ const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRi
     return <Typography>Invalid State. Rip</Typography>
   }
 
-  return (
-    <ResponsiveContainer>
-      {renderSubpage()}
-    </ResponsiveContainer>
-  )
+  return renderSubpage()
 }
 
 const mapStateToProps = (state) => {

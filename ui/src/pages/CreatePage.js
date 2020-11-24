@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
+import { Button, Checkbox, FormControlLabel, Typography } from '@material-ui/core'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import EditCard from '../components/create/EditCard'
@@ -128,6 +128,7 @@ const EditArea = ({
   const classes = useStyles()
   return (
     <ResponsiveContainer>
+      <Typography variant='h2' className={classes.title}>Configure your deck</Typography>
       <EditCardGrid>{elements}</EditCardGrid>
       <Paper component='form' className={classes.root}>
         <FormControlLabel
@@ -184,6 +185,9 @@ const useStyles = makeStyles((theme) => ({
     width: 320,
     background: '#fff',
   },
+  title: {
+    paddingBottom: 24,
+  }
 }))
 
 const mapStateToProps = (state) => {

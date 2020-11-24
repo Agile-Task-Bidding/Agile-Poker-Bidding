@@ -13,13 +13,14 @@ import { roundStateSelector } from '../../data/state/round-state/round-state.sel
 import DisplayCard from '../../components/round/DisplayCard'
 import EditCardGrid from '../../components/EditCardGrid'
 import GameState from '../../services/GameState';
-import { Dialog, Typography, Button } from '@material-ui/core';
+import { Dialog, Typography, Button, Paper, Container } from '@material-ui/core';
 import RickRolled from '../../components/round/RickRolled';
 import MemberRow from '../../components/round/MemberRow';
 import MemberList from '../../components/round/MemberList';
 import DesktopView from '../../components/round/DesktopView';
 import { useMediaQuery } from '@material-ui/core';
 import MobileView from '../../components/round/MobileView';
+import ResultsList from '../../components/round/ResultsList';
 
 const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, roundState, roomServiceSocket, emitEvent, ...thruProps }) => {
 
@@ -47,12 +48,6 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
         }}
         />
       ));
-      const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
-        const vote = roundState.voteByUserID[socketID];
-        return (
-          <MemberRow displayName={nickname} vote={vote}/>
-        )
-      });
       const voted = Object.values(roundState.connectedUsersByID).filter(({ socketID }) => roundState.voteByUserID[socketID] != null).length;
       const total = Object.values(roundState.connectedUsersByID).length;
       return (
@@ -60,6 +55,11 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
           <RickRolled/>
           { isDesktop ? (
             <DesktopView
+            header={
+              <Paper>
+                <Typography variant='h2' style={{ marginBottom: 24 }}>Place your bid</Typography>
+              </Paper>
+            }
             primary={
               <EditCardGrid>
                 {cardUi}
@@ -77,7 +77,7 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
               </EditCardGrid>
             }
             secondary={(
-              <MemberList className={css(styles.container)}/>
+              <MemberList/>
             )}
             buttonText={`${voted}/${total}`}
           />
@@ -87,23 +87,19 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
     }
 
     const renderResultsPhase = () => {
-      const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
-        const vote = roundState.voteByUserID[socketID];
-        return (
-          <Typography>{nickname}:{vote}</Typography>
-        )
-      });
       return (
-        <>
-          {players}
+        <Container>
+          <Paper>
+            <Typography variant='h2' style={{ marginBottom: 24 }}>Results</Typography>
+          </Paper>
+          <ResultsList/>
           <Button onClick={() => {
             emitEvent('start_new_round', {roomID: username})
           }}>Next Round</Button>
-        </>
+        </Container>
       )
     }
 
-    console.log(roundState)
     return (
       <>
         <RickRolled rickRollPlaying={true}/>
@@ -114,7 +110,7 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
+    marginLeft: 12,
   }
 })
 
