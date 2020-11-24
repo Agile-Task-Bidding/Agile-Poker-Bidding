@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { connectedToRoomSelector } from '../../data/state/room-service/room-service.selectors';
-import { createRoomServiceConnection } from '../../data/state/room-service/room-service.actions';
-import { setRoundState } from '../../data/state/round-state/round-state.actions';
-import ResponsiveContainer from '../../components/ResponsiveContainer'
-import RoundSubpage from './RoundSubpage'
+import { connectedToRoomSelector } from '../data/state/room-service/room-service.selectors';
+import { createRoomServiceConnection } from '../data/state/room-service/room-service.actions';
+import { setRoundState } from '../data/state/round-state/round-state.actions';
+import ResponsiveContainer from '../components/ResponsiveContainer'
+import RoundSubpage from './round/RoundSubpage'
 import { useHistory, useParams } from 'react-router-dom';
-import DisplayNameSubpage from './DisplayNameSubpage';
-import { setAccount } from '../../data/state/account/account.actions'
-import { appStateSelector } from '../../data/state/app-data/app-data.selector';
-import { setAppState, setDisplayName } from '../../data/state/app-data/app-data.actions';
-import { setRickRollPlaying } from '../../data/state/rick-rolled/rick-rolled.actions';
-import AppState from '../../services/AppState';
-import KickedSubpage from './KickedSubpage';
-import ClosedSubpage from './ClosedSubpage';
-import InactiveSubpage from './InactiveSubpage';
+import DisplayNameSubpage from './round/DisplayNameSubpage';
+import { setAccount } from '../data/state/account/account.actions'
+import { appStateSelector } from '../data/state/app-data/app-data.selector';
+import { setAppState, setDisplayName } from '../data/state/app-data/app-data.actions';
+import { setRickRollPlaying } from '../data/state/rick-rolled/rick-rolled.actions';
+import AppState from '../services/AppState';
+import KickedSubpage from './round/KickedSubpage';
+import ClosedSubpage from './round/ClosedSubpage';
+import InactiveSubpage from './round/InactiveSubpage';
 import { Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { loginUser } from '../../services/login';
+import { loginUser } from '../services/login';
 
 const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRickRollPlaying, createRoomServiceConnection }) => {
 
