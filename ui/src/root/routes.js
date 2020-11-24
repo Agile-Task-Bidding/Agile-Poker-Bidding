@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import HomePage from '../pages/HomePage'
 import LoginRegisterPage from '../pages/LoginRegisterPage'
 import DemoPage from '../pages/DemoPage'
-import CreatePage from '../pages/create/CreatePage'
+import CreatePage from '../pages/CreatePage'
 import RoundPage from '../pages/round/RoundPage'
 
 export default (

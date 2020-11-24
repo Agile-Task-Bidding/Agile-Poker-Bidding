@@ -10,16 +10,16 @@ import { useParams } from 'react-router-dom';
 import { displayNameSelector } from '../../data/state/app-data/app-data.selector';
 import { roomConfigSelector } from '../../data/state/room-config/room-config.selector';
 import { roundStateSelector } from '../../data/state/round-state/round-state.selector';
-import DisplayCard from './DisplayCard'
+import DisplayCard from '../../components/round/DisplayCard'
 import EditCardGrid from '../../components/EditCardGrid'
 import GameState from '../../services/GameState';
 import { Dialog, Typography, Button } from '@material-ui/core';
-import RickRolled from './RickRolled';
-import MemberRow from './MemberRow';
-import MemberList from './MemberList';
-import DesktopView from './DesktopView';
+import RickRolled from '../../components/round/RickRolled';
+import MemberRow from '../../components/round/MemberRow';
+import MemberList from '../../components/round/MemberList';
+import DesktopView from '../../components/round/DesktopView';
 import { useMediaQuery } from '@material-ui/core';
-import MobileView from './MobileView';
+import MobileView from '../../components/round/MobileView';
 
 const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, roundState, roomServiceSocket, emitEvent, ...thruProps }) => {
 

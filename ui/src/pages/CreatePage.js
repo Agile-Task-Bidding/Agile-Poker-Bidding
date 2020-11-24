@@ -4,21 +4,22 @@ import { useHistory } from 'react-router-dom'
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import EditCard from './EditCard'
-import AddCard from './AddCard'
-import EditCardGrid from '../../components/EditCardGrid'
-import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors'
+import EditCard from '../components/create/EditCard'
+import AddCard from '../components/create/AddCard'
+import EditCardGrid from '../components/EditCardGrid'
+import { roomServiceSocketSelector } from '../data/state/room-service/room-service.selectors'
 import {
   createRoomServiceConnection,
   emitEvent,
-} from '../../data/state/room-service/room-service.actions'
-import { setAccount } from '../../data/state/account/account.actions'
-import { accountSelector } from '../../data/state/account/account.selector'
+} from '../data/state/room-service/room-service.actions'
+import { setAccount } from '../data/state/account/account.actions'
+import { accountSelector } from '../data/state/account/account.selector'
 import axios from 'axios';
-import '..//Styling.css'
+import './Styling.css'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
-import { loginUser } from '../../services/login'
+import { loginUser } from '../services/login'
+import ResponsiveContainer from '../components/ResponsiveContainer'
 
 const EditArea = ({
   account,
@@ -126,7 +127,7 @@ const EditArea = ({
   )
   const classes = useStyles()
   return (
-    <div>
+    <ResponsiveContainer>
       <EditCardGrid>{elements}</EditCardGrid>
       <Paper component='form' className={classes.root}>
         <FormControlLabel
@@ -171,7 +172,7 @@ const EditArea = ({
           Start
         </Button>
       </Paper>
-    </div>
+    </ResponsiveContainer>
   )
 }
 const useStyles = makeStyles((theme) => ({

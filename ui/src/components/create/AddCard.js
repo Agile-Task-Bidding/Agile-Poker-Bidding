@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, IconButton } from '@material-ui/core'
-import CardFrame from '../../components/CardFrame'
+import CardFrame from '../CardFrame'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { StyleSheet, css } from 'aphrodite'
 

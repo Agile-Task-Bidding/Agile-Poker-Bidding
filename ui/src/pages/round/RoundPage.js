@@ -25,11 +25,7 @@ const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRi
   const history = useHistory();
 
   useEffect(() => {
-    (async () => {
-      // await firebase
-      //   .auth()
-      //   .signInWithEmailAndPassword('ryglaspey@knights.ucf.edu', 'password');
-      
+    (async () => {      
       loginUser(async (_) => {
         const socket = await createRoomServiceConnection()
         console.log(socket)

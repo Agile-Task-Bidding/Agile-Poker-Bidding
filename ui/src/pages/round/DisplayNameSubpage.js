@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import '..//Styling.css'
+import '../Styling.css'
 import mainImg from '../../components/icon/logo.svg'
 import { connect } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
@@ -13,7 +13,6 @@ import { setDisplayName } from '../../data/state/app-data/app-data.actions'
 import { roomServiceSocketSelector } from '../../data/state/room-service/room-service.selectors'
 import { displayNameSelector } from '../../data/state/app-data/app-data.selector'
 import { setAppState } from '../../data/state/app-data/app-data.actions'
-
 import { Typography } from '@material-ui/core'
 
 const DisplayNameSubpage = ({
