@@ -16,7 +16,7 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
         )
       });
     return (
-        <Paper className={css(styles.container) + (className ? ' ' + className : '')} {...thruProps}>
+        <Paper square className={css(styles.container) + (className ? ' ' + className : '')} {...thruProps}>
             <div style={{ backgroundColor: 'aqua' }}>
                 <Typography variant='h4'>Online</Typography>
             </div>

@@ -2,27 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Button, Checkbox, FormControlLabel, Typography } from '@material-ui/core'
-import firebase from 'firebase/app'
-import 'firebase/auth'
 import EditCard from '../components/create/EditCard'
 import AddCard from '../components/create/AddCard'
-import EditCardGrid from '../components/EditCardGrid'
+import CardGrid from '../components/CardGrid'
 import { roomServiceSocketSelector } from '../data/state/room-service/room-service.selectors'
 import {
   createRoomServiceConnection,
   emitEvent,
 } from '../data/state/room-service/room-service.actions'
+import { loginUser } from '../data/state/account/account.actions';
+import { startGame } from '../data/state/room-config/room-config.actions';
 import { setAccount } from '../data/state/account/account.actions'
 import { accountSelector } from '../data/state/account/account.selector'
 import axios from 'axios';
 import './Styling.css'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
-import { loginUser } from '../services/login'
 import ResponsiveContainer from '../components/ResponsiveContainer'
 
-const EditArea = ({
+const CreatePage = ({
   account,
+  loginUser,
   onSave,
   emitEvent,
   onSubmit,
@@ -92,18 +92,7 @@ const EditArea = ({
         allowAbstain,
       }
 
-      const idToken = await firebase.auth().currentUser.getIdToken(false);
-      //TODO remove await
-      await axios.put(`http://localhost:80/api/v1/users/${firebase.auth().currentUser.uid}/roomConfig`, { roomConfig }, {
-        headers: {
-          'Authorization': 'Bearer ' + idToken
-        }
-      });
-
-      emitEvent('create_room', {
-        roomID: account.username,
-        roomConfig,
-      })
+      startGame(roomConfig, account, emitEvent);
     } catch (err) {
       console.error(err)
       setLoading(false)
@@ -129,7 +118,7 @@ const EditArea = ({
   return (
     <ResponsiveContainer>
       <Typography variant='h2' className={classes.title}>Configure your deck</Typography>
-      <EditCardGrid>{elements}</EditCardGrid>
+      <CardGrid>{elements}</CardGrid>
       <Paper component='form' className={classes.root}>
         <FormControlLabel
           control={
@@ -200,6 +189,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   createRoomServiceConnection,
   emitEvent,
+  loginUser,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditArea)
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePage)

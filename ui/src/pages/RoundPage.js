@@ -18,9 +18,9 @@ import InactiveSubpage from './round/InactiveSubpage';
 import { Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { loginUser } from '../services/login';
+import { loginUser } from '../data/state/account/account.actions';
 
-const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRickRollPlaying, createRoomServiceConnection }) => {
+const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundState, setRickRollPlaying, createRoomServiceConnection }) => {
 
   const history = useHistory();
 
@@ -87,6 +87,7 @@ const mapDispatchToProps = {
   setDisplayName,
   setRoundState,
   setRickRollPlaying,
+  loginUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoundPage)

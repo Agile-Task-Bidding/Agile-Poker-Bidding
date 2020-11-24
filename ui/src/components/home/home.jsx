@@ -11,8 +11,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { accountSelector } from '../../data/state/account/account.selector'
 import { Typography } from '@material-ui/core'
-import { loginUser } from '../../services/login'
-import { setAccount } from '../../data/state/account/account.actions'
+import { setAccount, loginUser } from '../../data/state/account/account.actions'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { withRouter } from 'react-router-dom'
@@ -31,7 +30,7 @@ class Home extends React.Component {
   }
 
   componentDidMount = () => {
-    loginUser(() => {}, this.props.setAccount)
+    this.props.loginUser(() => {}, this.props.setAccount)
   }
 
   handleChange = (event) => {
@@ -44,7 +43,6 @@ class Home extends React.Component {
 
   render() {
     // const { user } = this.state
-    console.log(this.props.account)
     const { account } = this.props
     const { roomNumber } = this.state
     const { isUserLoggedIn } = this.state
@@ -183,6 +181,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setAccount,
+  loginUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

@@ -11,7 +11,7 @@ import { displayNameSelector } from '../../data/state/app-data/app-data.selector
 import { roomConfigSelector } from '../../data/state/room-config/room-config.selector';
 import { roundStateSelector } from '../../data/state/round-state/round-state.selector';
 import DisplayCard from '../../components/round/DisplayCard'
-import EditCardGrid from '../../components/EditCardGrid'
+import CardGrid from '../../components/CardGrid'
 import GameState from '../../services/GameState';
 import { Dialog, Typography, Button, Paper, Container } from '@material-ui/core';
 import RickRolled from '../../components/round/RickRolled';
@@ -29,18 +29,12 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
 
     const renderBiddingPhase = () => {
       const picked = roundState.voteByUserID[roomServiceSocket.id]
-      console.log(roomServiceSocket.id)
-      console.log(picked)
       const cardUi = roundState.deck.map((it, idx) => (
         <DisplayCard 
           key={it.number} 
           card={it}
           selected={idx==picked}
           onClick={()=>{
-            console.log('user_vote', {
-                roomID: username,
-                cardIndex: idx,
-            })
             emitEvent('user_vote', {
                 roomID: username,
                 cardIndex: idx,
@@ -56,14 +50,14 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
           { isDesktop ? (
             <DesktopView
             header={
-              <Paper>
-                <Typography variant='h2' style={{ marginBottom: 24 }}>Place your bid</Typography>
+              <Paper square>
+                <Typography variant='h2'>Place your bid</Typography>
               </Paper>
             }
             primary={
-              <EditCardGrid>
+              <CardGrid className={css(styles.cardArea)}>
                 {cardUi}
-              </EditCardGrid>
+              </CardGrid>
             }
             secondary={(
               <MemberList className={css(styles.container)}/>
@@ -71,16 +65,16 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
           />
           ) : (
             <MobileView
-            primary={
-              <EditCardGrid>
-                {cardUi}
-              </EditCardGrid>
-            }
-            secondary={(
-              <MemberList/>
-            )}
-            buttonText={`${voted}/${total}`}
-          />
+              primary={
+                <CardGrid>
+                  {cardUi}
+                </CardGrid>
+              }
+              secondary={(
+                <MemberList/>
+              )}
+              buttonText={`${voted}/${total}`}
+            />
           )}
         </>
       )
@@ -111,6 +105,9 @@ const RoundSubpage = ({ createRoomServiceConnection, displayName, roomConfig, ro
 const styles = StyleSheet.create({
   container: {
     marginLeft: 12,
+  },
+  cardArea: {
+    padding: 12,
   }
 })
 
