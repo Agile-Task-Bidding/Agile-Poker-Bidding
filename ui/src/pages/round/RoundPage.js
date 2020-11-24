@@ -41,7 +41,7 @@ const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRi
             setDisplayName('');
         });
         socket.on('room_inactive', event => setAppState(AppState.ROOM_INACTIVE));
-        socket.on('kicked', event => setAppState(AppState.KICKED_FROM_ROOM));
+        socket.on('host_closed_connection', event => setAppState(AppState.KICKED_FROM_ROOM));
         socket.on('user_already_in_room', console.log);
         socket.on('room_state_changed', event => setRoundState(event.roomState));
         socket.on('join_success', event => setAppState(AppState.CONNECTED_TO_ROOM));
@@ -51,7 +51,6 @@ const RoundPage = ({ appState, setAppState, setDisplayName, setRoundState, setRi
         socket.on('room_already_created', event => console.log);
         socket.on('create_success', event => console.log);
         socket.on('host_room_closed_failure', event => console.log);
-        socket.on('host_closed_connection', event => setAppState(AppState.ROOM_CLOSED));
         socket.on('host_room_closed_success', event => console.log);
         socket.on('rickroll', () => setRickRollPlaying(true));
       }, setAccount);

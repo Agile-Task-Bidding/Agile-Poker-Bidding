@@ -99,7 +99,6 @@ const EditArea = ({
         }
       });
 
-      console.log('create_room')
       emitEvent('create_room', {
         roomID: account.username,
         roomConfig,
