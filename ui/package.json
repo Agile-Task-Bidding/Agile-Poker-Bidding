@@ -7,6 +7,7 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.10.0",
+    "@mdi/font": "^5.8.55",
     "@svgr/cli": "^5.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -28,10 +29,12 @@
     "react-helmet": "^6.1.0",
     "react-jss": "^10.5.0",
     "react-loader-spinner": "^3.1.14",
+    "react-material-ui-form-validator": "^2.1.1",
     "react-media": "^1.10.0",
     "react-p5-wrapper": "^2.3.0",
     "react-player": "^2.6.2",
     "react-redux": "^7.2.1",
+    "react-responsive": "^8.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-visibility-sensor": "^5.1.1",
@@ -40,9 +43,7 @@
     "redux-thunk": "^2.3.0",
     "simple-flexbox": "^2.3.2",
     "smoothscroll-polyfill": "^0.4.4",
-    "socket.io-client": "^2.3.1",
-    "react-material-ui-form-validator": "^2.1.1",
-    "react-responsive": "^8.1.1"
+    "socket.io-client": "^2.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
