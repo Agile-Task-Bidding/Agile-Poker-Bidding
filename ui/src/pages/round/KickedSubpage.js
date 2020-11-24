@@ -1,10 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { Typography } from '@material-ui/core'
 import { TextField, Button, CircularProgress } from '@material-ui/core'
 import mainImg from '../../components/icon/logo.svg'
+import AppState from '../../services/AppState';
+import { setAppState } from '../../data/state/app-data/app-data.actions';
 import { Link } from 'react-router-dom'
 
-const KickedSubpage = (props) => {
+const KickedSubpage = ({ setAppState }) => {
   return (
     <div className='App '>
       <div className='radiant-background'>
@@ -31,11 +34,23 @@ const KickedSubpage = (props) => {
                     style={{
                       fontSize: 15,
                     }}
-                    type='submit'
                     component={Link}
                     to={'/'}
                   >
                     Home Page
+                  </Button>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    fullWidth
+                    style={{
+                      fontSize: 15,
+                    }}
+                    onClick={() => {
+                      setAppState(AppState.PICK_DISPLAY_NAME);
+                    }}
+                  >
+                    Rejoin Room
                   </Button>
                 </div>
               </div>
@@ -47,4 +62,10 @@ const KickedSubpage = (props) => {
   )
 }
 
-export default KickedSubpage
+const mapStateToProps = (state) => {return {}};
+
+const mapDispatchToProps = {
+  setAppState,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(KickedSubpage);

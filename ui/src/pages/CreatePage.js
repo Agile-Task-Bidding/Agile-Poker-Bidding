@@ -11,7 +11,7 @@ import {
   emitEvent,
 } from '../data/state/room-service/room-service.actions'
 import { loginUser } from '../data/state/account/account.actions';
-import { startGame } from '../data/state/room-config/room-config.actions';
+import { startGame, saveGame } from '../data/state/room-config/room-config.actions';
 import { setAccount } from '../data/state/account/account.actions'
 import { accountSelector } from '../data/state/account/account.selector'
 import axios from 'axios';
@@ -23,8 +23,9 @@ import ResponsiveContainer from '../components/ResponsiveContainer'
 const CreatePage = ({
   account,
   loginUser,
-  onSave,
   emitEvent,
+  startGame,
+  saveGame,
   onSubmit,
   roomServiceSocket,
   createRoomServiceConnection,
@@ -82,7 +83,17 @@ const CreatePage = ({
     }
   }
 
-  //TODO move this to action or somewhere else
+  const onSave = async () => {
+    setLoading(true)
+
+    const roomConfig = {
+      deck: cards,
+      allowAbstain,
+    }
+    
+    await saveGame(roomConfig);
+  }
+
   const onStart = async () => {
     try {
       setLoading(true)
@@ -92,7 +103,9 @@ const CreatePage = ({
         allowAbstain,
       }
 
-      startGame(roomConfig, account, emitEvent);
+      await startGame(account.username, roomConfig, emitEvent);
+
+      history.push(`/room/${account.username}`)
     } catch (err) {
       console.error(err)
       setLoading(false)
@@ -146,7 +159,7 @@ const CreatePage = ({
             margin: '5px',
           }}
           disabled={loading}
-          onClick={() => onSave()}
+          onClick={onSave}
         >
           Save
         </Button>
@@ -157,7 +170,7 @@ const CreatePage = ({
           style={{
             margin: '5px',
           }}
-          onClick={() => onStart()}
+          onClick={onStart}
         >
           Start
         </Button>
@@ -189,6 +202,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   createRoomServiceConnection,
   emitEvent,
+  startGame,
+  saveGame,
   loginUser,
 }
 
