@@ -68,10 +68,7 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
       >
         <div className={classes.toolbar} />
 
-        <List>
-          {players}
-          {/* <Divider /> */}
-        </List>
+        <List>{players}</List>
       </Drawer>
     </div>
   )

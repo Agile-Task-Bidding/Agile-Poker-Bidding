@@ -19,6 +19,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import IconButton from '@material-ui/core/IconButton'
+import iconCrown from '../icon/crown.svg'
 
 const MemberRow = ({
   account,
@@ -30,6 +31,7 @@ const MemberRow = ({
 }) => {
   const { username } = useParams()
   const isAdmin = account && account.username === username
+  const isHost = account === username
 
   return (
     <div className={css(styles.container)} {...thruProps}>
@@ -55,40 +57,40 @@ const MemberRow = ({
             )}
           </ListItemIcon>
           <ListItemText primary={displayName} />
-          {isAdmin ? (
-            <>
-              <DeleteIcon />
+          <ListItemIcon>
+            <img src={iconCrown} />
+          </ListItemIcon>
 
-              <ListItemSecondaryAction>
-                <IconButton
+          {isAdmin ? (
+            <ListItemSecondaryAction>
+              <IconButton
+                edge='end'
+                onClick={async () => {
+                  console.log({
+                    idToken: await firebase
+                      .auth()
+                      .currentUser.getIdToken(false),
+                    roomID: username,
+                    user: { socketID },
+                  })
+                  roomServiceSocket.emit('kick_user', {
+                    idToken: await firebase
+                      .auth()
+                      .currentUser.getIdToken(false),
+                    roomID: username,
+                    user: { socketID },
+                  })
+                }}
+              >
+                <ExitToAppIcon
                   edge='end'
-                  onClick={async () => {
-                    console.log({
-                      idToken: await firebase
-                        .auth()
-                        .currentUser.getIdToken(false),
-                      roomID: username,
-                      user: { socketID },
-                    })
-                    roomServiceSocket.emit('kick_user', {
-                      idToken: await firebase
-                        .auth()
-                        .currentUser.getIdToken(false),
-                      roomID: username,
-                      user: { socketID },
-                    })
+                  style={{
+                    color: '#223496',
                   }}
-                >
-                  <ExitToAppIcon
-                    edge='end'
-                    style={{
-                      color: '#223496',
-                    }}
-                    fontSize='large'
-                  />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </>
+                  fontSize='large'
+                />
+              </IconButton>
+            </ListItemSecondaryAction>
           ) : null}
         </ListItem>
       </List>
