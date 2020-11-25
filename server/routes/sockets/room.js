@@ -28,6 +28,7 @@ class Room {
         // We need to store a room state that can be passed to users
         // (especially those joining late).
         this.roomState = {
+            hostSocketID,
             phase: Constants.VOTING_PHASE,
             voteByUserID: {},
             connectedUsersByID: {},
