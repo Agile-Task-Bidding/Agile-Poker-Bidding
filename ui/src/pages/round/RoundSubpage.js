@@ -93,10 +93,15 @@ const RoundSubpage = ({
       <>
         <RickRolled />
         <HideOnScroll fullWidth>
-          <AppBar position='fixed' className={styles.appBar}>
+          <AppBar
+            position='fixed'
+            className={styles.appBar}
+            style={{
+              zIndex: '1500',
+            }}
+          >
             <Toolbar
               style={{
-                width: '80%',
                 display: 'flex',
                 justifyContent: 'space-between',
               }}
@@ -131,7 +136,7 @@ const RoundSubpage = ({
               <div>
                 <Typography variant='h6'>PICK YOUR CARD</Typography>
               </div>
-              <div>k</div>
+              <div></div>
             </Toolbar>
           </AppBar>
         </HideOnScroll>

@@ -36,7 +36,12 @@ const MemberRow = ({
   return (
     <div className={css(styles.container)} {...thruProps}>
       <List dense>
-        <ListItem>
+        <ListItem
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <ListItemIcon>
             {voted ? (
               <CheckCircleIcon
