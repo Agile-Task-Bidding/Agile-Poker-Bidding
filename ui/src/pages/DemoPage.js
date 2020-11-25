@@ -59,6 +59,7 @@ class DemoPage extends Component {
         this.props.roomServiceSocket.on('host_room_closed_success', event => this.onHostRoomClosedSuccess(event));
         this.props.roomServiceSocket.on('not_authorized', event => this.onNotAuthorized(event));
         this.props.roomServiceSocket.on('room_status_fetched', event => this.onRoomStatusFetched(event));
+        this.props.roomServiceSocket.on('host_closed_room', event => this.onHostClosedRoom(event));
     }
 
     onNotAuthorized(event) {
@@ -114,6 +115,13 @@ class DemoPage extends Component {
         });
     }
 
+    onHostClosedRoom(event) {
+        console.log('The host has closed the room. You have been disconnected.');
+        this.setState({
+            roomState: null,
+        });
+    }
+
     onHostRoomClosedSuccess(event) {
         console.log('You have successfully closed the room.');
     }
@@ -160,6 +168,8 @@ class DemoPage extends Component {
     }
 
     render() {
+        console.log(this.props.roomServiceSocket ? this.props.roomServiceSocket.id : 'No Socket');
+        console.log(this.state.roomState ? this.state.roomState.hostSocketID : 'No Host');
         return (
             <>
                 <div>
@@ -243,45 +253,6 @@ class DemoPage extends Component {
                 </div>
                 <div>
                     <TextField
-                        placeholder={'Email'}
-                        value={this.state.email}
-                        onChange={event => this.setState({ email: event.target.value })}
-                    />
-                    <TextField
-                        placeholder={'Password'}
-                        value={this.state.password}
-                        onChange={event => this.setState({ password: event.target.value })}
-                    />
-                    <Button
-                        onClick={async () => {
-                            const result = await firebase.auth().signInWithEmailAndPassword(
-                                this.state.email,
-                                this.state.password
-                            ).catch(err => console.log(err));
-                            if (firebase.auth().currentUser) {
-                                const authToken = await firebase.auth().currentUser.getIdToken(true)
-                                    .catch(err => console.log(err));
-                                this.setState({
-                                    authToken,
-                                });
-                                console.log('"Signed in" successfully!');
-                            }
-                        }}
-                    >
-                        Login
-                    </Button>
-                    <Button
-                        onClick={async () => {
-                            const result = await firebase.auth().signOut()
-                                .catch(err => console.log(err));
-                            console.log('Signed out successfully!');
-                        }}
-                    >
-                        Sign Out
-                    </Button>
-                </div>
-                <div>
-                    <TextField
                         placeholder={'Host Room ID'}
                         value={this.state.hostRoomID}
                         onChange={event => this.setState({ hostRoomID: event.target.value })}
@@ -354,32 +325,40 @@ class DemoPage extends Component {
                     </ul>
                 </div>
                 <div>
-                    <Button
-                        onClick={() => {
-                            this.props.emitEvent(
-                                'start_new_round',
-                                {
-                                    roomID: this.state.joinRoomID,
-                                    authToken: this.state.authToken,
-                                }
-                            );
-                        }}
-                    >
-                        Start New Round
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            this.props.emitEvent(
-                                'force_end_bidding',
-                                {
-                                    roomID: this.state.joinRoomID,
-                                    authToken: this.state.authToken,
-                                }
-                            );
-                        }}
-                    >
-                        Force End Bidding
-                    </Button>
+                    {
+                        (this.state.roomState && this.state.roomState.hostSocketID === this.props.roomServiceSocket.id)
+                            ? (
+                                <>
+                                    <Button
+                                        onClick={() => {
+                                            this.props.emitEvent(
+                                                'start_new_round',
+                                                {
+                                                    roomID: this.state.joinRoomID,
+                                                    authToken: this.state.authToken,
+                                                }
+                                            );
+                                        }}
+                                    >
+                                        Start New Round
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            this.props.emitEvent(
+                                                'force_end_bidding',
+                                                {
+                                                    roomID: this.state.joinRoomID,
+                                                    authToken: this.state.authToken,
+                                                }
+                                            );
+                                        }}
+                                    >
+                                        Force End Bidding
+                                    </Button>
+                                </>
+                            )
+                            : null
+                    }
                 </div>
                 <div>
                     <ul>
