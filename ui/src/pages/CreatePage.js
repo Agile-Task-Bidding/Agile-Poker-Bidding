@@ -92,6 +92,8 @@ const CreatePage = ({
     }
     
     await saveGame(roomConfig);
+
+    setLoading(false)
   }
 
   const onStart = async () => {
@@ -108,7 +110,6 @@ const CreatePage = ({
       history.push(`/room/${account.username}`)
     } catch (err) {
       console.error(err)
-      setLoading(false)
     }
   }
 
