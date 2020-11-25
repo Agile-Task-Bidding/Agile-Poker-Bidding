@@ -1,43 +1,49 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { accountSelector } from '../../data/state/account/account.selector';
-import ResultRow from './ResultRow';
-import { roundStateSelector } from '../../data/state/round-state/round-state.selector';
-import { StyleSheet, css } from 'aphrodite';
-import { Paper, List, ListItem, Typography } from '@material-ui/core';
+import React from 'react'
+import { connect } from 'react-redux'
+import { accountSelector } from '../../data/state/account/account.selector'
+import ResultRow from './ResultRow'
+import { roundStateSelector } from '../../data/state/round-state/round-state.selector'
+import { StyleSheet, css } from 'aphrodite'
+import { Paper, List, ListItem, Typography, Divider } from '@material-ui/core'
 
 const ResultsList = ({ roundState, account, className, ...thruProps }) => {
-    const players = Object.values(roundState.connectedUsersByID).map(({ nickname, socketID }) => {
-        const vote = roundState.voteByUserID[socketID];
-        return (
-            <ListItem>
-                <ResultRow key={socketID} displayName={nickname} vote={vote}/>
-            </ListItem>
-        )
-      });
-    return (
-        <Paper className={css(styles.container) + (className ? ' ' + className : '')} {...thruProps}>
-            <div style={{ backgroundColor: 'aqua' }}>
-                <Typography variant='h4'>Results</Typography>
-            </div>
-            <List>
-                {players}
-            </List>
-        </Paper>
-    );
-};
+  const players = Object.values(roundState.connectedUsersByID).map(
+    ({ nickname, socketID }) => {
+      const vote = roundState.voteByUserID[socketID]
+      return (
+        <ListItem>
+          <ResultRow key={socketID} displayName={nickname} vote={vote} />
+        </ListItem>
+      )
+    }
+  )
+  return (
+    <Paper
+      className={css(styles.container) + (className ? ' ' + className : '')}
+      {...thruProps}
+    >
+      <div>
+        <Typography variant='h4' color='primary' align='center'>
+          Users Cards
+        </Typography>
+        <Divider />
+      </div>
+      <List>{players}</List>
+    </Paper>
+  )
+}
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 12,
-    }
+  container: {
+    padding: 12,
+  },
 })
 
 const mapStateToProps = (state) => {
-    return {
-        roundState: roundStateSelector(state),
-        account: accountSelector(state),
-    }
-};
+  return {
+    roundState: roundStateSelector(state),
+    account: accountSelector(state),
+  }
+}
 
-export default connect(mapStateToProps, {})(ResultsList);
+export default connect(mapStateToProps, {})(ResultsList)

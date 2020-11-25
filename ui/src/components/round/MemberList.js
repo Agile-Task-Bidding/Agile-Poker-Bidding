@@ -8,6 +8,35 @@ import { Paper, List, ListItem, Typography } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
 import { makeStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
+import mainLogo from '../icon/logo.svg'
+
+import Toolbar from '@material-ui/core/Toolbar'
+
+// const drawerWidth = 240
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: 'flex',
+//   },
+//   appBar: {
+//     width: `calc(100% - ${drawerWidth}px)`,
+//     marginRight: drawerWidth,
+//   },
+//   drawer: {
+//     width: drawerWidth,
+//     flexShrink: 0,
+//   },
+//   drawerPaper: {
+//     width: drawerWidth,
+//   },
+//   // necessary for content to be below app bar
+//   toolbar: theme.mixins.toolbar,
+//   content: {
+//     flexGrow: 1,
+//     backgroundColor: theme.palette.background.default,
+//     padding: theme.spacing(3),
+//   },
+// }))
 
 const drawerWidth = 240
 
@@ -16,8 +45,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginRight: drawerWidth,
+    zIndex: theme.zIndex.drawer - 1,
   },
   drawer: {
     width: drawerWidth,
@@ -26,11 +54,11 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
+  drawerContainer: {
+    overflow: 'auto',
+  },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
   },
 }))
@@ -66,9 +94,10 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
         }}
         anchor='right'
       >
-        <div className={classes.toolbar} />
-
-        <List>{players}</List>
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <List>{players}</List>
+        </div>
       </Drawer>
     </div>
   )
