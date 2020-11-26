@@ -91,7 +91,11 @@ class RoomService {
                 && this.activeRoomsByID[connectedRoomID]
             ) {
                 const room = this.activeRoomsByID[connectedRoomID];
-                room.disconnectUserFromRoom(socket);
+                if (socket.id === room.hostSocketID) {
+                    this.closeRoom(room);
+                } else {
+                    room.disconnectUserFromRoom(socket);
+                }
             }
             // Remove the socket info from the activeSocketsByID list
             delete this.activeSocketsByID[socket.id];
@@ -103,8 +107,8 @@ class RoomService {
     /**
      * Create the room and set it in the list of active rooms by ID
      */
-    createRoom(roomID, roomConfig, hostUID) {
-        this.activeRoomsByID[roomID] = new roomAPI.Room(this.io, roomID, roomConfig, hostUID);
+    createRoom(roomID, roomConfig, hostUID, hostSocketID) {
+        this.activeRoomsByID[roomID] = new roomAPI.Room(this.io, roomID, roomConfig, hostUID, hostSocketID);
     }
 
     /**
@@ -172,7 +176,7 @@ class RoomService {
                 // Get the UID from the token to set as the room's host.
                 const hostUID = await this.getUID(eventInfo.authToken);
                 // Create the new room and store the info in the list of rooms
-                this.createRoom(eventInfo.roomID, eventInfo.roomConfig, hostUID);
+                this.createRoom(eventInfo.roomID, eventInfo.roomConfig, hostUID, socket.id);
                 // Emit a create_success event to the host
                 this.emitUserEvent('create_success', socket);
             }

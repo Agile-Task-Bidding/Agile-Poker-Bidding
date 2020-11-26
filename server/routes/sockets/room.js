@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Constants = require('../../constants');
 
 class Room {
-    constructor(ioRef, roomID, roomConfig, hostUID) {
+    constructor(ioRef, roomID, roomConfig, hostUID, hostSocketID) {
         // This is the reference to the io server
         this.ioRef = ioRef;
         // The reference to the appropriate io room ("channel")
@@ -13,6 +13,8 @@ class Room {
         this.deck = this.roomConfig.deck;
         // The host's user ID for authentication
         this.hostUID = hostUID;
+        // The host's socket ID for handling closing room connections
+        this.hostSocketID = hostSocketID;
 
         // If the allowAbstain property is set, we need to add an
         // abstain option to the room's deck
@@ -26,6 +28,7 @@ class Room {
         // We need to store a room state that can be passed to users
         // (especially those joining late).
         this.roomState = {
+            hostSocketID,
             phase: Constants.VOTING_PHASE,
             voteByUserID: {},
             connectedUsersByID: {},
@@ -93,10 +96,15 @@ class Room {
      */
     disconnectAllUsers() {
         for (const userID in this.roomState.connectedUsersByID) {
-            // Disconnect the user from the room channel.
-            this.ioRef.sockets.sockets[userID].leave(this.roomID);
-            // Emit a host_closed_connection event to the user.
-            this.emitUserEvent('host_closed_connection', this.roomState.connectedUsersByID[userID]);
+            try {
+                // Disconnect the user from the room channel.
+                this.ioRef.sockets.sockets[userID].leave(this.roomID);
+                // Emit a host_closed_room event to the user.
+                this.emitUserEvent('host_closed_room', this.roomState.connectedUsersByID[userID]);
+            } catch (err) {
+                // This will get triggered if the host leaves the room since their socket likely no longer exists
+                console.error(err);
+            }
         }
     }
 
