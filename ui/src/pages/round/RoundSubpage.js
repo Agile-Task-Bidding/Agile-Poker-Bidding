@@ -13,7 +13,7 @@ import { roundStateSelector } from '../../data/state/round-state/round-state.sel
 import DisplayCard from '../../components/round/DisplayCard'
 import CardGrid from '../../components/CardGrid'
 import GameState from '../../services/GameState'
-import { Dialog, Typography, Button, Paper, Container } from '@material-ui/core'
+import { Dialog, Typography, Button, Paper, Container, Hidden, makeStyles } from '@material-ui/core'
 import RickRolled from '../../components/round/RickRolled'
 import MemberRow from '../../components/round/MemberRow'
 import MemberList from '../../components/round/MemberList'
@@ -40,6 +40,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import MenuIcon from '@material-ui/icons/Menu'
+import CoffeeCard from '../../components/create/CoffeeCard'
 function HideOnScroll(props) {
   const { children, window } = props
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -63,6 +64,40 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 }
 
+const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginRight: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
+
 const RoundSubpage = ({
   createRoomServiceConnection,
   displayName,
@@ -74,6 +109,8 @@ const RoundSubpage = ({
 }) => {
   const { username } = useParams()
   const isDesktop = useMediaQuery('(min-width:600px)')
+  const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
+  const classes = useStyles();
 
   const renderBiddingPhase = () => {
     const picked = roundState.voteByUserID[roomServiceSocket.id]
@@ -103,9 +140,9 @@ const RoundSubpage = ({
         <HideOnScroll fullWidth>
           <AppBar
             position='fixed'
-            className={styles.appBar}
+            className={classes.appBar}
             style={{
-              zIndex: '1500',
+              // zIndex: '1500',
             }}
           >
             <Toolbar
@@ -140,14 +177,22 @@ const RoundSubpage = ({
               <div>
                 <Typography variant='h6'>PICK YOUR CARD</Typography>
               </div>
-              <IconButton>
-                <MenuIcon />
-              </IconButton>
+              <div>
+                <Hidden smUp implementation='css'>
+                  <IconButton onClick={() => setMobileDrawerOpen(true)}>
+                    <MenuIcon />
+                  </IconButton>
+                </Hidden>
+              </div>
             </Toolbar>
           </AppBar>
         </HideOnScroll>
         <Toolbar />
-        <MemberList className={css(styles.container)} />
+        <MemberList 
+          // className={css(styles.container)} 
+          mobileDrawerOpen={mobileDrawerOpen} 
+          onClose={() => setMobileDrawerOpen(false)} 
+        />
         {isDesktop ? (
           <DesktopView
             // header={
@@ -156,7 +201,9 @@ const RoundSubpage = ({
             //   </Paper>
             // }
             primary={
-              <CardGrid className={css(styles.cardArea)}>{cardUi}</CardGrid>
+              <CardGrid 
+                // className={css(styles.cardArea)}
+              >{cardUi}</CardGrid>
             }
             // secondary={<MemberList className={css(styles.container)} />}
           />
@@ -177,7 +224,6 @@ const RoundSubpage = ({
         <HideOnScroll fullWidth>
           <AppBar
             position='fixed'
-            className={styles.appBar}
             style={
               {
                 // zIndex: '1500',
@@ -240,7 +286,7 @@ const RoundSubpage = ({
         </HideOnScroll>
         <Toolbar />
         <Container>
-          <Grid container spacing={3} style={{ marginTop: 18 }}>
+          <Grid container justify="space-evenly" spacing={3} style={{ marginTop: 18 }}>
             <Grid item xs>
               <Paper style={{ padding: 12 }}>
                 <Typography variant='h3' color='primary' align='center'>
@@ -277,8 +323,8 @@ const RoundSubpage = ({
                 </Table>
               </Paper>
             </Grid>
-            <Grid item xs>
-              Most picked card
+            <Grid style={{ display: 'flex', justifyContent: 'center' }}item xs>
+              <CoffeeCard/>
             </Grid>
             <Grid item xs>
               <ResultsList />
@@ -299,15 +345,20 @@ const RoundSubpage = ({
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginLeft: 12,
-  },
-  cardArea: {
-    padding: 12,
-  },
-  appBar: {},
-})
+// const styles = StyleSheet.create({
+//   container: {
+//     marginLeft: 12,
+//   },
+//   cardArea: {
+//     padding: 12,
+//   },
+//   appBar: {
+//     [theme.breakpoints.up('sm')]: {
+//       width: `calc(100% - ${drawerWidth}px)`,
+//       marginLeft: drawerWidth,
+//     },
+//   },
+// })
 
 const mapStateToProps = (state) => {
   return {
