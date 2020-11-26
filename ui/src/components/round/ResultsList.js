@@ -12,24 +12,25 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
       const vote = roundState.voteByUserID[socketID]
       const voteValue = vote ? roundState.deck[vote].value : '-1'
       return (
-        <ListItem>
-          <ResultRow key={socketID} displayName={nickname} vote={voteValue} />
-        </ListItem>
+        <div>
+          <ListItem>
+            <ResultRow key={socketID} displayName={nickname} vote={voteValue} />
+          </ListItem>
+          <Divider />
+        </div>
       )
     }
   )
   const voteTally = []
-  Object.values(roundState.connectedUsersByID).forEach(
-    ({ _, socketID }) => {
-      const vote = roundState.voteByUserID[socketID]
-      if (vote) {
-        const voteValue = roundState.deck[vote].value
-        if (voteValue != 'abstain') {
-          voteTally.push(voteValue);
-        }
+  Object.values(roundState.connectedUsersByID).forEach(({ _, socketID }) => {
+    const vote = roundState.voteByUserID[socketID]
+    if (vote) {
+      const voteValue = roundState.deck[vote].value
+      if (voteValue != 'abstain') {
+        voteTally.push(voteValue)
       }
     }
-  )
+  })
   console.log(voteTally)
   return (
     <Paper
@@ -38,11 +39,11 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
     >
       <div>
         <Typography variant='h4' color='primary' align='center'>
-          Users Cards
+          Users' Cards
         </Typography>
         <Divider />
       </div>
-      <List>{players}</List>
+      <List style={{ color: 'black' }}>{players}</List>
     </Paper>
   )
 }

@@ -33,6 +33,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import { Link } from 'react-router-dom'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
 
 function HideOnScroll(props) {
   const { children, window } = props
@@ -104,6 +110,7 @@ const RoundSubpage = ({
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
+                width: '80%',
               }}
               noWrap
             >
@@ -131,7 +138,7 @@ const RoundSubpage = ({
               <div>
                 <Typography variant='h6'>PICK YOUR CARD</Typography>
               </div>
-              <div></div>
+              <div>k</div>
             </Toolbar>
           </AppBar>
         </HideOnScroll>
@@ -167,9 +174,11 @@ const RoundSubpage = ({
           <AppBar
             position='fixed'
             className={styles.appBar}
-            style={{
-              zIndex: '1500',
-            }}
+            style={
+              {
+                // zIndex: '1500',
+              }
+            }
           >
             <Toolbar
               style={{
@@ -230,24 +239,38 @@ const RoundSubpage = ({
           <Grid container spacing={3} style={{ marginTop: 18 }}>
             <Grid item xs>
               <Paper style={{ padding: 12 }}>
-                <div>
-                  <Typography variant='h4' color='primary' align='center'>
-                    Statistics
-                  </Typography>
-                  <Divider />
-                  <div>
-                    <Typography>Average</Typography>
-                    <Typography>x</Typography>
-                  </div>
-                  <div>
-                    <Typography>Median</Typography>
-                    <Typography>x</Typography>
-                  </div>
-                  <div>
-                    <Typography>Standard Deviation</Typography>
-                    <Typography>x</Typography>
-                  </div>
-                </div>
+                <Typography variant='h3' color='primary' align='center'>
+                  Statistics
+                </Typography>
+                <Divider />
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>Average</Typography>
+                      </TableCell>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>x</Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>Median</Typography>
+                      </TableCell>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>x</Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>Standard Deviation</Typography>
+                      </TableCell>
+                      <TableCell allign='right'>
+                        <Typography variant='h6'>x</Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </Paper>
             </Grid>
             <Grid item xs>

@@ -22,20 +22,10 @@ const ResultRow = ({
 }) => {
   return (
     <div className={css(styles.container)} {...thruProps}>
-        <Typography
-          style={{
-            color: '#223496',
-            paddingTop: '5px',
-          }}
-          variant='h5'
-        >
-          {displayName}
-        </Typography>
-        <Typography
-          variant='h5'
-        >
-          {vote}
-        </Typography>
+      <Typography variant='h6'>
+        {displayName.charAt(0).toUpperCase() + displayName.slice(1)}
+      </Typography>
+      <Typography variant='h6'>{vote}</Typography>
     </div>
   )
 }
