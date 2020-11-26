@@ -94,6 +94,8 @@ const RoundSubpage = ({
       ({ socketID }) => roundState.voteByUserID[socketID] != null
     ).length
     const total = Object.values(roundState.connectedUsersByID).length
+    const container =
+      window !== undefined ? () => window().document.body : undefined
 
     return (
       <>
