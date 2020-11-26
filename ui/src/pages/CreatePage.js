@@ -8,6 +8,7 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core'
+import CoffeeCard from '../components/create/CoffeeCard'
 import EditCard from '../components/create/EditCard'
 import AddCard from '../components/create/AddCard'
 import CardGrid from '../components/CardGrid'
@@ -89,6 +90,7 @@ const CreatePage = ({
         console.log(account)
         if (account) {
           setCards(account.roomConfig.deck)
+          setAllowAbstain(account.roomConfig.allowAbstain)
           const socket = await createRoomServiceConnection()
           socket.on('connect', () => {
             console.log('Connected!')
@@ -155,21 +157,27 @@ const CreatePage = ({
     }
   }
 
-  let elements = cards.map((it, idx) => (
+  const elements = []
+  elements.push(...cards.map((it, idx) => (
     <EditCard
-      key={idx}
-      card={it}
-      setCard={genChangeCard(idx)}
-      deleteCard={genOnDelete(idx)}
-      setAllowAbstain={(flag) => setAllowAbstain(flag)}
+    key={idx}
+    card={it}
+    setCard={genChangeCard(idx)}
+    deleteCard={genOnDelete(idx)}
+    setAllowAbstain={(flag) => setAllowAbstain(flag)}
     />
-  ))
+    )))
   elements.push(
     <AddCard
-      key='add'
-      onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
+    key='add'
+    onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
     />
-  )
+    )
+      if (allowAbstain) {
+        elements.push(
+          <CoffeeCard/>
+        )
+      }
   const classes = useStyles()
 
   return (

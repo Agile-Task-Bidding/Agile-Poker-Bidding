@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: '1em',
     background: '#fff',
-    border: '0.3em solid rgba(60,141,247, 0.5)',
+    // border: '0.3em solid white',
     '@media (max-width: 959px)': {
       width: 100,
       height: 150,

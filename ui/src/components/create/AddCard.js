@@ -8,7 +8,7 @@ const AddCard = ({ onClick }) => {
   return (
     <CardFrame elevation={1} className={css(styles.container)}>
       <IconButton onClick={onClick}>
-        <AddCircleOutlineIcon />
+        <AddCircleOutlineIcon color='primary' />
       </IconButton>
     </CardFrame>
   )
