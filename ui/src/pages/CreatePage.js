@@ -239,19 +239,40 @@ const CreatePage = ({
         </AppBar>
       </ElevationScroll>
       <Toolbar />
-      <CardGrid>{elements}</CardGrid>
-      <Grid item component='form' className={classes.root}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={allowAbstain}
-              onChange={(event) => setAllowAbstain(event.target.checked)}
-              color='primary'
-              style={{
-                color: '#2b84ed',
-                marginLeft: 5,
-              }}
-            >
+      <div className={classes.center}>
+          <div>
+            <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
+            <Grid item component='form' className={classes.root}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={allowAbstain}
+                    onChange={(event) => setAllowAbstain(event.target.checked)}
+                    color='primary'
+                    style={{
+                      color: '#2b84ed',
+                      marginLeft: 5,
+                    }}
+                  >
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      style={{
+                        margin: '5px',
+                      }}
+                      disabled={loading}
+                      onClick={onSave}
+                    >
+                      Allow Abstain
+                    </Button>
+                  </Checkbox>
+                }
+                label='Allow Abstain'
+                style={{
+                  color: '#2b84ed',
+                  marginLeft: 5,
+                }}
+              />
               <Button
                 variant='contained'
                 color='primary'
@@ -261,28 +282,11 @@ const CreatePage = ({
                 disabled={loading}
                 onClick={onSave}
               >
-                Allow Abstain
+                Save
               </Button>
-            </Checkbox>
-          }
-          label='Allow Abstain'
-          style={{
-            color: '#2b84ed',
-            marginLeft: 5,
-          }}
-        />
-        <Button
-          variant='contained'
-          color='primary'
-          style={{
-            margin: '5px',
-          }}
-          disabled={loading}
-          onClick={onSave}
-        >
-          Save
-        </Button>
-      </Grid>
+            </Grid>
+          </div>
+      </div>
     </ResponsiveContainer>
   )
 }
@@ -302,6 +306,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  marginBottom: {
+    marginBottom: 12,
+  }
 }))
 
 const mapStateToProps = (state) => {
