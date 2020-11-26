@@ -162,46 +162,103 @@ const RoundSubpage = ({
 
   const renderResultsPhase = () => {
     return (
-      <Container>
-        <Paper>
-          <Typography
-            variant='h2'
-            color='primary'
-            align='center'
-            style={{ paddingTop: 10, marginBottom: 24 }}
-          >
-            Results
-          </Typography>
-          <Button
-            onClick={() => {
-              emitEvent('start_new_round', { roomID: username })
+      <>
+        <HideOnScroll fullWidth>
+          <AppBar
+            position='fixed'
+            className={styles.appBar}
+            style={{
+              zIndex: '1500',
             }}
           >
-            Next Round
-          </Button>
-        </Paper>
-        <Grid container spacing={3} style={{ marginTop: 18 }}>
-          <Grid item xs>
-            <Paper style={{ padding: 12 }}>
-              <div>
-                <Typography variant='h4' color='primary' align='center'>
-                  Statistics
+            <Toolbar
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+              noWrap
+            >
+              <Button
+                component={Link}
+                to={'/'}
+                style={{
+                  color: '#fff',
+                }}
+              >
+                <img src={userImg} style={{ height: '30px' }} />
+                <Typography
+                  variant='h6'
+                  style={{
+                    paddingTop: '16px',
+                    paddingBottom: '8px',
+                    textIndent: '0.5em',
+                    textTransform: 'none',
+                  }}
+                >
+                  PilePlan
                 </Typography>
-                <Divider />
-                <Typography>Average</Typography>
-                <Typography>Median</Typography>
-                <Typography>Standard Deviation</Typography>
+              </Button>
+
+              <div>
+                <Typography variant='h6'>RESULTS</Typography>
               </div>
-            </Paper>
+              <div>
+                <Button
+                  variant='outlined'
+                  color='secondary'
+                  style={{
+                    margin: '5px',
+                    paddingTop: '5px',
+                    paddingBottom: '5px',
+                    paddingLeft: '12px',
+                    paddingRight: '12px',
+                  }}
+                  size='large'
+                  disableElevation
+                  onClick={() => {
+                    emitEvent('start_new_round', { roomID: username })
+                  }}
+                >
+                  Next Round
+                </Button>
+              </div>
+            </Toolbar>
+          </AppBar>
+        </HideOnScroll>
+        <Toolbar />
+        <Container>
+          <Grid container spacing={3} style={{ marginTop: 18 }}>
+            <Grid item xs>
+              <Paper style={{ padding: 12 }}>
+                <div>
+                  <Typography variant='h4' color='primary' align='center'>
+                    Statistics
+                  </Typography>
+                  <Divider />
+                  <div>
+                    <Typography>Average</Typography>
+                    <Typography>x</Typography>
+                  </div>
+                  <div>
+                    <Typography>Median</Typography>
+                    <Typography>x</Typography>
+                  </div>
+                  <div>
+                    <Typography>Standard Deviation</Typography>
+                    <Typography>x</Typography>
+                  </div>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs>
+              Most picked card
+            </Grid>
+            <Grid item xs>
+              <ResultsList />
+            </Grid>
           </Grid>
-          <Grid item xs>
-            Most picked card
-          </Grid>
-          <Grid item xs>
-            <ResultsList />
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </>
     )
   }
 
