@@ -110,13 +110,8 @@ const RoundSubpage = ({
               <Button
                 component={Link}
                 to={'/'}
-                // fontSize='small'
-
                 style={{
-                  //   paddingTop: '16px',
-                  //   paddingBottom: '8px',
                   color: '#fff',
-                  //   font: "'Reem Kufi', sans-serif",
                 }}
               >
                 <img src={userImg} style={{ height: '30px' }} />
