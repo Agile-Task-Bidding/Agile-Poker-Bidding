@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
     borderRadius: '1em',
     background: '#fff',
     border: '0.3em solid rgba(60,141,247, 0.5)',
-    '@media (max-width: 599px)': {
+    '@media (max-width: 959px)': {
       width: 100,
       height: 150,
     },
-    '@media (min-width: 600px)': {
+    '@media (min-width: 960px)': {
       width: 180,
       height: 270,
     },

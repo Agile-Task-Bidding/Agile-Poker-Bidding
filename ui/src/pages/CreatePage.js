@@ -134,6 +134,8 @@ const CreatePage = ({
     }
 
     await saveGame(roomConfig)
+
+    setLoading(false)
   }
 
   const onStart = async () => {
@@ -150,7 +152,6 @@ const CreatePage = ({
       history.push(`/room/${account.username}`)
     } catch (err) {
       console.error(err)
-      setLoading(false)
     }
   }
 
@@ -248,9 +249,20 @@ const CreatePage = ({
               color='primary'
               style={{
                 color: '#2b84ed',
+                marginLeft: 5,
               }}
             >
-              Allow Abstain
+              <Button
+                variant='contained'
+                color='primary'
+                style={{
+                  margin: '5px',
+                }}
+                disabled={loading}
+                onClick={onSave}
+              >
+                Allow Abstain
+              </Button>
             </Checkbox>
           }
           label='Allow Abstain'
@@ -285,6 +297,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     paddingBottom: 24,
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }))
 

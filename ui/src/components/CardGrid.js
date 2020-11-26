@@ -3,21 +3,31 @@ import { StyleSheet, css } from 'aphrodite';
 import { Container, Grid, Paper, Typography } from '@material-ui/core'
 
 const CardGrid = ({children, className, ...passThruProps}) => {
-    const items = children.map((it, idx) => (
-        <Grid key={idx} item xs={6} sm={6} md={4} lg={3} xl={2} className={css(styles.cardHolder) + (className ? ` ${className}`: ``)}>{it}</Grid>
-    ))
     return (
-        <Grid container justify="flex-start" spacing={2} {...passThruProps}>
-            {items}
-        </Grid>
+        <div className={css(styles.cardHolder) + (className ? ` ${className}`: ``)} justify="flex-start" spacing={2} {...passThruProps}>
+            {children}
+        </div>
     )
 };
 
 const styles = StyleSheet.create({
     cardHolder: {
-        display: 'flex', 
-        justifyContent: 'center',
+        display: 'grid',
+        gridGap: 24,
+        '@media (max-width: 959px)': {
+            gridTemplateColumns: '1fr 1fr',
+        },
+        '@media (min-width: 960px) and (max-width: 1279px)': {
+            gridTemplateColumns: '1fr 1fr 1fr',
+        },
+        '@media (min-width: 1280px)': {
+            gridTemplateColumns: '1fr 1fr 1fr 1fr',
+        },
     },
+    centerContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+    }
 });
 
 

@@ -4,7 +4,9 @@ import { StyleSheet, css } from 'aphrodite'
 const DesktopView = ({ header, primary, secondary }) => {
   return (
     <div className={css(styles.container)}>
-      {primary}
+      <div className={css(styles.center)}>
+        {primary}
+      </div>
       {secondary}
     </div>
   )
@@ -13,8 +15,12 @@ const DesktopView = ({ header, primary, secondary }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'grid',
-    gridTemplateColumns: '2fr 1fr',
+    gridTemplateColumns: '3fr 1fr',
   },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+  }
 })
 
 export default DesktopView

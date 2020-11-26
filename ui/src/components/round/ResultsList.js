@@ -10,9 +10,10 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
   const players = Object.values(roundState.connectedUsersByID).map(
     ({ nickname, socketID }) => {
       const vote = roundState.voteByUserID[socketID]
+      const voteValue = vote ? roundState.deck[vote].value : '-1'
       return (
         <ListItem>
-          <ResultRow key={socketID} displayName={nickname} vote={vote} />
+          <ResultRow key={socketID} displayName={nickname} vote={voteValue} />
         </ListItem>
       )
     }
