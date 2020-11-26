@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  Grid,
   Typography,
 } from '@material-ui/core'
 import EditCard from '../components/create/EditCard'
@@ -238,7 +239,7 @@ const CreatePage = ({
       </ElevationScroll>
       <Toolbar />
       <CardGrid>{elements}</CardGrid>
-      <Paper component='form' className={classes.root}>
+      <Grid item component='form' className={classes.root}>
         <FormControlLabel
           control={
             <Checkbox
@@ -269,17 +270,17 @@ const CreatePage = ({
         >
           Save
         </Button>
-      </Paper>
+      </Grid>
     </ResponsiveContainer>
   )
 }
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: 12,
+    // marginTop: 12,
     padding: '6px 10px',
-    display: 'flex',
+    // display: 'flex',
     alignItems: 'center',
-    width: 320,
+    // width: 320,
     background: '#fff',
   },
   title: {
