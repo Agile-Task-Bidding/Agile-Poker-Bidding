@@ -4,10 +4,8 @@ import { Container, Grid, Paper, Typography } from '@material-ui/core'
 
 const CardGrid = ({children, className, ...passThruProps}) => {
     return (
-        <div className={css(styles.centerContainer)}>
-            <div className={css(styles.cardHolder) + (className ? ` ${className}`: ``)} justify="flex-start" spacing={2} {...passThruProps}>
-                {children}
-            </div>
+        <div className={css(styles.cardHolder) + (className ? ` ${className}`: ``)} justify="flex-start" spacing={2} {...passThruProps}>
+            {children}
         </div>
     )
 };
