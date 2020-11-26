@@ -132,50 +132,55 @@ const CreatePage = ({
   return (
     <ResponsiveContainer>
       <Typography variant='h2' className={classes.title}>Configure your deck</Typography>
-      <CardGrid>{elements}</CardGrid>
-      <Paper component='form' className={classes.root}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={allowAbstain}
-              onChange={(event) => setAllowAbstain(event.target.checked)}
-              color='primary'
+      <div className={classes.center}>
+        <div>
+          <CardGrid>{elements}</CardGrid>
+
+          <Paper component='form' className={classes.root}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={allowAbstain}
+                  onChange={(event) => setAllowAbstain(event.target.checked)}
+                  color='primary'
+                  style={{
+                    color: '#2b84ed',
+                  }}
+                >
+                  Allow Abstain
+                </Checkbox>
+              }
+              label='Allow Abstain'
               style={{
                 color: '#2b84ed',
+                marginLeft: 5,
               }}
+            />
+            <Button
+              variant='contained'
+              color='primary'
+              style={{
+                margin: '5px',
+              }}
+              disabled={loading}
+              onClick={onSave}
             >
-              Allow Abstain
-            </Checkbox>
-          }
-          label='Allow Abstain'
-          style={{
-            color: '#2b84ed',
-            marginLeft: 5,
-          }}
-        />
-        <Button
-          variant='contained'
-          color='primary'
-          style={{
-            margin: '5px',
-          }}
-          disabled={loading}
-          onClick={onSave}
-        >
-          Save
-        </Button>
-        <Button
-          disabled={loading}
-          variant='contained'
-          color='primary'
-          style={{
-            margin: '5px',
-          }}
-          onClick={onStart}
-        >
-          Start
-        </Button>
-      </Paper>
+              Save
+            </Button>
+            <Button
+              disabled={loading}
+              variant='contained'
+              color='primary'
+              style={{
+                margin: '5px',
+              }}
+              onClick={onStart}
+            >
+              Start
+            </Button>
+          </Paper>
+        </div>
+      </div>
     </ResponsiveContainer>
   )
 }
@@ -190,6 +195,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     paddingBottom: 24,
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
   }
 }))
 
