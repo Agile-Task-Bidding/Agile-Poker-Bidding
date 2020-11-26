@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MemberList = ({ roundState, account, className, ...thruProps }) => {
+const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose, ...thruProps }) => {
   const players = Object.values(roundState.connectedUsersByID).map(
     ({ nickname, socketID }) => {
       const vote = roundState.voteByUserID[socketID]
@@ -113,10 +113,6 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
   const { window } = thruProps
   const container =
     window !== undefined ? () => window().document.body : undefined
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
-  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   return (
     <div className={classes.root}>
@@ -130,8 +126,8 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
           container={container}
           variant='temporary'
           anchor='right'
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
+          open={mobileDrawerOpen}
+          onClose={onClose}
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -140,6 +136,7 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
           }}
         >
           <Toolbar />
+          <Divider/>
           <div className={classes.drawerContainer}>
             <List>{players}</List>
           </div>
@@ -158,6 +155,7 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
           open
         >
           <Toolbar />
+          <Divider/>
           <div className={classes.drawerContainer}>
             <List>{players}</List>
           </div>
