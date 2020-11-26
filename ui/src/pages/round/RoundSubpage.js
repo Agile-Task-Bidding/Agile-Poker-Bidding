@@ -40,6 +40,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import MenuIcon from '@material-ui/icons/Menu'
+import CoffeeCard from '../../components/create/CoffeeCard'
 function HideOnScroll(props) {
   const { children, window } = props
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -283,7 +284,7 @@ const RoundSubpage = ({
         </HideOnScroll>
         <Toolbar />
         <Container>
-          <Grid container spacing={3} style={{ marginTop: 18 }}>
+          <Grid container justify="space-evenly" spacing={3} style={{ marginTop: 18 }}>
             <Grid item xs>
               <Paper style={{ padding: 12 }}>
                 <Typography variant='h3' color='primary' align='center'>
@@ -320,8 +321,8 @@ const RoundSubpage = ({
                 </Table>
               </Paper>
             </Grid>
-            <Grid item xs>
-              Most picked card
+            <Grid style={{ display: 'flex', justifyContent: 'center' }}item xs>
+              <CoffeeCard/>
             </Grid>
             <Grid item xs>
               <ResultsList />
