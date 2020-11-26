@@ -122,52 +122,47 @@ const MemberList = ({ roundState, account, className, ...thruProps }) => {
     <div className={classes.root}>
       <CssBaseline />
       <div className={classes.toolbar} />
-      <nav className={classes.drawer} aria-label='mailbox folders'>
-        <Hidden smUp implementation='css'>
-          <Drawer
-            {...thruProps}
-            className={classes.drawer}
-            container={container}
-            variant='temporary'
-            anchor='right'
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            <Toolbar />
-            <div className={classes.drawerContainer}>
-              <List>{players}</List>
-            </div>
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation='css'>
-          <Drawer
-            {...thruProps}
-            className={classes.drawer}
-            container={container}
-            variant='temporary'
-            anchor='right'
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            <Toolbar />
-            <div className={classes.drawerContainer}>
-              <List>{players}</List>
-            </div>
-          </Drawer>
-        </Hidden>
-      </nav>
+
+      <Hidden smUp implementation='css'>
+        <Drawer
+          {...thruProps}
+          className={classes.drawer}
+          container={container}
+          variant='temporary'
+          anchor='right'
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          <Toolbar />
+          <div className={classes.drawerContainer}>
+            <List>{players}</List>
+          </div>
+        </Drawer>
+      </Hidden>
+      <Hidden xsDown implementation='css'>
+        <Drawer
+          {...thruProps}
+          className={classes.drawer}
+          container={container}
+          anchor='right'
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant='permanent'
+          open
+        >
+          <Toolbar />
+          <div className={classes.drawerContainer}>
+            <List>{players}</List>
+          </div>
+        </Drawer>
+      </Hidden>
     </div>
   )
 }
