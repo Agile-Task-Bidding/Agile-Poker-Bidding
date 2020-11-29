@@ -15,7 +15,7 @@ const DesktopView = ({ header, primary, secondary }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'grid',
-    gridTemplateColumns: '3fr 1fr',
+    gridTemplateColumns: '1fr 240px',
   },
   center: {
     display: 'flex',

@@ -8,7 +8,6 @@ export function setDisplayName(displayName) {
 
 export function setAppState(appState) {
     return (dispatch) => {
-        console.log(appState)
         dispatch({ type: types.SET_APP_STATE, appState })
     }
 }

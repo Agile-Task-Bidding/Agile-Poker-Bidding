@@ -229,17 +229,22 @@ const RoundSubpage = ({
     return Math.sqrt(averageDiffSq);
   }
 
+  const roundToThousandth = (value) => {
+    return Math.round(value * 1000) / 1000;
+  } 
+
   const renderResultsPhase = () => {
     const voteTally = []
     Object.values(roundState.connectedUsersByID).forEach(({ _, socketID }) => {
       const vote = roundState.voteByUserID[socketID]
-      if (vote) {
+      if (vote !== undefined && vote !== null) {
         const voteValue = roundState.deck[vote].value
-        if (voteValue != 'ABSTAIN') {
+        if (voteValue !== 'ABSTAIN') {
           voteTally.push(voteValue)
         }
       }
     })
+    console.log(voteTally)
     const average = calcAverage(voteTally);
     const stdDev = calcStandardDeviation(voteTally);
     let nearest = { value: 'ABSTAIN', tag: 'abstain' };
@@ -333,7 +338,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Average</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{`${Math.round(average * 1000)/1000}`}</Typography>
+                        <Typography variant='h6'>{`${roundToThousandth(average)}`}</Typography>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -349,7 +354,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Standard Deviation</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{`${stdDev}`}</Typography>
+                        <Typography variant='h6'>{`${roundToThousandth(stdDev)}`}</Typography>
                       </TableCell>
                     </TableRow>
                   </TableBody>

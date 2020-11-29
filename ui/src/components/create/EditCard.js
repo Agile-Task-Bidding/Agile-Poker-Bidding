@@ -7,22 +7,18 @@ const EditCard = ({ card, setCard, deleteCard }) => {
   return (
     <CardFrame elevation={1} className={css(styles.container)}>
       <TextField
-        label='Number'
+        label='Value'
         inputProps={{ style: { textAlign: 'center' } }}
-        value={card.value}
-        onChange={(event) => setCard({ ...card, value: event.target.value })}
+        value={`${card.value}`}
+        onChange={(event) => setCard({ ...card, value: Number(event.target.value) })}
         color='primary'
-      >
-        Value
-      </TextField>
+      />
       <TextField
         label='Tag'
         inputProps={{ style: { textAlign: 'center' } }}
         value={card.tag}
         onChange={(event) => setCard({ ...card, tag: event.target.value })}
-      >
-        value
-      </TextField>
+      />
       <Button variant='contained' color='primary' onClick={() => deleteCard()}>
         Delete
       </Button>

@@ -80,14 +80,8 @@ const CreatePage = ({
   const history = useHistory()
 
   useEffect(() => {
-    ;(async () => {
-      // await firebase
-      //   .auth()
-      //   .signInWithEmailAndPassword('ryglaspey@knights.ucf.edu', 'password');
-      // await firebase.auth().signOut();
-
+    (async () => {
       loginUser(async (account) => {
-        console.log(account)
         if (account) {
           setCards(account.roomConfig.deck)
           setAllowAbstain(account.roomConfig.allowAbstain)
@@ -160,24 +154,24 @@ const CreatePage = ({
   const elements = []
   elements.push(...cards.map((it, idx) => (
     <EditCard
-    key={idx}
-    card={it}
-    setCard={genChangeCard(idx)}
-    deleteCard={genOnDelete(idx)}
-    setAllowAbstain={(flag) => setAllowAbstain(flag)}
+      key={idx}
+      card={it}
+      setCard={genChangeCard(idx)}
+      deleteCard={genOnDelete(idx)}
+      setAllowAbstain={(flag) => setAllowAbstain(flag)}
     />
     )))
   elements.push(
     <AddCard
-    key='add'
-    onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
+      key='add'
+      onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
     />
     )
-      if (allowAbstain) {
-        elements.push(
-          <CoffeeCard/>
-        )
-      }
+  if (allowAbstain) {
+    elements.push(
+      <CoffeeCard key='abstain'/>
+    )
+  }
   const classes = useStyles()
 
   return (

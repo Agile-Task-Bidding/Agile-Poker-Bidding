@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
     background: '#fff',
     // border: '0.3em solid white',
     '@media (max-width: 959px)': {
-      width: 100,
-      height: 150,
+      width: 140,
+      height: 140*3/2,
     },
     '@media (min-width: 960px)': {
       width: 180,
-      height: 270,
+      height: 180*3/2,
     },
   },
 })

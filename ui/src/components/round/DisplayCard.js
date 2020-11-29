@@ -7,8 +7,8 @@ import PilePlanIcon from '../icon/PilePlanIcon'
 
 const DisplayCard = ({ card, selected, onClick }) => {
   return (
-    <ButtonBase onClick={onClick} style={{ textDecoration: 'none' }}>
-      <CardFrame elevation={1} className={css(styles.container)}>
+    <CardFrame elevation={1}>
+      <ButtonBase className={css(styles.container)} onClick={onClick} style={{ textDecoration: 'none' }}>
         <Typography
           variant='h1'
           style={{
@@ -29,13 +29,13 @@ const DisplayCard = ({ card, selected, onClick }) => {
         >
           {card.tag}
         </Typography>
-      </CardFrame>
-      {selected ? (
-        <div className={css(styles.overlay)}>
-          <Done />
-        </div>
-      ) : null}
-    </ButtonBase>
+        {selected ? (
+          <div className={css(styles.overlay)}>
+            <Done />
+          </div>
+        ) : null}
+      </ButtonBase>
+    </CardFrame>
   )
 }
 
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     gridTemplateColumns: '1fr',
     justifyItems: 'center',
     alignItems: 'center',
+    width: '100%',
+    height: '100%',
   },
   overlay: {
     position: 'absolute',
