@@ -41,6 +41,9 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import MenuIcon from '@material-ui/icons/Menu'
 import CoffeeCard from '../../components/create/CoffeeCard'
+import firebase from 'firebase'
+import 'firebase/auth'
+
 function HideOnScroll(props) {
   const { children, window } = props
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -300,8 +303,13 @@ const RoundSubpage = ({
                   }}
                   size='large'
                   disableElevation
-                  onClick={() => {
-                    emitEvent('start_new_round', { roomID: username })
+                  onClick={async () => {
+                    const authToken = await firebase.auth().currentUser.getIdToken()
+                                    .catch(err => console.log(err));
+                    emitEvent('start_new_round', { 
+                      roomID: username,
+                      authToken
+                    })
                   }}
                 >
                   Next Round

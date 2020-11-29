@@ -95,6 +95,9 @@ const CreatePage = ({
           socket.on('room_already_created', (event) => {
             console.log(event)
           })
+          socket.on('not_authorized', (event) => {
+            console.log(event);
+          })
           socket.on('create_success', (event) => {
             console.log('create_success')
             history.push(`/room/${account.username}`)
@@ -144,8 +147,6 @@ const CreatePage = ({
       }
 
       await startGame(account.username, roomConfig, emitEvent)
-
-      history.push(`/room/${account.username}`)
     } catch (err) {
       console.error(err)
     }

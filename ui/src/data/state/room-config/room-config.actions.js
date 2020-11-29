@@ -14,9 +14,9 @@ export function saveGame(roomConfig) {
     return async (dispatch, getState) => {
         try {
             const roomServiceSocket = roomServiceSocketSelector(getState());
-            const idToken = await firebase.auth().currentUser.getIdToken(false);
+            const authToken = await firebase.auth().currentUser.getIdToken(false);
             const user = firebase.auth().currentUser.uid;
-            saveConfig(user, idToken, roomConfig);
+            saveConfig(user, authToken, roomConfig);
         } catch (err) {
             console.error(err);
             throw err;
@@ -28,10 +28,10 @@ export function startGame(roomID, roomConfig) {
     return async (dispatch, getState) => {
         try {
             const roomServiceSocket = roomServiceSocketSelector(getState());
-            const idToken = await firebase.auth().currentUser.getIdToken(false);
+            const authToken = await firebase.auth().currentUser.getIdToken(false);
             const user = firebase.auth().currentUser.uid;
-            saveConfig(user, idToken, roomConfig);
-            createRoom(idToken, roomID, roomConfig, roomServiceSocket);
+            saveConfig(user, authToken, roomConfig);
+            createRoom(authToken, roomID, roomConfig, roomServiceSocket);
         } catch (err) {
             console.error(err);
             throw err;
@@ -39,18 +39,17 @@ export function startGame(roomID, roomConfig) {
     }
 }
 
-const saveConfig = (uid, idToken, roomConfig) => {
+const saveConfig = (uid, authToken, roomConfig) => {
     axios.put(`http://localhost:80/api/v1/users/${uid}/roomConfig`, { roomConfig }, {
         headers: {
-            'Authorization': 'Bearer ' + idToken
+            'Authorization': 'Bearer ' + authToken
         }
     });
 }
 
-const createRoom = (idToken, roomID, roomConfig, roomServiceSocket) => {
-    console.log(roomConfig);
+const createRoom = (authToken, roomID, roomConfig, roomServiceSocket) => {
     roomServiceSocket.emit(
         'create_room',
-        { roomID, roomConfig, idToken }
+        { roomID, roomConfig, authToken }
     );
 }
