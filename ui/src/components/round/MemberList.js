@@ -95,17 +95,16 @@ const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose,
     ({ nickname, socketID }) => {
       const vote = roundState.voteByUserID[socketID]
       return (
-        <>
+        <React.Fragment key={socketID}>
           <ListItem>
             <MemberRow
-              key={socketID}
               displayName={nickname}
               socketID={socketID}
               voted={vote !== null}
             />
           </ListItem>
-          <Divider />
-        </>
+          <Divider/>
+        </React.Fragment>
       )
     }
   )

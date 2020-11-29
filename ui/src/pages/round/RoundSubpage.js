@@ -116,7 +116,7 @@ const RoundSubpage = ({
     const picked = roundState.voteByUserID[roomServiceSocket.id]
     const cardUi = roundState.deck.map((it, idx) => (
       <DisplayCard
-        key={it.number}
+        key={it.value}
         card={it}
         selected={idx == picked}
         onClick={() => {
@@ -150,8 +150,8 @@ const RoundSubpage = ({
                 display: 'flex',
                 justifyContent: 'space-between',
               }}
-              noWrap
-              fullWidth
+              // noWrap
+              // fullWidth
             >
               <Button
                 component={Link}
@@ -268,7 +268,7 @@ const RoundSubpage = ({
                 display: 'flex',
                 justifyContent: 'space-between',
               }}
-              noWrap
+              // noWrap
             >
               <Button
                 component={Link}
@@ -333,7 +333,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Average</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{Math.round(average * 1000)/1000}</Typography>
+                        <Typography variant='h6'>{`${Math.round(average * 1000)/1000}`}</Typography>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -349,7 +349,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Standard Deviation</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{stdDev}</Typography>
+                        <Typography variant='h6'>{`${stdDev}`}</Typography>
                       </TableCell>
                     </TableRow>
                   </TableBody>

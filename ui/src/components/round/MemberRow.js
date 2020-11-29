@@ -47,24 +47,22 @@ const MemberRow = ({
               <CheckCircleIcon
                 style={{
                   color: '#223496',
-                  marginRight: 12,
                 }}
-                fontSize='large'
+                // fontSize='large'
               />
             ) : (
               <CheckCircleOutlineIcon
                 style={{
                   color: '#223496',
-                  marginRight: 12,
                 }}
-                fontSize='large'
+                // fontSize='large'
               />
             )}
           </ListItemIcon>
           <ListItemText primary={displayName} />
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <img src={iconCrown} />
-          </ListItemIcon>
+          </ListItemIcon> */}
 
           {isAdmin ? (
             <ListItemSecondaryAction>
@@ -92,7 +90,7 @@ const MemberRow = ({
                   style={{
                     color: '#223496',
                   }}
-                  fontSize='large'
+                  // fontSize='large'
                 />
               </IconButton>
             </ListItemSecondaryAction>

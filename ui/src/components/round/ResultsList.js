@@ -12,12 +12,12 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
       const vote = roundState.voteByUserID[socketID]
       const voteValue = vote ? roundState.deck[vote].value : '-1'
       return (
-        <div>
+        <React.Fragment key={socketID}>
           <ListItem>
             <ResultRow key={socketID} displayName={nickname} vote={voteValue} />
           </ListItem>
           <Divider />
-        </div>
+        </React.Fragment>
       )
     }
   )

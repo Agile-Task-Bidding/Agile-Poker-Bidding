@@ -73,7 +73,7 @@ const DisplayNameSubpage = ({
                       variant='filled'
                       margin='dense'
                       validators={['required']}
-                      errorMessages={['Display Name is required']}
+                      // errorMessages={['Display Name is required']}
                       InputProps={{ disableUnderline: true }}
                       fullWidth
                       label='Nickname'

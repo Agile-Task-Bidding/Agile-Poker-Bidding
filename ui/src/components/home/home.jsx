@@ -143,7 +143,7 @@ class Home extends React.Component {
                 variant='filled'
                 margin='dense'
                 validators={['required']}
-                errorMessages={['Room ID is required']}
+                // errorMessages={['Room ID is required']}
                 InputProps={{ disableUnderline: true }}
                 fullWidth
                 style={{ marginBottom: 0 }}
