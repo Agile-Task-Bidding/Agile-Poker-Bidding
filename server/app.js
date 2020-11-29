@@ -1,9 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const http = require('http');
+const initServer = require('./initServer');
 const cors = require('cors');
 const path = require('path');
-const mongoose = require('mongoose');
 const readline = require('readline');
 
 // Initialize Firebase Admin
@@ -14,8 +13,8 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DB_URL,
 })
 
-const app = express()
-const server = http.createServer(app)
+const app = express();
+const server = initServer(app);
 
 // Import all other sockets that are going to be used (they will automatically listen)
 const roomServiceSocket = require('./routes/sockets/room-service')
@@ -38,13 +37,8 @@ app.use(express.static(path.join(__dirname, '../ui/build')))
 
 // The home page
 app.get(/^\/(?!api).*/, function (req, res) {
-  res.sendFile(path.join(__dirname, '../ui/build', 'index.html'))
-})
-
-// Listen on the specified port for traffic
-app.listen(process.env.WEBSITE_PORT, function () {
-  console.log('Server is running on Port: ' + process.env.WEBSITE_PORT)
-})
+    res.sendFile(path.join(__dirname, '../ui/build', 'index.html'));
+});
 
 const rl = readline.createInterface({
   input: process.stdin,

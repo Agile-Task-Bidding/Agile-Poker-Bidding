@@ -3,8 +3,18 @@ const AuthService = require('../../../services/auth');
 const UNAUTHORIZED_MESSAGE = 'You are not authorized to perform this action';
 
 // Validates the HTTP Authorization Bearer header value
+// NOTE: Validates input constraints, not token
 const validateHeader = (authHeader) => {
-    const parts = authHeader.split(' ');
+    if (!authHeader) {
+        return false;
+    }
+
+    let parts;
+    try {
+        parts = authHeader.split(' ');
+    } catch (e) {
+        return false;
+    }
 
     if (parts.length !== 2) {
         return false;
