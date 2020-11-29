@@ -8,7 +8,7 @@ const CoffeeCard = () => {
   return (
       <CardFrame elevation={1} className={css(styles.container)}>
         <Typography variant='h3'>
-          <PilePlanIcon color='primary' />
+          <PilePlanIcon color='primary' fontSize='large'/>
         </Typography>
         <Typography
           variant='h4'

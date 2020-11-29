@@ -16,7 +16,7 @@ const DisplayCard = ({ card, selected, onClick }) => {
           }}
         >
           { (card.value == 'ABSTAIN' ) ? (
-            <PilePlanIcon/>
+            <PilePlanIcon fontSize='large'/>
           ) : 
             (card.value)
           }

@@ -88,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  usersHeader: {
+    padding: 12,
+  }
 }))
 
 const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose, ...thruProps }) => {
@@ -116,7 +119,7 @@ const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose,
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar}/>
 
       <Hidden smUp implementation='css'>
         <Drawer
@@ -134,7 +137,7 @@ const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose,
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          <Toolbar />
+          <Typography variant='h4' className={classes.usersHeader}>Users</Typography>
           <Divider/>
           <div className={classes.drawerContainer}>
             <List>{players}</List>
@@ -153,7 +156,7 @@ const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose,
           variant='permanent'
           open
         >
-          <Toolbar />
+          <Typography variant='h4' className={classes.usersHeader}>Users</Typography>
           <Divider/>
           <div className={classes.drawerContainer}>
             <List>{players}</List>

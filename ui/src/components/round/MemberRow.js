@@ -59,7 +59,7 @@ const MemberRow = ({
               />
             )}
           </ListItemIcon>
-          <ListItemText primary={displayName} />
+          <ListItemText primary={<Typography variant='h5'>{displayName}</Typography>} />
           {/* <ListItemIcon>
             <img src={iconCrown} />
           </ListItemIcon> */}
