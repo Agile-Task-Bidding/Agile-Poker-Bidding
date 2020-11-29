@@ -194,25 +194,13 @@ const RoundSubpage = ({
           onClose={() => setMobileDrawerOpen(false)} 
         />
         {isDesktop ? (
-          <DesktopView
-            // header={
-            //   <Paper square>
-            //     <Typography variant='h2'>Place your bid</Typography>
-            //   </Paper>
-            // }
-            primary={
-              <CardGrid 
-                // className={css(styles.cardArea)}
-              >{cardUi}</CardGrid>
-            }
-            // secondary={<MemberList className={css(styles.container)} />}
-          />
+          <DesktopView>
+            <CardGrid>{cardUi}</CardGrid>
+          </DesktopView>
         ) : (
-          <MobileView
-            primary={<CardGrid>{cardUi}</CardGrid>}
-            secondary={<MemberList />}
-            buttonText={`${voted}/${total}`}
-          />
+          <MobileView>
+            <CardGrid>{cardUi}</CardGrid>
+          </MobileView>
         )}
       </>
     )

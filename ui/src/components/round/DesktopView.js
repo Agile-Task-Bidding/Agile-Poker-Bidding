@@ -1,13 +1,12 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
 
-const DesktopView = ({ header, primary, secondary }) => {
+const DesktopView = ({ children }) => {
   return (
     <div className={css(styles.container)}>
       <div className={css(styles.center)}>
-        {primary}
+        {children}
       </div>
-      {secondary}
     </div>
   )
 }
