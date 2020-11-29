@@ -21,17 +21,7 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
       )
     }
   )
-  const voteTally = []
-  Object.values(roundState.connectedUsersByID).forEach(({ _, socketID }) => {
-    const vote = roundState.voteByUserID[socketID]
-    if (vote) {
-      const voteValue = roundState.deck[vote].value
-      if (voteValue != 'abstain') {
-        voteTally.push(voteValue)
-      }
-    }
-  })
-  console.log(voteTally)
+
   return (
     <Paper
       className={css(styles.container) + (className ? ' ' + className : '')}

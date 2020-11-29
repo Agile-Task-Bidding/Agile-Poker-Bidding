@@ -3,8 +3,9 @@ import { StyleSheet, css } from 'aphrodite'
 import { Typography, TextField, Button, ButtonBase } from '@material-ui/core'
 import { Done } from '@material-ui/icons'
 import CardFrame from '../../components/CardFrame'
+import PilePlanIcon from '../icon/PilePlanIcon'
 
-const DisplayCard = ({ card, setCard, deleteCard, selected, onClick }) => {
+const DisplayCard = ({ card, selected, onClick }) => {
   return (
     <ButtonBase onClick={onClick} style={{ textDecoration: 'none' }}>
       <CardFrame elevation={1} className={css(styles.container)}>
@@ -14,7 +15,11 @@ const DisplayCard = ({ card, setCard, deleteCard, selected, onClick }) => {
             color: '#2752B6',
           }}
         >
-          {card.value}
+          { (card.value == 'ABSTAIN' ) ? (
+            <PilePlanIcon/>
+          ) : 
+            (card.value)
+          }
         </Typography>
         <Typography
           variant='h4'

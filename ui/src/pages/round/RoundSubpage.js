@@ -216,7 +216,40 @@ const RoundSubpage = ({
     )
   }
 
+  const calcAverage = (values) => {
+    return values.reduce((a, b) => a + b, 0) / values.length;
+  }
+
+  const calcStandardDeviation = (values) => {
+    const average = calcAverage(values);
+    const diffsSq = values.map(a => (a - average) * (a - average), 0);
+    const averageDiffSq = calcAverage(diffsSq);
+    return Math.sqrt(averageDiffSq);
+  }
+
   const renderResultsPhase = () => {
+    const voteTally = []
+    Object.values(roundState.connectedUsersByID).forEach(({ _, socketID }) => {
+      const vote = roundState.voteByUserID[socketID]
+      if (vote) {
+        const voteValue = roundState.deck[vote].value
+        if (voteValue != 'ABSTAIN') {
+          voteTally.push(voteValue)
+        }
+      }
+    })
+    const average = calcAverage(voteTally);
+    const stdDev = calcStandardDeviation(voteTally);
+    let nearest = { value: 'ABSTAIN', tag: 'abstain' };
+    let nearestDistance = 1e9;
+    for (const card of roundState.deck) {
+      if (card.value === 'ABSTAIN') continue;
+      const diff = Math.abs(card.value - average);
+      if ((diff == nearestDistance && card.value > nearest.value) || diff < nearestDistance) {
+        nearestDistance = diff;
+        nearest = card;
+      }
+    }
     return (
       <>
         <HideOnScroll fullWidth>
@@ -298,7 +331,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Average</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>x</Typography>
+                        <Typography variant='h6'>{Math.round(average * 1000)/1000}</Typography>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -314,7 +347,7 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Standard Deviation</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>x</Typography>
+                        <Typography variant='h6'>{stdDev}</Typography>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -322,7 +355,7 @@ const RoundSubpage = ({
               </Paper>
             </Grid>
             <Grid style={{ display: 'flex', justifyContent: 'center' }}item xs>
-              <CoffeeCard/>
+              <DisplayCard card={nearest} selected={true} onClick={()=>{}} />
             </Grid>
             <Grid item xs>
               <ResultsList />
