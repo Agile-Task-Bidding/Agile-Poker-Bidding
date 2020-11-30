@@ -31,7 +31,6 @@ const MemberRow = ({
 }) => {
   const { username } = useParams()
   const isAdmin = account && account.username === username
-  const isHost = account === username
 
   return (
     <div className={css(styles.container)} {...thruProps}>

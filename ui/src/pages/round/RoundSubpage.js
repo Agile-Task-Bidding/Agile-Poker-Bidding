@@ -43,6 +43,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CoffeeCard from '../../components/create/CoffeeCard'
 import firebase from 'firebase'
 import 'firebase/auth'
+import { accountSelector } from '../../data/state/account/account.selector'
 
 function HideOnScroll(props) {
   const { children, window } = props
@@ -108,12 +109,15 @@ const RoundSubpage = ({
   roundState,
   roomServiceSocket,
   emitEvent,
+  account,
   ...thruProps
 }) => {
   const { username } = useParams()
   const isDesktop = useMediaQuery('(min-width:600px)')
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
   const classes = useStyles();
+
+  const isAdmin = account && account.username === username
 
   const renderBiddingPhase = () => {
     const picked = roundState.voteByUserID[roomServiceSocket.id]
@@ -291,29 +295,31 @@ const RoundSubpage = ({
                 <Typography variant='h6'>RESULTS</Typography>
               </div>
               <div>
-                <Button
-                  variant='outlined'
-                  color='secondary'
-                  style={{
-                    margin: '5px',
-                    paddingTop: '5px',
-                    paddingBottom: '5px',
-                    paddingLeft: '12px',
-                    paddingRight: '12px',
-                  }}
-                  size='large'
-                  disableElevation
-                  onClick={async () => {
-                    const authToken = await firebase.auth().currentUser.getIdToken()
-                                    .catch(err => console.log(err));
-                    emitEvent('start_new_round', { 
-                      roomID: username,
-                      authToken
-                    })
-                  }}
-                >
-                  Next Round
-                </Button>
+                { isAdmin ? (
+                  <Button
+                    variant='outlined'
+                    color='secondary'
+                    style={{
+                      margin: '5px',
+                      paddingTop: '5px',
+                      paddingBottom: '5px',
+                      paddingLeft: '12px',
+                      paddingRight: '12px',
+                    }}
+                    size='large'
+                    disableElevation
+                    onClick={async () => {
+                      const authToken = await firebase.auth().currentUser.getIdToken()
+                                      .catch(err => console.log(err));
+                      emitEvent('start_new_round', { 
+                        roomID: username,
+                        authToken
+                      })
+                    }}
+                  >
+                    Next Round
+                  </Button>
+                ) : <div/>}
               </div>
             </Toolbar>
           </AppBar>
@@ -400,6 +406,7 @@ const mapStateToProps = (state) => {
     displayName: displayNameSelector(state),
     roundState: roundStateSelector(state),
     roomConfig: roomConfigSelector(state),
+    account: accountSelector(state),
   }
 }
 
