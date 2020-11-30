@@ -1,10 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { Typography } from '@material-ui/core'
 import { TextField, Button, CircularProgress } from '@material-ui/core'
 import mainImg from '../../components/icon/logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import { setAppState } from '../../data/state/app-data/app-data.actions'
+import AppState from '../../services/AppState'
 
-const ClosedSubpage = (props) => {
+const ClosedSubpage = ({ setAppState }) => {
+
+  const history = useHistory();
+
   return (
     <div className='App '>
       <div className='radiant-background'>
@@ -31,9 +37,10 @@ const ClosedSubpage = (props) => {
                     style={{
                       fontSize: 15,
                     }}
-                    type='submit'
-                    component={Link}
-                    to={'/'}
+                    onClick={() => {
+                      setAppState(AppState.PICK_DISPLAY_NAME);
+                      history.push('/');
+                    }}
                   >
                     Home Page
                   </Button>
@@ -47,4 +54,9 @@ const ClosedSubpage = (props) => {
   )
 }
 
-export default ClosedSubpage
+const mapStateToProps = state => { return {} };
+const mapDispatchToProps = {
+  setAppState,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClosedSubpage);

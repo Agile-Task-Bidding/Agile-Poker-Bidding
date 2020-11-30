@@ -79,6 +79,36 @@ const CreatePage = ({
   const [roomExistsError, setRoomExistsError] = useState(false)
   const history = useHistory()
 
+  const onConnect = () => {console.log('Connected!')}
+  const onDisconnect = () => {console.log('Disconnected')}
+  const onRoomAlreadyCreated = (event) => {console.log(event)}
+  const onNotAuthorized = (event) => {console.log(event);}
+  const onCreateSuccess = (event) => {console.log('create_success'); history.push(`/room/${account.username}`)}
+  const onRoomStatusFetched = (event) => {
+    console.log(event);
+    if (event.status === 'ACTIVE') {
+      history.push(`/room/${account.username}`)
+    }
+  }
+
+  const registerSocketEvents = (socket) => {
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+    socket.on('room_already_created', onRoomAlreadyCreated)
+    socket.on('not_authorized', onNotAuthorized)
+    socket.on('create_success', onCreateSuccess)
+    socket.on('room_status_fetched', onRoomStatusFetched)
+  };
+
+  const unregisterSocketEvents = (socket) => {
+    socket.off('connect', onConnect)
+    socket.off('disconnect', onDisconnect)
+    socket.off('room_already_created', onRoomAlreadyCreated)
+    socket.off('not_authorized', onNotAuthorized)
+    socket.off('create_success', onCreateSuccess)
+    socket.off('room_status_fetched', onRoomStatusFetched)
+  }
+
   useEffect(() => {
     (async () => {
       loginUser(async (account) => {
@@ -86,22 +116,11 @@ const CreatePage = ({
           setCards(account.roomConfig.deck)
           setAllowAbstain(account.roomConfig.allowAbstain)
           const socket = await createRoomServiceConnection()
-          socket.on('connect', () => {
-            console.log('Connected!')
-          })
-          socket.on('disconnect', () => {
-            console.log('Disconnected')
-          })
-          socket.on('room_already_created', (event) => {
-            console.log(event)
-          })
-          socket.on('not_authorized', (event) => {
-            console.log(event);
-          })
-          socket.on('create_success', (event) => {
-            console.log('create_success')
-            history.push(`/room/${account.username}`)
-          })
+          
+          emitEvent('is_room_open', { roomID: account.username });
+          
+          registerSocketEvents(socket);
+          return () => { unregisterSocketEvents(socket); }
         } else {
           history.push('/login')
         }
@@ -146,7 +165,7 @@ const CreatePage = ({
         allowAbstain,
       }
 
-      await startGame(account.username, roomConfig, emitEvent)
+      await startGame(account.username, roomConfig)
     } catch (err) {
       console.error(err)
     }

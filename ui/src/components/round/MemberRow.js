@@ -77,7 +77,7 @@ const MemberRow = ({
                     user: { socketID },
                   })
                   roomServiceSocket.emit('kick_user', {
-                    idToken: await firebase
+                    authToken: await firebase
                       .auth()
                       .currentUser.getIdToken(false),
                     roomID: username,

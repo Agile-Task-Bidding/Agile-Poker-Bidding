@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import '../Styling.css'
 import mainImg from '../../components/icon/logo.svg'
 import { connect } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
