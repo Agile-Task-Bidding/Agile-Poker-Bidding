@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import settings from '../../../config';
 import { roomServiceSocketSelector } from './room-service.selectors';
 import AppState from '../../../services/AppState';
+import { accountSelector } from '../account/account.selector';
 
 export function createRoomServiceConnection() {
     return async (dispatch, getState) => {

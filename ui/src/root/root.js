@@ -1,12 +1,24 @@
-import React, { Component } from 'react';
-import 'fontsource-roboto';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router/immutable';
-import routes from './routes';
+import React, { Component } from 'react'
+import 'fontsource-roboto'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { ConnectedRouter } from 'connected-react-router/immutable'
+import routes from './routes'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles'
+import withFirebaseAuth from 'react-with-firebase-auth'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import firebaseConfig from '../firebaseConfig'
+
 const font = "'Reem Kufi', sans-serif"
+
+const firebaseApp = firebase.initializeApp(firebaseConfig)
+
+const firebaseAppAuth = firebaseApp.auth()
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+}
 
 const theme = createMuiTheme({
   palette: {
@@ -28,20 +40,21 @@ const theme = createMuiTheme({
   },
 })
 class Root extends Component {
-    render() {
-        const { store, history } = this.props;
-        return (
-            <Provider store={store}>
-                <MuiThemeProvider theme={theme}>
-                    <Router>
-                        <ConnectedRouter history={history}>
-                            {routes}
-                        </ConnectedRouter>
-                    </Router>
-                </MuiThemeProvider>
-            </Provider>
-        );
-    }
+  render() {
+    const { store, history } = this.props
+    return (
+      <Provider store={store}>
+        <MuiThemeProvider theme={theme}>
+          <Router>
+            <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+          </Router>
+        </MuiThemeProvider>
+      </Provider>
+    )
+  }
 }
 
-export default Root;
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(Root)
