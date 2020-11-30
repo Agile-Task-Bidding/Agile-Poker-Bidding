@@ -13,6 +13,7 @@ import { roomServiceSocketSelector } from '../../data/state/room-service/room-se
 import { displayNameSelector } from '../../data/state/app-data/app-data.selector'
 import { setAppState } from '../../data/state/app-data/app-data.actions'
 import { Typography } from '@material-ui/core'
+import * as RoomService from '../../services/RoomService'
 
 const DisplayNameSubpage = ({
   displayName,
@@ -31,12 +32,9 @@ const DisplayNameSubpage = ({
   }, [])
 
   const submit = async () => {
-    localStorage.setItem('displayName', formDisplayName)
-    setDisplayName(formDisplayName)
-    emitEvent('join_room', {
-      roomID: username,
-      nickname: formDisplayName,
-    })
+    localStorage.setItem('displayName', formDisplayName);
+    setDisplayName(formDisplayName);
+    RoomService.emitJoinRoom(roomServiceSocket, username, formDisplayName);
   }
 
   const displayNameInvalid = formDisplayName.length === 0

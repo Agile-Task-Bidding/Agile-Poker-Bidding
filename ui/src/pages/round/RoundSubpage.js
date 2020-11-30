@@ -44,6 +44,7 @@ import CoffeeCard from '../../components/create/CoffeeCard'
 import firebase from 'firebase'
 import 'firebase/auth'
 import { accountSelector } from '../../data/state/account/account.selector'
+import * as RoomService from '../../services/RoomService'
 
 function HideOnScroll(props) {
   const { children, window } = props
@@ -127,10 +128,7 @@ const RoundSubpage = ({
         card={it}
         selected={idx == picked}
         onClick={() => {
-          emitEvent('user_vote', {
-            roomID: username,
-            cardIndex: idx,
-          })
+          RoomService.emitUserVote(roomServiceSocket, username, idx);
         }}
       />
     ))
@@ -311,10 +309,7 @@ const RoundSubpage = ({
                     onClick={async () => {
                       const authToken = await firebase.auth().currentUser.getIdToken()
                                       .catch(err => console.log(err));
-                      emitEvent('start_new_round', { 
-                        roomID: username,
-                        authToken
-                      })
+                      RoomService.emitStartNewRound(roomServiceSocket, username, authToken);
                     }}
                   >
                     Next Round

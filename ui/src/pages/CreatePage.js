@@ -38,6 +38,8 @@ import Slide from '@material-ui/core/Slide'
 import PropTypes from 'prop-types'
 import userImg from '../components/icon/logowhite.svg'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import * as RoomService from '../services/RoomService'
+
 function ElevationScroll(props) {
   const { children, window } = props
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -79,34 +81,33 @@ const CreatePage = ({
   const [roomExistsError, setRoomExistsError] = useState(false)
   const history = useHistory()
 
-  const onConnect = () => {console.log('Connected!')}
-  const onDisconnect = () => {console.log('Disconnected')}
-  const onRoomAlreadyCreated = (event) => {console.log(event)}
-  const onNotAuthorized = (event) => {console.log(event);}
-  const onCreateSuccess = (event) => {console.log('create_success'); history.push(`/room/${account.username}`)}
-  const onRoomStatusFetched = (event) => {
-    console.log(event);
-    if (event.status === 'ACTIVE') {
-      history.push(`/room/${account.username}`)
-    }
-  }
+  let onConnect;
+  let onDisconnect;
+  let onRoomAlreadyCreated;
+  let onNotAuthorized;
+  let onCreateSuccess;
+  let onRoomStatusFetched;
 
   const registerSocketEvents = (socket) => {
-    socket.on('connect', onConnect)
-    socket.on('disconnect', onDisconnect)
-    socket.on('room_already_created', onRoomAlreadyCreated)
-    socket.on('not_authorized', onNotAuthorized)
-    socket.on('create_success', onCreateSuccess)
-    socket.on('room_status_fetched', onRoomStatusFetched)
+    onConnect = RoomService.onConnect(socket, () => {console.log('Connected!')})
+    onDisconnect = RoomService.onConnect(socket, () => {console.log('Disconnected')})
+    onRoomAlreadyCreated = RoomService.onConnect(socket, console.log)
+    onNotAuthorized = RoomService.onConnect(socket, console.log)
+    onCreateSuccess = RoomService.onConnect(socket, () => {history.push(`/room/${account.username}`)})
+    onRoomStatusFetched = RoomService.onConnect(socket, (status) => {
+      if (status === 'ACTIVE') {
+        history.push(`/room/${account.username}`)
+      }
+    })
   };
 
   const unregisterSocketEvents = (socket) => {
-    socket.off('connect', onConnect)
-    socket.off('disconnect', onDisconnect)
-    socket.off('room_already_created', onRoomAlreadyCreated)
-    socket.off('not_authorized', onNotAuthorized)
-    socket.off('create_success', onCreateSuccess)
-    socket.off('room_status_fetched', onRoomStatusFetched)
+    onConnect.off();
+    onDisconnect.off();
+    onRoomAlreadyCreated.off();
+    onNotAuthorized.off();
+    onCreateSuccess.off();
+    onRoomStatusFetched.off();
   }
 
   useEffect(() => {
@@ -116,8 +117,8 @@ const CreatePage = ({
           setCards(account.roomConfig.deck)
           setAllowAbstain(account.roomConfig.allowAbstain)
           const socket = await createRoomServiceConnection()
-          
-          emitEvent('is_room_open', { roomID: account.username });
+
+          RoomService.emitIsRoomOpen(socket, account.username);
           
           registerSocketEvents(socket);
           return () => { unregisterSocketEvents(socket); }

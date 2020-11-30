@@ -19,68 +19,73 @@ import { Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { loginUser } from '../data/state/account/account.actions';
+import * as RoomService from '../services/RoomService';
 
 const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundState, setRickRollPlaying, createRoomServiceConnection, emitEvent }) => {
 
   const history = useHistory();
   const { username } = useParams();
 
-  const onConnect = () => {console.log('Connected!');};
-  const onDisconnect = () => {console.log('Disconnected');};
-  const onRoomInactive = event => { setAppState(AppState.ROOM_INACTIVE) };
-  const onHostClosedConnection = event => { setDisplayName(''); setAppState(AppState.KICKED_FROM_ROOM) };
-  const onUserAlreadyInRoom = console.log;
-  const onRoomStateChanged = event => setRoundState(event.roomState);
-  const onJoinSuccess = event => setAppState(AppState.CONNECTED_TO_ROOM);
-  const onNotInRoomError = event => console.log;
-  const onVoteSuccess = event => console.log;
-  const onVoteCancelSuccess = event => console.log;
-  const onCreateSuccess = event => console.log;
-  const onHostRoomClosedFailure = event => console.log;
-  const onHostRoomClosedSuccess = event => { setDisplayName(''); setAppState(AppState.ROOM_CLOSED) };
-  const onRickroll = () => setRickRollPlaying(true);
-  const onRoomStatusFetched = (event) => {
-    console.log(event);
-    if (event.status === 'INACTIVE') {
-      console.log('inactive', event.status);
-      setAppState(AppState.ROOM_INACTIVE)          
-    }
-  }
+  let onConnect;
+  let onDisconnect;
+  let onRoomInactive;
+  let onHostClosedConnection;
+  let onUserAlreadyInRoom;
+  let onRoomStateChanged;
+  let onJoinSuccess;
+  let onNotInRoomError;
+  let onVoteSuccess;
+  let onVoteCancelSuccess;
+  let onCreateSuccess;
+  let onHostRoomClosedFailure;
+  let onHostRoomClosedSuccess;
+  let onRickroll;
+  let onRoomStatusFetched;
 
   const registerSocketEvents = (socket) => {
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('room_inactive', onRoomInactive);
-    socket.on('host_closed_connection', onHostClosedConnection);
-    socket.on('user_already_in_room', onUserAlreadyInRoom);
-    socket.on('room_state_changed', onRoomStateChanged);
-    socket.on('join_success', onJoinSuccess);
-    socket.on('not_in_room_error', onNotInRoomError);
-    socket.on('vote_success', onVoteSuccess);
-    socket.on('vote_cancel_success', onVoteCancelSuccess);
-    socket.on('create_success', onCreateSuccess);
-    socket.on('host_room_closed_failure', onHostRoomClosedFailure);
-    socket.on('host_room_closed_success', onHostRoomClosedSuccess);
+    onConnect = RoomService.onConnect(socket, () => { console.log('Connected!'); });
+    onDisconnect = RoomService.onDisconnect(socket, () => { console.log('Disconnected'); });
+    onRoomInactive = RoomService.onRoomInactive(socket, () => { setAppState(AppState.ROOM_INACTIVE); })
+    onHostClosedConnection = RoomService.onHostClosedConnection(socket, () => { 
+      setDisplayName(''); 
+      setAppState(AppState.KICKED_FROM_ROOM); 
+    });
+    onUserAlreadyInRoom = RoomService.onUserAlreadyInRoom(socket, console.log);
+    onRoomStateChanged = RoomService.onRoomStateChanged(socket, (roomState) => setRoundState(roomState));
+    onJoinSuccess = RoomService.onJoinSuccess(socket, () => setAppState(AppState.CONNECTED_TO_ROOM));
+    onNotInRoomError = RoomService.onNotInRoomError(socket, console.log);
+    onVoteSuccess = RoomService.onVoteSuccess(socket, console.log);
+    onVoteCancelSuccess = RoomService.onVoteCancelSuccess(socket, console.log);
+    onCreateSuccess = RoomService.onCreateSuccess(socket, console.log);
+    onHostRoomClosedFailure = RoomService.onHostRoomClosedFailure(socket, console.log);
+    onHostRoomClosedSuccess = RoomService.onHostRoomClosedSuccess(socket, () => { 
+      setDisplayName(''); 
+      setAppState(AppState.ROOM_CLOSED) 
+    });
+    onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
+      if (status === 'INACTIVE') {
+        setAppState(AppState.ROOM_INACTIVE)          
+      }
+    })
     socket.on('rickroll', onRickroll);
-    socket.on('room_status_fetched', onRoomStatusFetched)
   }
 
   const unregisterSocketEvents = (socket) => {
-    socket.off('connect', onConnect);
-    socket.off('disconnect', onDisconnect);
-    socket.off('room_inactive', onRoomInactive);
-    socket.off('host_closed_connection', onHostClosedConnection);
-    socket.off('user_already_in_room', onUserAlreadyInRoom);
-    socket.off('room_state_changed', onRoomStateChanged);
-    socket.off('join_success', onJoinSuccess);
-    socket.off('not_in_room_error', onNotInRoomError);
-    socket.off('vote_success', onVoteSuccess);
-    socket.off('vote_cancel_success', onVoteCancelSuccess);
-    socket.off('create_success', onCreateSuccess);
-    socket.off('host_room_closed_failure', onHostRoomClosedFailure);
-    socket.off('host_room_closed_success', onHostRoomClosedSuccess);
+    onConnect.off();
+    onDisconnect.off();
+    onRoomInactive.off();
+    onHostClosedConnection.off();
+    onUserAlreadyInRoom.off();
+    onRoomStateChanged.off();
+    onJoinSuccess.off();
+    onNotInRoomError.off();
+    onVoteSuccess.off();
+    onVoteCancelSuccess.off();
+    onCreateSuccess.off();
+    onHostRoomClosedFailure.off();
+    onHostRoomClosedSuccess.off();
+    onRoomStatusFetched.off();
     socket.off('rickroll', onRickroll);
-    socket.off('room_status_fetched', onRoomStatusFetched)
   }
 
   useEffect(() => {
@@ -88,7 +93,7 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
       loginUser(async (_) => {
         const socket = await createRoomServiceConnection()
 
-        emitEvent('is_room_open', { roomID: username });
+        RoomService.emitIsRoomOpen(socket, username);
 
         registerSocketEvents(socket);
         return () => { unregisterSocketEvents(socket); };
