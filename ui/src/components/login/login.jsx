@@ -55,7 +55,7 @@ class Login extends React.Component {
         console.log(error)
         if (
           error.code === 'auth/user-not-found' ||
-          error.code === 'auth/user-not-found'
+          error.code === 'auth/wrong-password'
         ) {
           this.setState({ passwordWrong: true })
         }

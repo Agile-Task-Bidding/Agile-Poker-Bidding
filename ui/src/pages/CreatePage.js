@@ -197,8 +197,6 @@ const CreatePage = ({
   }
   const classes = useStyles()
 
-  console.log(firebase.auth().currentUser)
-
   return (
     <ResponsiveContainer>
       <ElevationScroll fullWidth>
@@ -268,9 +266,9 @@ const CreatePage = ({
       <Toolbar />
       {
         (firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified ? (
-          <div style={{ width: '100%', backgroundColor: 'yellow', padding: 8, marginBottom: 12, borderRadius: 4 }}>
-            Verify your account motherf*cker
-          </div>
+          <Paper style={{ width: '100%', backgroundColor: 'yellow', padding: 8, marginBottom: 12, borderRadius: 4 }}>
+            Verify your account
+          </Paper>
         ) : null)
       }
       <div className={classes.center}>
