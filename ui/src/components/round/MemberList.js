@@ -90,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
   usersHeader: {
     padding: 12,
+    marginTop: 2,
   }
 }))
 

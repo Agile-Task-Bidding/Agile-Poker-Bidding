@@ -14,7 +14,7 @@ export function loginUser(callback) {
     firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
             const idToken = await firebase.auth().currentUser.getIdToken(false);
-            const account = (await axios.get(`http://localhost:80/api/v1/users/${firebase.auth().currentUser.uid}`, {
+            const account = (await axios.get(`/api/v1/users/${firebase.auth().currentUser.uid}`, {
                 headers: {
                 'Authorization': 'Bearer ' + idToken
                 }

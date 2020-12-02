@@ -39,6 +39,8 @@ import PropTypes from 'prop-types'
 import userImg from '../components/icon/logowhite.svg'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import * as RoomService from '../services/RoomService'
+import firebase from 'firebase'
+import 'firebase/auth'
 
 function ElevationScroll(props) {
   const { children, window } = props
@@ -88,13 +90,13 @@ const CreatePage = ({
   let onCreateSuccess;
   let onRoomStatusFetched;
 
-  const registerSocketEvents = (socket) => {
+  const registerSocketEvents = (socket, account) => {
     onConnect = RoomService.onConnect(socket, () => {console.log('Connected!')})
-    onDisconnect = RoomService.onConnect(socket, () => {console.log('Disconnected')})
-    onRoomAlreadyCreated = RoomService.onConnect(socket, console.log)
-    onNotAuthorized = RoomService.onConnect(socket, console.log)
-    onCreateSuccess = RoomService.onConnect(socket, () => {history.push(`/room/${account.username}`)})
-    onRoomStatusFetched = RoomService.onConnect(socket, (status) => {
+    onDisconnect = RoomService.onDisconnect(socket, () => {console.log('Disconnected')})
+    onRoomAlreadyCreated = RoomService.onRoomAlreadyCreated(socket, console.log)
+    onNotAuthorized = RoomService.onNotAuthorized(socket, console.log)
+    onCreateSuccess = RoomService.onCreateSuccess(socket, () => {history.push(`/room/${account.username}`)})
+    onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
       if (status === 'ACTIVE') {
         history.push(`/room/${account.username}`)
       }
@@ -120,7 +122,7 @@ const CreatePage = ({
 
           RoomService.emitIsRoomOpen(socket, account.username);
           
-          registerSocketEvents(socket);
+          registerSocketEvents(socket, account);
           return () => { unregisterSocketEvents(socket); }
         } else {
           history.push('/login')
@@ -262,6 +264,13 @@ const CreatePage = ({
         </AppBar>
       </ElevationScroll>
       <Toolbar />
+      {
+        (firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified ? (
+          <div style={{ width: '100%', backgroundColor: 'yellow', padding: 8, marginBottom: 12, borderRadius: 4 }}>
+            Verify your account motherf*cker
+          </div>
+        ) : null)
+      }
       <div className={classes.center}>
           <div>
             <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
