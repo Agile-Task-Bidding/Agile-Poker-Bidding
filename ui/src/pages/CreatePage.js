@@ -123,6 +123,7 @@ const CreatePage = ({
           RoomService.emitIsRoomOpen(socket, account.username);
           
           registerSocketEvents(socket, account);
+
           return () => { unregisterSocketEvents(socket); }
         } else {
           history.push('/login')

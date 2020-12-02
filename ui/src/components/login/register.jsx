@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import axios from 'axios'
 import { StyleSheet, css } from 'aphrodite'
+import { withSnackbar } from 'notistack'
 
 var actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export class Register extends React.Component {
+class Register extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -82,9 +83,11 @@ export class Register extends React.Component {
         // Save the email locally so you don't need to ask the user for it again
         // if they open the link on the same device.
         window.localStorage.setItem('emailForSignIn', this.state.user.email)
+        this.props.enqueueSnackbar('Sent verification email to ' + this.state.user.email, { variant: 'success' });
       })
       .catch(function (error) {
-        console.log('Ryan told me to do that', error)
+        this.props.enqueueSnackbar('There was an error')
+        console.error(error);
         // Some error occurred, you can inspect the code: error.code
       })
   }
@@ -226,3 +229,5 @@ export class Register extends React.Component {
     )
   }
 }
+
+export default withSnackbar(Register);
