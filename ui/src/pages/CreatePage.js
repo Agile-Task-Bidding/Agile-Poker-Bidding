@@ -197,6 +197,8 @@ const CreatePage = ({
   }
   const classes = useStyles()
 
+  console.log(firebase.auth().currentUser)
+
   return (
     <ResponsiveContainer>
       <ElevationScroll fullWidth>
