@@ -47,7 +47,7 @@ class Login extends React.Component {
       })
       .catch((error) => {
         console.log(error)
-        if (error.code === 'auth/user-not-found') {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/user-not-found') {
           this.setState({ passwordWrong: true })
         }
       })
