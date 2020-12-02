@@ -9,6 +9,23 @@ import { withRouter } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import axios from 'axios'
 
+var actionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be in the authorized domains list in the Firebase Console.
+  url: 'http://localhost:80/verifyemail',
+  // This must be true.
+  handleCodeInApp: true,
+  // iOS: {
+  //   bundleId: 'com.example.ios',
+  // },
+  // android: {
+  //   packageName: 'com.example.android',
+  //   installApp: true,
+  //   minimumVersion: '12',
+  // // },
+  // dynamicLinkDomain: 'example.page.link',
+}
+
 export class Register extends React.Component {
   constructor(props) {
     super(props)
@@ -55,6 +72,18 @@ export class Register extends React.Component {
       email: this.state.user.email,
       password: this.state.user.password,
     })
+    firebase
+      .auth()
+      .sendSignInLinkToEmail(this.state.user.email, actionCodeSettings)
+      .then(function () {
+        // The link was successfully sent. Inform the user.
+        // Save the email locally so you don't need to ask the user for it again
+        // if they open the link on the same device.
+        window.localStorage.setItem('emailForSignIn', this.state.user.email)
+      })
+      .catch(function (error) {
+        // Some error occurred, you can inspect the code: error.code
+      })
   }
 
   componentDidMount() {
