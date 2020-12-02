@@ -118,10 +118,10 @@ class Home extends React.Component {
           <div className='image'>
             <img src={mainImg} />
           </div>
-          <Typography variant='h1' color='primary'>
+          <Typography variant='h2' color='primary'>
             PilePlan
           </Typography>
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 30 }}>
             <Button
               variant='contained'
               color='primary'

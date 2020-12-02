@@ -77,13 +77,14 @@ export class Register extends React.Component {
     firebase
       .auth()
       .sendSignInLinkToEmail(this.state.user.email, actionCodeSettings)
-      .then(function () {
+      .then(() => {
         // The link was successfully sent. Inform the user.
         // Save the email locally so you don't need to ask the user for it again
         // if they open the link on the same device.
         window.localStorage.setItem('emailForSignIn', this.state.user.email)
       })
       .catch(function (error) {
+        console.log('Ryan told me to do that', error)
         // Some error occurred, you can inspect the code: error.code
       })
   }
@@ -116,7 +117,7 @@ export class Register extends React.Component {
             <img src={loginImg} />
           </div>
           <div>
-            <Typography variant='h1' color='primary'>
+            <Typography variant='h2' color='primary'>
               PilePlan
             </Typography>
           </div>
