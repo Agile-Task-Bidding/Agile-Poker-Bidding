@@ -12,7 +12,7 @@ import axios from 'axios'
 var actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
   // URL must be in the authorized domains list in the Firebase Console.
-  url: 'http://localhost:80/verifyemail',
+  url: 'http://localhost:3000/verifyemail',
   // This must be true.
   handleCodeInApp: true,
   // iOS: {
