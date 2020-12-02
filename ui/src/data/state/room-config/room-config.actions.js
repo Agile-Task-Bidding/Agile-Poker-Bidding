@@ -40,7 +40,7 @@ export function startGame(roomID, roomConfig) {
 }
 
 const saveConfig = (uid, authToken, roomConfig) => {
-    axios.put(`http://localhost:80/api/v1/users/${uid}/roomConfig`, { roomConfig }, {
+    axios.put(`/api/v1/users/${uid}/roomConfig`, { roomConfig }, {
         headers: {
             'Authorization': 'Bearer ' + authToken
         }

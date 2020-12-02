@@ -41,23 +41,23 @@ const MemberRow = ({
             justifyContent: 'space-between',
           }}
         >
-          <ListItemIcon>
-            {voted ? (
-              <CheckCircleIcon
-                style={{
-                  color: '#223496',
-                }}
-                // fontSize='large'
-              />
-            ) : (
-              <CheckCircleOutlineIcon
-                style={{
-                  color: '#223496',
-                }}
-                // fontSize='large'
-              />
-            )}
-          </ListItemIcon>
+          {voted ? (
+            <CheckCircleIcon
+              style={{
+                color: '#223496',
+                marginRight: 8,
+              }}
+              // fontSize='large'
+            />
+          ) : (
+            <CheckCircleOutlineIcon
+              style={{
+                color: '#223496',
+                marginRight: 8,
+              }}
+              // fontSize='large'
+            />
+          )}
           <ListItemText primary={<Typography variant='h5'>{displayName}</Typography>} />
           {/* <ListItemIcon>
             <img src={iconCrown} />

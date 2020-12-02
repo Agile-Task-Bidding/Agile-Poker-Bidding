@@ -192,7 +192,7 @@ const RoundSubpage = ({
             </Toolbar>
           </AppBar>
         </HideOnScroll>
-        <Toolbar />
+        <Toolbar/>
         <MemberList 
           // className={css(styles.container)} 
           mobileDrawerOpen={mobileDrawerOpen} 
@@ -319,7 +319,7 @@ const RoundSubpage = ({
             </Toolbar>
           </AppBar>
         </HideOnScroll>
-        <Toolbar />
+        <Toolbar/>
         <Container>
           <Grid container justify="space-evenly" spacing={3} style={{ marginTop: 18 }}>
             <Grid item xs>
