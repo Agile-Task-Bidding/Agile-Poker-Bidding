@@ -7,7 +7,13 @@ import { Typography } from '@material-ui/core'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { withRouter } from 'react-router-dom'
+import { StyleSheet, css } from 'aphrodite'
 
+const styles = StyleSheet.create({
+  deleteclass: {
+    margin: '-1px',
+  },
+})
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -47,7 +53,10 @@ class Login extends React.Component {
       })
       .catch((error) => {
         console.log(error)
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/user-not-found') {
+        if (
+          error.code === 'auth/user-not-found' ||
+          error.code === 'auth/user-not-found'
+        ) {
           this.setState({ passwordWrong: true })
         }
       })
@@ -68,7 +77,9 @@ class Login extends React.Component {
           </div>
           <div className='form'>
             <ValidatorForm
+              className={css(styles.deleteclass)}
               ref='form'
+              helperText=' '
               onSubmit={this.handleSubmit}
               onError={(errors) => console.log(errors)}
             >
@@ -80,6 +91,7 @@ class Login extends React.Component {
                 }}
               >
                 <TextValidator
+                  className={css(styles.deleteclass)}
                   label='E-mail'
                   onChange={this.handleChange}
                   name='email'
@@ -87,6 +99,7 @@ class Login extends React.Component {
                   validators={['required', 'isEmail']}
                   errorMessages={['Required Field', 'Email is invalid']}
                   variant='filled'
+                  helperText=' '
                   margin='dense'
                   InputProps={{ disableUnderline: true }}
                   fullWidth

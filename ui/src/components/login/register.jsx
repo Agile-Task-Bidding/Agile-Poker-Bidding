@@ -8,6 +8,7 @@ import 'firebase/auth'
 import { withRouter } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import axios from 'axios'
+import { StyleSheet, css } from 'aphrodite'
 
 var actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
@@ -25,6 +26,11 @@ var actionCodeSettings = {
   // // },
   // dynamicLinkDomain: 'example.page.link',
 }
+const styles = StyleSheet.create({
+  deleteclass: {
+    margin: '-1px',
+  },
+})
 
 export class Register extends React.Component {
   constructor(props) {
@@ -46,10 +52,6 @@ export class Register extends React.Component {
   }
 
   handleSubmit = () => {
-    // your submit logic
-  }
-
-  doRegister = () => {
     // firebase
     //   .auth()
     //   .createUserWithEmailAndPassword(
@@ -124,99 +126,100 @@ export class Register extends React.Component {
               onSubmit={this.handleSubmit}
               onError={(errors) => console.log(errors)}
             >
-              <div ClassName='form-group'>
-                <TextValidator
-                  label='Username'
-                  onChange={this.handleChange}
-                  name='username'
-                  value={user.username}
-                  validators={[
-                    'required',
-                    'minStringLength: 1',
-                    'maxStringLength: 15',
-                  ]}
-                  errorMessages={[
-                    'Username is required',
-                    'Username must be at least have 1 character',
-                    'Username can have maximum 15 characters',
-                  ]}
-                  variant='filled'
-                  InputProps={{ disableUnderline: true }}
-                  fullWidth
-                  variant='filled'
-                  margin='dense'
-                />
+              <TextValidator
+                className={css(styles.deleteclass)}
+                label='Username'
+                onChange={this.handleChange}
+                name='username'
+                value={user.username}
+                validators={[
+                  'required',
+                  'minStringLength: 1',
+                  'maxStringLength: 15',
+                ]}
+                errorMessages={[
+                  'Username is required',
+                  'Username must be at least have 1 character',
+                  'Username can have maximum 15 characters',
+                ]}
+                variant='filled'
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+                helperText=' '
+                variant='filled'
+                margin='dense'
+              />
 
-                {/* <input type='text' name='username' placeholder='Username' /> */}
-              </div>
-              <div ClassName='form-group'>
-                <TextValidator
-                  label='E-mail'
-                  onChange={this.handleChange}
-                  name='email'
-                  value={user.email}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['Required Field', 'Email is invalid']}
-                  variant='filled'
-                  margin='dense'
-                  InputProps={{ disableUnderline: true }}
-                  fullWidth
-                />
-                {/* <input type='text' name='email' placeholder='E-mail' /> */}
-              </div>
-              <div ClassName='form-group'>
-                <TextValidator
-                  label='Password'
-                  onChange={this.handleChange}
-                  name='password'
-                  type='password'
-                  validators={['required', 'minStringLength: 6']}
-                  errorMessages={[
-                    'Password is required',
-                    'Password must be at least 6 characters long',
-                  ]}
-                  value={user.password}
-                  variant='filled'
-                  margin='dense'
-                  InputProps={{ disableUnderline: true }}
-                  fullWidth
-                />
-                {/* <input type='text' name='password' placeholder='Password' /> */}
-              </div>
-              <div ClassName='form-group'>
-                <TextValidator
-                  label='Confirm Password'
-                  onChange={this.handleChange}
-                  name='confirmPassword'
-                  type='password'
-                  validators={['isPasswordMatch', 'required']}
-                  errorMessages={['Passwords Mismatch', 'Required Field']}
-                  value={user.confirmPassword}
-                  variant='filled'
-                  margin='dense'
-                  InputProps={{ disableUnderline: true }}
-                  fullWidth
-                />
-                {/* <input
+              {/* <input type='text' name='username' placeholder='Username' /> */}
+
+              <TextValidator
+                className={css(styles.deleteclass)}
+                label='E-mail'
+                onChange={this.handleChange}
+                name='email'
+                value={user.email}
+                validators={['required', 'isEmail']}
+                errorMessages={['Required Field', 'Email is invalid']}
+                variant='filled'
+                margin='dense'
+                helperText=' '
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+              />
+              {/* <input type='text' name='email' placeholder='E-mail' /> */}
+
+              <TextValidator
+                className={css(styles.deleteclass)}
+                label='Password'
+                onChange={this.handleChange}
+                name='password'
+                type='password'
+                validators={['required', 'minStringLength: 6']}
+                errorMessages={[
+                  'Password is required',
+                  'Password must be at least 6 characters long',
+                ]}
+                value={user.password}
+                variant='filled'
+                margin='dense'
+                helperText=' '
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+              />
+              {/* <input type='text' name='password' placeholder='Password' /> */}
+
+              {/* <TextValidator
+                className={css(styles.deleteclass)}
+                label='Confirm Password'
+                onChange={this.handleChange}
+                name='confirmPassword'
+                type='password'
+                validators={['isPasswordMatch', 'required']}
+                errorMessages={['Passwords Mismatch', 'Required Field']}
+                value={user.confirmPassword}
+                variant='filled'
+                margin='dense'
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+              /> */}
+              {/* <input
                   type='text'
                   name='confirmPassword'
                   placeholder='Confirm Password'
                 /> */}
-              </div>
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                fullWidth
+                // component={Link}
+                // to={'/home'}
+                onClick={this.doRegister}
+              >
+                Sign Up
+              </Button>
             </ValidatorForm>
           </div>
-        </div>
-        <div className='footer'>
-          <Button
-            variant='contained'
-            color='primary'
-            fullWidth
-            // component={Link}
-            // to={'/home'}
-            onClick={this.doRegister}
-          >
-            Sign Up
-          </Button>
         </div>
       </div>
     )
