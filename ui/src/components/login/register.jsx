@@ -3,8 +3,11 @@ import loginImg from '../icon/logo.svg'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { FormGroup, Typography } from '@material-ui/core'
-
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import { withRouter } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
+import axios from 'axios'
 
 export class Register extends React.Component {
   constructor(props) {
@@ -27,6 +30,31 @@ export class Register extends React.Component {
 
   handleSubmit = () => {
     // your submit logic
+  }
+
+  doRegister = () => {
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(
+    //     this.state.user.email,
+    //     this.state.user.password
+    //   )
+    //   .then((user) => {
+    //     console.log('in the base')
+    //     // Signed in
+    //     // ...
+    //   })
+    //   .catch((error) => {
+    //     var errorCode = error.code
+    //     console.log('fucked up... again')
+    //     var errorMessage = error.message
+    //     // ..
+    //   })
+    axios.post(`/api/v1/users`, {
+      username: this.state.user.username,
+      email: this.state.user.email,
+      password: this.state.user.password,
+    })
   }
 
   componentDidMount() {
@@ -154,8 +182,9 @@ export class Register extends React.Component {
             variant='contained'
             color='primary'
             fullWidth
-            component={Link}
-            to={'/home'}
+            // component={Link}
+            // to={'/home'}
+            onClick={this.doRegister}
           >
             Sign Up
           </Button>
