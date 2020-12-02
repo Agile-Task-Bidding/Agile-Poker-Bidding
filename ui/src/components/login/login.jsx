@@ -19,6 +19,7 @@ class Login extends React.Component {
         password: '',
         confirmPassword: '',
       },
+      passwordWrong: false,
     }
   }
 
@@ -45,9 +46,10 @@ class Login extends React.Component {
         console.log('we did it')
       })
       .catch((error) => {
-        var errorCode = error.code
-        console.log('oh no')
-        var errorMessage = error.message
+        console.log(error)
+        if (error.code === 'auth/user-not-found') {
+          this.setState({ passwordWrong: true })
+        }
       })
   }
 
@@ -106,6 +108,11 @@ class Login extends React.Component {
                   fullWidth
                 />
                 {/* <input type='text' name='password' placeholder='Password' /> */}
+              </div>
+              <div style={{ marginTop: 4 }}>
+                <Typography variant='body1' color='error'>
+                  {this.state.passwordWrong ? 'Account does not exist' : ' '}
+                </Typography>
               </div>
             </ValidatorForm>
           </div>
