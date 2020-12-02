@@ -43,7 +43,7 @@ const VerifyLinkPage = ({ setAppState }) => {
         //TODO expand error handling
         console.log(error);
       });
-  })
+  }, [])
 
   return (
     <div className='App '>
