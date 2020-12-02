@@ -10,6 +10,7 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import firebaseConfig from '../firebaseConfig'
+import { SnackbarProvider } from 'notistack';
 
 const font = "'Reem Kufi', sans-serif"
 
@@ -45,9 +46,11 @@ class Root extends Component {
     return (
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <Router>
-            <ConnectedRouter history={history}>{routes}</ConnectedRouter>
-          </Router>
+          <SnackbarProvider maxSnack={3}>
+            <Router>
+              <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+            </Router>
+          </SnackbarProvider>
         </MuiThemeProvider>
       </Provider>
     )
