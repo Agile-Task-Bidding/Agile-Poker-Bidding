@@ -21,6 +21,8 @@ export const Events = {
     CREATE_SUCCESS: 'create_success',
     HOST_ROOM_CLOSED_FAILURE: 'host_room__closed_failure',
     HOST_ROOM_CLOSED_SUCCESS: 'host_room_closed_success',
+    NOT_AUTHORIZED: 'not_authorized',
+    ROOM_ALREADY_CREATED: 'room_already_created',
 }
 
 class Ticket {
@@ -206,6 +208,22 @@ export function onHostRoomClosedFailure(socket, callback) {
     return registerOn(
         socket, 
         Events.HOST_ROOM_CLOSED_FAILURE,
+        (_) => callback(),
+    )
+}
+
+export function onNotAuthorized(socket, callback) {
+    return registerOn(
+        socket, 
+        Events.NOT_AUTHORIZED,
+        (_) => callback(),
+    )
+}
+
+export function onRoomAlreadyCreated(socket, callback) {
+    return registerOn(
+        socket, 
+        Events.ROOM_ALREADY_CREATED,
         (_) => callback(),
     )
 }
