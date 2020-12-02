@@ -90,11 +90,11 @@ const CreatePage = ({
 
   const registerSocketEvents = (socket) => {
     onConnect = RoomService.onConnect(socket, () => {console.log('Connected!')})
-    onDisconnect = RoomService.onConnect(socket, () => {console.log('Disconnected')})
-    onRoomAlreadyCreated = RoomService.onConnect(socket, console.log)
-    onNotAuthorized = RoomService.onConnect(socket, console.log)
-    onCreateSuccess = RoomService.onConnect(socket, () => {history.push(`/room/${account.username}`)})
-    onRoomStatusFetched = RoomService.onConnect(socket, (status) => {
+    onDisconnect = RoomService.onDisconnect(socket, () => {console.log('Disconnected')})
+    onRoomAlreadyCreated = RoomService.onRoomAlreadyCreated(socket, console.log)
+    onNotAuthorized = RoomService.onNotAuthorized(socket, console.log)
+    onCreateSuccess = RoomService.onCreateSuccess(socket, () => {history.push(`/room/${account.username}`)})
+    onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
       if (status === 'ACTIVE') {
         history.push(`/room/${account.username}`)
       }
