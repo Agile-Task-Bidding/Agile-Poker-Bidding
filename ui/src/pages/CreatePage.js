@@ -132,18 +132,12 @@ const CreatePage = ({
 
           registerSocketEvents(socket, account)
 
-<<<<<<< HEAD
           const notVerified = firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified;
           if (notVerified) {
             enqueueSnackbar(`Don't forget to verify your account`, { variant: 'warning' })
           }
 
           return () => { unregisterSocketEvents(socket); }
-=======
-          return () => {
-            unregisterSocketEvents(socket)
-          }
->>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
         } else {
           history.push('/login')
         }
@@ -206,7 +200,6 @@ const CreatePage = ({
   const isError = !!deckErrors.find(it => !!it);
 
   const elements = []
-<<<<<<< HEAD
   elements.push(...cards.map((it, idx) => (
     <EditCard
       key={idx}
@@ -217,19 +210,6 @@ const CreatePage = ({
       setAllowAbstain={(flag) => setAllowAbstain(flag)}
     />
   )))
-=======
-  elements.push(
-    ...cards.map((it, idx) => (
-      <EditCard
-        key={idx}
-        card={it}
-        setCard={genChangeCard(idx)}
-        deleteCard={genOnDelete(idx)}
-        setAllowAbstain={(flag) => setAllowAbstain(flag)}
-      />
-    ))
-  )
->>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
   elements.push(
     <AddCard
       key='add'
@@ -308,27 +288,6 @@ const CreatePage = ({
         </AppBar>
       </ElevationScroll>
       <Toolbar />
-<<<<<<< HEAD
-=======
-      {firebase.auth().currentUser &&
-      !firebase.auth().currentUser.emailVerified ? (
-        <Paper
-          style={{
-            width: '100%',
-            backgroundColor: 'primary',
-            display: 'flex',
-            justifyContent: 'center',
-            padding: 8,
-            marginBottom: 12,
-            borderRadius: 4,
-          }}
-        >
-          <Typography variant='h5' color='primary' align='center'>
-            Verify your account
-          </Typography>
-        </Paper>
-      ) : null}
->>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
       <div className={classes.center}>
         <div>
           <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
