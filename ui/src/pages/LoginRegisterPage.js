@@ -17,6 +17,9 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
 import { createMuiTheme } from '@material-ui/core/styles'
 import { FormGroup, Typography } from '@material-ui/core'
+import firebase from 'firebase'
+import 'firebase/auth'
+import { withSnackbar } from 'notistack'
 
 const font = "'Reem Kufi', sans-serif"
 
@@ -96,6 +99,16 @@ class LoginRegisterPage extends React.Component {
       this.setState({ isModalOn: false })
     }
 
+    const sendResetEmail = () => {
+      firebase.auth().sendPasswordResetEmail(user.email).then(() => {
+        this.props.enqueueSnackbar('Sent password reset', { variant: 'success' })
+      }).catch((err) => {
+        console.log(err);
+        this.props.enqueueSnackbar('Error: ' + err.message, { variant: 'error' })
+      });
+      this.setState({ isModalOn: false })
+    }
+
     return (
       <MuiThemeProvider theme={theme}>
         <div className='App'>
@@ -153,7 +166,7 @@ class LoginRegisterPage extends React.Component {
                     style={{
                       margin: '15px',
                     }}
-                    onClick={handleClose}
+                    onClick={sendResetEmail}
                   >
                     Reset
                   </Button>
@@ -201,4 +214,4 @@ const RightSide = (props) => {
   )
 }
 
-export default LoginRegisterPage
+export default withSnackbar(LoginRegisterPage)
