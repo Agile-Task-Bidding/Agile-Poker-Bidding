@@ -278,13 +278,17 @@ const CreatePage = ({
         <Paper
           style={{
             width: '100%',
-            backgroundColor: 'gray',
+            backgroundColor: 'primary',
+            display: 'flex',
+            justifyContent: 'center',
             padding: 8,
             marginBottom: 12,
             borderRadius: 4,
           }}
         >
-          Verify your account
+          <Typography variant='h5' color='primary' align='center'>
+            Verify your account
+          </Typography>
         </Paper>
       ) : null}
       <div className={classes.center}>
