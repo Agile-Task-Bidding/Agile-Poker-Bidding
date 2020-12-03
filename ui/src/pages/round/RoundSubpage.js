@@ -44,6 +44,7 @@ import CoffeeCard from '../../components/create/CoffeeCard'
 import firebase from 'firebase'
 import 'firebase/auth'
 import { accountSelector } from '../../data/state/account/account.selector'
+import { setDisplayName } from '../../data/state/app-data/app-data.actions'
 import * as RoomService from '../../services/RoomService'
 
 function HideOnScroll(props) {
@@ -111,6 +112,7 @@ const RoundSubpage = ({
   roomServiceSocket,
   emitEvent,
   account,
+  setDisplayName,
   ...thruProps
 }) => {
   const { username } = useParams()
@@ -119,6 +121,10 @@ const RoundSubpage = ({
   const classes = useStyles();
 
   const isAdmin = account && account.username === username
+
+  useEffect(() => {
+    setDisplayName('');
+  }, [])
 
   const renderBiddingPhase = () => {
     const picked = roundState.voteByUserID[roomServiceSocket.id]
@@ -237,7 +243,6 @@ const RoundSubpage = ({
         }
       }
     })
-    console.log(voteTally)
     const average = calcAverage(voteTally);
     const stdDev = calcStandardDeviation(voteTally);
     let nearest = { value: 'ABSTAIN', tag: 'abstain' };
@@ -400,6 +405,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   createRoomServiceConnection,
   emitEvent,
+  setDisplayName,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoundSubpage)
