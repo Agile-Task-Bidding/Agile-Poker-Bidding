@@ -83,11 +83,14 @@ class Register extends React.Component {
         // Save the email locally so you don't need to ask the user for it again
         // if they open the link on the same device.
         window.localStorage.setItem('emailForSignIn', this.state.user.email)
-        this.props.enqueueSnackbar('Sent verification email to ' + this.state.user.email, { variant: 'success' });
+        this.props.enqueueSnackbar(
+          'Sent verification email to ' + this.state.user.email,
+          { variant: 'success' }
+        )
       })
       .catch(function (error) {
         this.props.enqueueSnackbar('There was an error')
-        console.error(error);
+        console.error(error)
         // Some error occurred, you can inspect the code: error.code
       })
   }
@@ -120,7 +123,11 @@ class Register extends React.Component {
             <img src={loginImg} />
           </div>
           <div>
-            <Typography variant='h2' color='primary'>
+            <Typography
+              variant='h1'
+              color='primary'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
               PilePlan
             </Typography>
           </div>
@@ -191,7 +198,21 @@ class Register extends React.Component {
                 fullWidth
               />
               {/* <input type='text' name='password' placeholder='Password' /> */}
-
+              <TextValidator
+                className={css(styles.deleteclass)}
+                label='Confirm Password'
+                onChange={this.handleChange}
+                name='confirmPassword'
+                type='password'
+                validators={['isPasswordMatch', 'required']}
+                errorMessages={['Passwords Mismatch', 'Required Field']}
+                value={user.confirmPassword}
+                variant='filled'
+                margin='dense'
+                helperText=' '
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+              />
               {/* <TextValidator
                 className={css(styles.deleteclass)}
                 label='Confirm Password'
@@ -230,4 +251,4 @@ class Register extends React.Component {
   }
 }
 
-export default withSnackbar(Register);
+export default withSnackbar(Register)

@@ -71,7 +71,11 @@ class Login extends React.Component {
             <img src={loginImg} />
           </div>
           <div>
-            <Typography variant='h2' color='primary'>
+            <Typography
+              variant='h1'
+              color='primary'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
               PilePlan
             </Typography>
           </div>
