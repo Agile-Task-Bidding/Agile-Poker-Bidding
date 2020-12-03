@@ -13,7 +13,15 @@ import { roundStateSelector } from '../../data/state/round-state/round-state.sel
 import DisplayCard from '../../components/round/DisplayCard'
 import CardGrid from '../../components/CardGrid'
 import GameState from '../../services/GameState'
-import { Dialog, Typography, Button, Paper, Container, Hidden, makeStyles } from '@material-ui/core'
+import {
+  Dialog,
+  Typography,
+  Button,
+  Paper,
+  Container,
+  Hidden,
+  makeStyles,
+} from '@material-ui/core'
 import RickRolled from '../../components/round/RickRolled'
 import MemberRow from '../../components/round/MemberRow'
 import MemberList from '../../components/round/MemberList'
@@ -70,7 +78,7 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 }
 
-const drawerWidth = 240;
+const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -102,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-}));
+}))
 
 const RoundSubpage = ({
   createRoomServiceConnection,
@@ -117,8 +125,8 @@ const RoundSubpage = ({
 }) => {
   const { username } = useParams()
   const isDesktop = useMediaQuery('(min-width:600px)')
-  const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
-  const classes = useStyles();
+  const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false)
+  const classes = useStyles()
 
   const isAdmin = account && account.username === username
 
@@ -134,7 +142,7 @@ const RoundSubpage = ({
         card={it}
         selected={idx == picked}
         onClick={() => {
-          RoomService.emitUserVote(roomServiceSocket, username, idx);
+          RoomService.emitUserVote(roomServiceSocket, username, idx)
         }}
       />
     ))
@@ -152,9 +160,11 @@ const RoundSubpage = ({
           <AppBar
             position='fixed'
             className={classes.appBar}
-            style={{
-              // zIndex: '1500',
-            }}
+            style={
+              {
+                // zIndex: '1500',
+              }
+            }
           >
             <Toolbar
               style={{
@@ -198,11 +208,11 @@ const RoundSubpage = ({
             </Toolbar>
           </AppBar>
         </HideOnScroll>
-        <Toolbar/>
-        <MemberList 
-          // className={css(styles.container)} 
-          mobileDrawerOpen={mobileDrawerOpen} 
-          onClose={() => setMobileDrawerOpen(false)} 
+        <Toolbar />
+        <MemberList
+          // className={css(styles.container)}
+          mobileDrawerOpen={mobileDrawerOpen}
+          onClose={() => setMobileDrawerOpen(false)}
         />
         {isDesktop ? (
           <DesktopView>
@@ -218,19 +228,19 @@ const RoundSubpage = ({
   }
 
   const calcAverage = (values) => {
-    return values.reduce((a, b) => a + b, 0) / values.length;
+    return values.reduce((a, b) => a + b, 0) / values.length
   }
 
   const calcStandardDeviation = (values) => {
-    const average = calcAverage(values);
-    const diffsSq = values.map(a => (a - average) * (a - average), 0);
-    const averageDiffSq = calcAverage(diffsSq);
-    return Math.sqrt(averageDiffSq);
+    const average = calcAverage(values)
+    const diffsSq = values.map((a) => (a - average) * (a - average), 0)
+    const averageDiffSq = calcAverage(diffsSq)
+    return Math.sqrt(averageDiffSq)
   }
 
   const roundToThousandth = (value) => {
-    return Math.round(value * 1000) / 1000;
-  } 
+    return Math.round(value * 1000) / 1000
+  }
 
   const renderResultsPhase = () => {
     const voteTally = []
@@ -248,11 +258,14 @@ const RoundSubpage = ({
     let nearest = { value: 'ABSTAIN', tag: 'abstain' };
     let nearestDistance = 1e9;
     for (const card of roundState.deck) {
-      if (card.value === 'ABSTAIN') continue;
-      const diff = Math.abs(card.value - average);
-      if ((diff == nearestDistance && card.value > nearest.value) || diff < nearestDistance) {
-        nearestDistance = diff;
-        nearest = card;
+      if (card.value === 'ABSTAIN') continue
+      const diff = Math.abs(card.value - average)
+      if (
+        (diff == nearestDistance && card.value > nearest.value) ||
+        diff < nearestDistance
+      ) {
+        nearestDistance = diff
+        nearest = card
       }
     }
     return (
@@ -298,7 +311,7 @@ const RoundSubpage = ({
                 <Typography variant='h6'>RESULTS</Typography>
               </div>
               <div>
-                { isAdmin ? (
+                {isAdmin ? (
                   <Button
                     variant='outlined'
                     color='secondary'
@@ -312,21 +325,34 @@ const RoundSubpage = ({
                     size='large'
                     disableElevation
                     onClick={async () => {
-                      const authToken = await firebase.auth().currentUser.getIdToken()
-                                      .catch(err => console.log(err));
-                      RoomService.emitStartNewRound(roomServiceSocket, username, authToken);
+                      const authToken = await firebase
+                        .auth()
+                        .currentUser.getIdToken()
+                        .catch((err) => console.log(err))
+                      RoomService.emitStartNewRound(
+                        roomServiceSocket,
+                        username,
+                        authToken
+                      )
                     }}
                   >
                     Next Round
                   </Button>
-                ) : <div/>}
+                ) : (
+                  <div />
+                )}
               </div>
             </Toolbar>
           </AppBar>
         </HideOnScroll>
-        <Toolbar/>
+        <Toolbar />
         <Container>
-          <Grid container justify="space-evenly" spacing={3} style={{ marginTop: 18 }}>
+          <Grid
+            container
+            justify='space-evenly'
+            spacing={3}
+            style={{ marginTop: 18 }}
+          >
             <Grid item xs>
               <Paper style={{ padding: 12 }}>
                 <Typography variant='h3' color='primary' align='center'>
@@ -340,7 +366,9 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Average</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{`${roundToThousandth(average)}`}</Typography>
+                        <Typography variant='h6'>{`${roundToThousandth(
+                          average
+                        )}`}</Typography>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -348,15 +376,17 @@ const RoundSubpage = ({
                         <Typography variant='h6'>Standard Deviation</Typography>
                       </TableCell>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>{`${roundToThousandth(stdDev)}`}</Typography>
+                        <Typography variant='h6'>{`${roundToThousandth(
+                          stdDev
+                        )}`}</Typography>
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </Paper>
             </Grid>
-            <Grid style={{ display: 'flex', justifyContent: 'center' }}item xs>
-              <DisplayCard card={nearest} selected={true} onClick={()=>{}} />
+            <Grid style={{ display: 'flex', justifyContent: 'center' }} item xs>
+              <DisplayCard card={nearest} selected={true} onClick={() => {}} />
             </Grid>
             <Grid item xs>
               <ResultsList />
