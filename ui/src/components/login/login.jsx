@@ -67,9 +67,14 @@ class Login extends React.Component {
     return (
       <div className='base-container' ref={this.props.containerRef}>
         <div className='content'>
-          <div className='image'>
+          <Button
+            className='image'
+            component={Link}
+            to={'/'}
+            style={{ marginTop: '10px', width: '55%' }}
+          >
             <img src={loginImg} />
-          </div>
+          </Button>
           <div>
             <Typography
               variant='h1'
