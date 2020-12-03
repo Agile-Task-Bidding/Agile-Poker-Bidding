@@ -32,9 +32,9 @@ const DisplayNameSubpage = ({
   }, [])
 
   const submit = async () => {
-    localStorage.setItem('displayName', formDisplayName);
-    setDisplayName(formDisplayName);
-    RoomService.emitJoinRoom(roomServiceSocket, username, formDisplayName);
+    localStorage.setItem('displayName', formDisplayName)
+    setDisplayName(formDisplayName)
+    RoomService.emitJoinRoom(roomServiceSocket, username, formDisplayName)
   }
 
   const displayNameInvalid = formDisplayName.length === 0
@@ -48,7 +48,11 @@ const DisplayNameSubpage = ({
                 <div className='image' style={{ marginTop: 30 }}>
                   <img src={mainImg} />
                 </div>
-                <Typography variant='h1' color='primary'>
+                <Typography
+                  variant='h1'
+                  color='primary'
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                >
                   PilePlan
                 </Typography>
                 <form
