@@ -120,11 +120,19 @@ const CreatePage = ({
     onRoomStatusFetched.off()
   }
 
+  const unformatDeck = (deck) => {
+    return deck.map(card => { return { value: `${card.value}`, tag: card.tag }});
+  }
+
+  const formatDeck = (deck) => {
+    return deck.map(card => { return { value: Number(card.value), tag: card.tag }; })
+  } 
+
   useEffect(() => {
     ;(async () => {
       loginUser(async (account) => {
         if (account) {
-          setCards(account.roomConfig.deck)
+          setCards(unformatDeck(account.roomConfig.deck))
           setAllowAbstain(account.roomConfig.allowAbstain)
           const socket = await createRoomServiceConnection()
 
@@ -160,10 +168,6 @@ const CreatePage = ({
     }
   }
 
-  const formatDeck = (deck) => {
-    return deck.map(card => { return { value: Number(card.value), tag: card.tag }; })
-  } 
-
   const onSave = async () => {
     setLoading(true)
 
@@ -191,10 +195,19 @@ const CreatePage = ({
       console.error(err)
     }
   }
+  const frequencyMap = new Map()
+  cards.forEach(card => {
+    if (frequencyMap.has(card.value)) {
+      frequencyMap.set(card.value, frequencyMap.get(card.value)+1);
+    } else {
+      frequencyMap.set(card.value, 1);
+    }
+  })
 
   const deckErrors = cards.map(card => {
     if (!card.value) return 'error/falsy'
     if (isNaN(card.value)) return 'error/nan'
+    if (frequencyMap.get(card.value) > 1) return 'error/duplicate'
     return '';
   })
   const isError = !!deckErrors.find(it => !!it);

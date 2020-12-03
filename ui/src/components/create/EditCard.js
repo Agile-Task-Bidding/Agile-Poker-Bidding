@@ -7,6 +7,7 @@ const EditCard = ({ card, valueError, setCard, deleteCard }) => {
   const getTextError = (code) => {
     if (code === 'error/falsy') return 'Value cannot be empty';
     if (code === 'error/nan') return 'Value must be a number';
+    if (code === 'error/duplicate') return 'Value can only appear once';
     return 'Unknown error'
   }
   const trim = (text, maxLength) => {

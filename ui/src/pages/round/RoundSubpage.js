@@ -368,14 +368,6 @@ const RoundSubpage = ({
                     </TableRow>
                     <TableRow>
                       <TableCell allign='right'>
-                        <Typography variant='h6'>Median</Typography>
-                      </TableCell>
-                      <TableCell allign='right'>
-                        <Typography variant='h6'>x</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell allign='right'>
                         <Typography variant='h6'>Standard Deviation</Typography>
                       </TableCell>
                       <TableCell allign='right'>
