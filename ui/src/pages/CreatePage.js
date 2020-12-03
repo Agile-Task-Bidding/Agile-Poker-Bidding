@@ -8,6 +8,7 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 import CoffeeCard from '../components/create/CoffeeCard'
 import EditCard from '../components/create/EditCard'
 import AddCard from '../components/create/AddCard'
@@ -81,6 +82,7 @@ const CreatePage = ({
   const [cards, setCards] = useState([])
   const [allowAbstain, setAllowAbstain] = useState(false)
   const [roomExistsError, setRoomExistsError] = useState(false)
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory()
 
   let onConnect;
@@ -124,6 +126,11 @@ const CreatePage = ({
           
           registerSocketEvents(socket, account);
 
+          const notVerified = firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified;
+          if (notVerified) {
+            enqueueSnackbar(`Don't forget to verify your account`, { variant: 'warning' })
+          }
+
           return () => { unregisterSocketEvents(socket); }
         } else {
           history.push('/login')
@@ -147,11 +154,15 @@ const CreatePage = ({
     }
   }
 
+  const formatDeck = (deck) => {
+    return deck.map(card => { return { value: Number(card.value), tag: card.tag }; })
+  } 
+
   const onSave = async () => {
     setLoading(true)
 
     const roomConfig = {
-      deck: cards,
+      deck: formatDeck(cards),
       allowAbstain,
     }
 
@@ -165,7 +176,7 @@ const CreatePage = ({
       setLoading(true)
 
       const roomConfig = {
-        deck: cards,
+        deck: formatDeck(cards),
         allowAbstain,
       }
 
@@ -175,22 +186,30 @@ const CreatePage = ({
     }
   }
 
+  const deckErrors = cards.map(card => {
+    if (!card.value) return 'error/falsy'
+    if (isNaN(card.value)) return 'error/nan'
+    return '';
+  })
+  const isError = !!deckErrors.find(it => !!it);
+
   const elements = []
   elements.push(...cards.map((it, idx) => (
     <EditCard
       key={idx}
       card={it}
+      valueError={deckErrors[idx]}
       setCard={genChangeCard(idx)}
       deleteCard={genOnDelete(idx)}
       setAllowAbstain={(flag) => setAllowAbstain(flag)}
     />
-    )))
+  )))
   elements.push(
     <AddCard
       key='add'
       onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
     />
-    )
+  )
   if (allowAbstain) {
     elements.push(
       <CoffeeCard key='abstain'/>
@@ -244,7 +263,7 @@ const CreatePage = ({
               <Typography variant='h6'>CONFIGURE DECK</Typography>
             </div>
             <Button
-              disabled={loading}
+              disabled={loading || isError}
               variant='outlined'
               color='secondary'
               style={{
@@ -265,13 +284,6 @@ const CreatePage = ({
         </AppBar>
       </ElevationScroll>
       <Toolbar />
-      {
-        (firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified ? (
-          <Paper style={{ width: '100%', backgroundColor: 'yellow', padding: 8, marginBottom: 12, borderRadius: 4 }}>
-            Verify your account
-          </Paper>
-        ) : null)
-      }
       <div className={classes.center}>
           <div>
             <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
@@ -287,17 +299,6 @@ const CreatePage = ({
                       marginLeft: 5,
                     }}
                   >
-                    <Button
-                      variant='contained'
-                      color='primary'
-                      style={{
-                        margin: '5px',
-                      }}
-                      disabled={loading}
-                      onClick={onSave}
-                    >
-                      Allow Abstain
-                    </Button>
                   </Checkbox>
                 }
                 label='Allow Abstain'
@@ -312,7 +313,7 @@ const CreatePage = ({
                 style={{
                   margin: '5px',
                 }}
-                disabled={loading}
+                disabled={loading || isError}
                 onClick={onSave}
               >
                 Save

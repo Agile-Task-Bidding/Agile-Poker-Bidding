@@ -3,21 +3,31 @@ import { StyleSheet, css } from 'aphrodite'
 import { Typography, TextField, Button } from '@material-ui/core'
 import CardFrame from '../../components/CardFrame'
 
-const EditCard = ({ card, setCard, deleteCard }) => {
+const EditCard = ({ card, valueError, setCard, deleteCard }) => {
+  const getTextError = (code) => {
+    if (code === 'error/falsy') return 'Value cannot be empty';
+    if (code === 'error/nan') return 'Value must be a number';
+    return 'Unknown error'
+  }
+  const trim = (text, maxLength) => {
+    return text.substring(0, Math.min(text.length, maxLength));
+  }
   return (
     <CardFrame elevation={1} className={css(styles.container)}>
       <TextField
         label='Value'
         inputProps={{ style: { textAlign: 'center' } }}
         value={`${card.value}`}
-        onChange={(event) => setCard({ ...card, value: Number(event.target.value) })}
+        helperText={valueError ? getTextError(valueError) : ''}
+        error={!!valueError}
+        onChange={(event) => setCard({ ...card, value: trim(event.target.value, 5) })}
         color='primary'
       />
       <TextField
         label='Tag'
         inputProps={{ style: { textAlign: 'center' } }}
         value={card.tag}
-        onChange={(event) => setCard({ ...card, tag: event.target.value })}
+        onChange={(event) => setCard({ ...card, tag: trim(event.target.value, 15) })}
       />
       <Button variant='contained' color='primary' onClick={() => deleteCard()}>
         Delete
