@@ -14,7 +14,7 @@ import { withSnackbar } from 'notistack'
 var actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
   // URL must be in the authorized domains list in the Firebase Console.
-  url: window.location.hostname + '/verifyemail',
+  url: window.location.origin + '/verifyemail',
   // This must be true.
   handleCodeInApp: true,
   // iOS: {
@@ -75,6 +75,7 @@ class Register extends React.Component {
       email: this.state.user.email,
       password: this.state.user.password,
     })
+    console.log(actionCodeSettings);
     firebase
       .auth()
       .sendSignInLinkToEmail(this.state.user.email, actionCodeSettings)
@@ -88,8 +89,8 @@ class Register extends React.Component {
           { variant: 'success' }
         )
       })
-      .catch(function (error) {
-        this.props.enqueueSnackbar('There was an error')
+      .catch((error) => {
+        this.props.enqueueSnackbar('There was an error', { variant: 'error' })
         console.error(error)
         // Some error occurred, you can inspect the code: error.code
       })

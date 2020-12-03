@@ -126,7 +126,7 @@ const CreatePage = ({
 
   const formatDeck = (deck) => {
     return deck.map(card => { return { value: Number(card.value), tag: card.tag }; })
-  } 
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -178,6 +178,8 @@ const CreatePage = ({
 
     await saveGame(roomConfig)
 
+    enqueueSnackbar(`Saved`, { variant: 'success' })
+
     setLoading(false)
   }
 
@@ -226,7 +228,7 @@ const CreatePage = ({
   elements.push(
     <AddCard
       key='add'
-      onClick={() => setCards(cards.concat({ value: 1, tag: 'ez' }))}
+      onClick={() => setCards(cards.concat({ value: '1', tag: 'ez' }))}
     />
   )
   if (allowAbstain) {

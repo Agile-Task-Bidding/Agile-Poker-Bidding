@@ -21,7 +21,7 @@ const EditCard = ({ card, valueError, setCard, deleteCard }) => {
         value={`${card.value}`}
         helperText={valueError ? getTextError(valueError) : ''}
         error={!!valueError}
-        onChange={(event) => setCard({ ...card, value: trim(event.target.value, 5) })}
+        onChange={(event) => setCard({ ...card, value: trim(event.target.value, 3) })}
         color='primary'
       />
       <TextField
