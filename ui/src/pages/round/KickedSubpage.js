@@ -1,10 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { Typography } from '@material-ui/core'
 import { TextField, Button, CircularProgress } from '@material-ui/core'
 import mainImg from '../../components/icon/logo.svg'
-import AppState from '../../services/AppState';
-import { setAppState } from '../../data/state/app-data/app-data.actions';
+import AppState from '../../services/AppState'
+import { setAppState } from '../../data/state/app-data/app-data.actions'
 import { Link } from 'react-router-dom'
 
 const KickedSubpage = ({ setAppState }) => {
@@ -18,40 +18,57 @@ const KickedSubpage = ({ setAppState }) => {
                 <div className='image' style={{ marginTop: 30 }}>
                   <img src={mainImg} />
                 </div>
-                <Typography variant='h1' color='primary'>
+                <Typography
+                  variant='h1'
+                  color='primary'
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                >
                   PilePlan
                 </Typography>
 
-                <div style={{ marginTop: 30 }}>
-                  <Typography variant='h6' color='primary'>
-                    You have been kicked
-                  </Typography>
-
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                    style={{
-                      fontSize: 15,
-                    }}
-                    component={Link}
-                    to={'/'}
-                  >
-                    Home Page
-                  </Button>
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                    style={{
-                      fontSize: 15,
-                    }}
-                    onClick={() => {
-                      setAppState(AppState.PICK_DISPLAY_NAME);
-                    }}
-                  >
-                    Rejoin Room
-                  </Button>
+                <div
+                  style={{
+                    marginTop: 40,
+                    display: 'block',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div>
+                    <Typography variant='h5' color='primary'>
+                      You have been kicked
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      fullWidth
+                      style={{
+                        fontSize: 15,
+                        marginTop: 15,
+                      }}
+                      component={Link}
+                      to={'/'}
+                    >
+                      Home Page
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      fullWidth
+                      style={{
+                        fontSize: 15,
+                        marginTop: 15,
+                      }}
+                      onClick={() => {
+                        setAppState(AppState.PICK_DISPLAY_NAME)
+                      }}
+                    >
+                      Rejoin Room
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,10 +79,12 @@ const KickedSubpage = ({ setAppState }) => {
   )
 }
 
-const mapStateToProps = (state) => {return {}};
+const mapStateToProps = (state) => {
+  return {}
+}
 
 const mapDispatchToProps = {
   setAppState,
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(KickedSubpage);
+export default connect(mapStateToProps, mapDispatchToProps)(KickedSubpage)

@@ -85,53 +85,65 @@ const CreatePage = ({
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory()
 
-  let onConnect;
-  let onDisconnect;
-  let onRoomAlreadyCreated;
-  let onNotAuthorized;
-  let onCreateSuccess;
-  let onRoomStatusFetched;
+  let onConnect
+  let onDisconnect
+  let onRoomAlreadyCreated
+  let onNotAuthorized
+  let onCreateSuccess
+  let onRoomStatusFetched
 
   const registerSocketEvents = (socket, account) => {
-    onConnect = RoomService.onConnect(socket, () => {console.log('Connected!')})
-    onDisconnect = RoomService.onDisconnect(socket, () => {console.log('Disconnected')})
+    onConnect = RoomService.onConnect(socket, () => {
+      console.log('Connected!')
+    })
+    onDisconnect = RoomService.onDisconnect(socket, () => {
+      console.log('Disconnected')
+    })
     onRoomAlreadyCreated = RoomService.onRoomAlreadyCreated(socket, console.log)
     onNotAuthorized = RoomService.onNotAuthorized(socket, console.log)
-    onCreateSuccess = RoomService.onCreateSuccess(socket, () => {history.push(`/room/${account.username}`)})
+    onCreateSuccess = RoomService.onCreateSuccess(socket, () => {
+      history.push(`/room/${account.username}`)
+    })
     onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
       if (status === 'ACTIVE') {
         history.push(`/room/${account.username}`)
       }
     })
-  };
+  }
 
   const unregisterSocketEvents = (socket) => {
-    onConnect.off();
-    onDisconnect.off();
-    onRoomAlreadyCreated.off();
-    onNotAuthorized.off();
-    onCreateSuccess.off();
-    onRoomStatusFetched.off();
+    onConnect.off()
+    onDisconnect.off()
+    onRoomAlreadyCreated.off()
+    onNotAuthorized.off()
+    onCreateSuccess.off()
+    onRoomStatusFetched.off()
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       loginUser(async (account) => {
         if (account) {
           setCards(account.roomConfig.deck)
           setAllowAbstain(account.roomConfig.allowAbstain)
           const socket = await createRoomServiceConnection()
 
-          RoomService.emitIsRoomOpen(socket, account.username);
-          
-          registerSocketEvents(socket, account);
+          RoomService.emitIsRoomOpen(socket, account.username)
 
+          registerSocketEvents(socket, account)
+
+<<<<<<< HEAD
           const notVerified = firebase.auth().currentUser && !firebase.auth().currentUser.emailVerified;
           if (notVerified) {
             enqueueSnackbar(`Don't forget to verify your account`, { variant: 'warning' })
           }
 
           return () => { unregisterSocketEvents(socket); }
+=======
+          return () => {
+            unregisterSocketEvents(socket)
+          }
+>>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
         } else {
           history.push('/login')
         }
@@ -194,6 +206,7 @@ const CreatePage = ({
   const isError = !!deckErrors.find(it => !!it);
 
   const elements = []
+<<<<<<< HEAD
   elements.push(...cards.map((it, idx) => (
     <EditCard
       key={idx}
@@ -204,6 +217,19 @@ const CreatePage = ({
       setAllowAbstain={(flag) => setAllowAbstain(flag)}
     />
   )))
+=======
+  elements.push(
+    ...cards.map((it, idx) => (
+      <EditCard
+        key={idx}
+        card={it}
+        setCard={genChangeCard(idx)}
+        deleteCard={genOnDelete(idx)}
+        setAllowAbstain={(flag) => setAllowAbstain(flag)}
+      />
+    ))
+  )
+>>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
   elements.push(
     <AddCard
       key='add'
@@ -211,9 +237,7 @@ const CreatePage = ({
     />
   )
   if (allowAbstain) {
-    elements.push(
-      <CoffeeCard key='abstain'/>
-    )
+    elements.push(<CoffeeCard key='abstain' />)
   }
   const classes = useStyles()
 
@@ -284,10 +308,32 @@ const CreatePage = ({
         </AppBar>
       </ElevationScroll>
       <Toolbar />
+<<<<<<< HEAD
+=======
+      {firebase.auth().currentUser &&
+      !firebase.auth().currentUser.emailVerified ? (
+        <Paper
+          style={{
+            width: '100%',
+            backgroundColor: 'primary',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: 8,
+            marginBottom: 12,
+            borderRadius: 4,
+          }}
+        >
+          <Typography variant='h5' color='primary' align='center'>
+            Verify your account
+          </Typography>
+        </Paper>
+      ) : null}
+>>>>>>> b8280068e280e8fd3ede0deffdb7d3a26c11aeab
       <div className={classes.center}>
-          <div>
-            <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
-            <Grid item component='form' className={classes.root}>
+        <div>
+          <CardGrid className={classes.marginBottom}>{elements}</CardGrid>
+          <Grid item component='form' className={classes.root}>
+            <div className={classes.abstainsave}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -318,8 +364,9 @@ const CreatePage = ({
               >
                 Save
               </Button>
-            </Grid>
-          </div>
+            </div>
+          </Grid>
+        </div>
       </div>
     </ResponsiveContainer>
   )
@@ -330,8 +377,18 @@ const useStyles = makeStyles((theme) => ({
     padding: '6px 10px',
     // display: 'flex',
     alignItems: 'center',
-    // width: 320,
-    background: '#fff',
+    //width: 320,
+    //background: '#fff',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  abstainsave: {
+    width: '240px',
+    padding: '6px 10px',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    justifySelf: 'center',
+    borderRadius: '0.5em',
   },
   title: {
     paddingBottom: 24,
@@ -342,7 +399,7 @@ const useStyles = makeStyles((theme) => ({
   },
   marginBottom: {
     marginBottom: 12,
-  }
+  },
 }))
 
 const mapStateToProps = (state) => {

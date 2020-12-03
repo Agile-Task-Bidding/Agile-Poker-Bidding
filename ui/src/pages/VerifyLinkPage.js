@@ -56,12 +56,16 @@ const VerifyLinkPage = ({ setAppState }) => {
                 <div className='image' style={{ marginTop: 30 }}>
                   <img src={mainImg} />
                 </div>
-                <Typography variant='h1' color='primary'>
+                <Typography
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                  variant='h1'
+                  color='primary'
+                >
                   PilePlan
                 </Typography>
 
-                <div style={{ marginTop: 120 }}>
-                  <Typography variant='h6' color='primary'>
+                <div style={{ marginTop: 80 }}>
+                  <Typography variant='h4' color='primary'>
                     Email verified
                   </Typography>
 
@@ -71,6 +75,7 @@ const VerifyLinkPage = ({ setAppState }) => {
                     fullWidth
                     style={{
                       fontSize: 15,
+                      marginTop: 40,
                     }}
                     onClick={() => {
                       setAppState(AppState.PICK_DISPLAY_NAME)

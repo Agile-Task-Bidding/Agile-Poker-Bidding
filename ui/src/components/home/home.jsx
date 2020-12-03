@@ -118,7 +118,11 @@ class Home extends React.Component {
           <div className='image'>
             <img src={mainImg} />
           </div>
-          <Typography variant='h2' color='primary'>
+          <Typography
+            variant='h1'
+            color='primary'
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
             PilePlan
           </Typography>
           <div style={{ marginTop: 30 }}>
