@@ -5,9 +5,12 @@ import { TextField, Button, CircularProgress } from '@material-ui/core'
 import mainImg from '../../components/icon/logo.svg'
 import AppState from '../../services/AppState'
 import { setAppState } from '../../data/state/app-data/app-data.actions'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 const KickedSubpage = ({ setAppState }) => {
+
+  const history = useHistory();
+
   return (
     <div className='App '>
       <div className='radiant-background'>
@@ -47,8 +50,10 @@ const KickedSubpage = ({ setAppState }) => {
                         fontSize: 15,
                         marginTop: 15,
                       }}
-                      component={Link}
-                      to={'/'}
+                      onClick={() => {
+                        history.push('/')
+                        setAppState(AppState.PICK_DISPLAY_NAME)
+                      }}
                     >
                       Home Page
                     </Button>

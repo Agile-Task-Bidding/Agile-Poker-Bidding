@@ -43,6 +43,7 @@ class Register extends React.Component {
         password: '',
         confirmPassword: '',
       },
+      accountRegisteredError: false,
     }
   }
 
@@ -52,7 +53,7 @@ class Register extends React.Component {
     this.setState({ user })
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     // firebase
     //   .auth()
     //   .createUserWithEmailAndPassword(
@@ -70,30 +71,38 @@ class Register extends React.Component {
     //     var errorMessage = error.message
     //     // ..
     //   })
-    axios.post(`/api/v1/users`, {
-      username: this.state.user.username,
-      email: this.state.user.email,
-      password: this.state.user.password,
-    })
-    console.log(actionCodeSettings);
-    firebase
-      .auth()
-      .sendSignInLinkToEmail(this.state.user.email, actionCodeSettings)
-      .then(() => {
-        // The link was successfully sent. Inform the user.
-        // Save the email locally so you don't need to ask the user for it again
-        // if they open the link on the same device.
-        window.localStorage.setItem('emailForSignIn', this.state.user.email)
-        this.props.enqueueSnackbar(
-          'Sent verification email to ' + this.state.user.email,
-          { variant: 'success' }
-        )
+    try {
+      await axios.post(`/api/v1/users`, {
+        username: this.state.user.username,
+        email: this.state.user.email,
+        password: this.state.user.password,
       })
-      .catch((error) => {
-        this.props.enqueueSnackbar('There was an error', { variant: 'error' })
-        console.error(error)
-        // Some error occurred, you can inspect the code: error.code
+      firebase
+        .auth()
+        .sendSignInLinkToEmail(this.state.user.email, actionCodeSettings)
+        .then(() => {
+          // The link was successfully sent. Inform the user.
+          // Save the email locally so you don't need to ask the user for it again
+          // if they open the link on the same device.
+          window.localStorage.setItem('emailForSignIn', this.state.user.email)
+          this.props.enqueueSnackbar(
+            'Sent verification email to ' + this.state.user.email,
+            { variant: 'success' }
+          )
+          this.props.history.push('/')
+        })
+        .catch((error) => {
+          this.props.enqueueSnackbar('There was an error', { variant: 'error' })
+          console.error(error)
+          // Some error occurred, you can inspect the code: error.code
+        })
+    } catch (err) {
+      console.error(err);
+      this.props.enqueueSnackbar('That account already exists', { variant: 'error' })
+      this.setState({
+        accountRegisteredError: true,
       })
+    }
   }
 
   componentDidMount() {
@@ -141,7 +150,6 @@ class Register extends React.Component {
             <ValidatorForm
               ref='form'
               onSubmit={this.handleSubmit}
-              onError={(errors) => console.log(errors)}
             >
               <TextValidator
                 className={css(styles.deleteclass)}
@@ -238,6 +246,7 @@ class Register extends React.Component {
                   name='confirmPassword'
                   placeholder='Confirm Password'
                 /> */}
+              {this.state.accountRegisteredError ? (<Typography variant='body1' color='error'>Account already exists</Typography>) : null}
               <Button
                 variant='contained'
                 color='primary'
@@ -257,4 +266,4 @@ class Register extends React.Component {
   }
 }
 
-export default withSnackbar(Register)
+export default withSnackbar(withRouter(Register))

@@ -10,7 +10,7 @@ const DisplayCard = ({ card, selected, onClick }) => {
     <CardFrame elevation={1}>
       <ButtonBase className={css(styles.container)} onClick={onClick} style={{ textDecoration: 'none' }}>
         <Typography
-          variant='h1'
+          variant='h2'
           style={{
             color: '#2752B6',
           }}

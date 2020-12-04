@@ -239,6 +239,7 @@ const RoundSubpage = ({
   }
 
   const roundToThousandth = (value) => {
+    if (isNaN(value)) return 'N/A';
     return Math.round(value * 1000) / 1000
   }
 
@@ -255,7 +256,7 @@ const RoundSubpage = ({
     })
     const average = calcAverage(voteTally);
     const stdDev = calcStandardDeviation(voteTally);
-    let nearest = { value: 'ABSTAIN', tag: 'abstain' };
+    let nearest = { value: 'ABSTAIN', tag: 'Abstain' };
     let nearestDistance = 1e9;
     for (const card of roundState.deck) {
       if (card.value === 'ABSTAIN') continue

@@ -7,6 +7,7 @@ import { Typography } from '@material-ui/core'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { withRouter } from 'react-router-dom'
+import { withSnackbar } from 'notistack'
 import { StyleSheet, css } from 'aphrodite'
 
 const styles = StyleSheet.create({
@@ -49,7 +50,7 @@ class Login extends React.Component {
         // Signed in
         // ...
         this.props.history.push('/home')
-        console.log('we did it')
+        this.props.enqueueSnackbar('Logged in successfully', { variant: 'success' })
       })
       .catch((error) => {
         console.log(error)
@@ -177,4 +178,4 @@ class Login extends React.Component {
   }
 }
 
-export default withRouter(Login)
+export default withSnackbar(withRouter(Login))

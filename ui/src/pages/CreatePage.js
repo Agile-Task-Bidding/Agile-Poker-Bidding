@@ -106,7 +106,7 @@ const CreatePage = ({
     })
     onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
       if (status === 'ACTIVE') {
-        history.push(`/room/${account.username}`)
+        history.replace(`/room/${account.username}`)
       }
     })
   }

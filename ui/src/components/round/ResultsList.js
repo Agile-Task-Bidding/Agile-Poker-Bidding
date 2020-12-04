@@ -10,7 +10,7 @@ const ResultsList = ({ roundState, account, className, ...thruProps }) => {
   const players = Object.values(roundState.connectedUsersByID).map(
     ({ nickname, socketID }) => {
       const vote = roundState.voteByUserID[socketID]
-      const voteValue = (vote !== undefined && vote !== null) ? roundState.deck[vote].value : '-1'
+      const voteValue = (vote !== undefined && vote !== null) ? roundState.deck[vote].value : 'N/A'
       return (
         <React.Fragment key={socketID}>
           <ListItem>
