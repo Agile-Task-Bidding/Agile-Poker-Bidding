@@ -98,9 +98,9 @@ class Register extends React.Component {
         })
     } catch (err) {
       console.error(err);
-      this.props.enqueueSnackbar('That account already exists', { variant: 'error' })
+      this.props.enqueueSnackbar(err.response.data.error.message, { variant: 'error' })
       this.setState({
-        accountRegisteredError: true,
+        accountRegisteredError: err.response.data.error.message,
       })
     }
   }
@@ -246,7 +246,7 @@ class Register extends React.Component {
                   name='confirmPassword'
                   placeholder='Confirm Password'
                 /> */}
-              {this.state.accountRegisteredError ? (<Typography variant='body1' color='error'>Account already exists</Typography>) : null}
+              {this.state.accountRegisteredError ? (<Typography variant='body1' color='error'>{this.state.accountRegisteredError}</Typography>) : null}
               <Button
                 variant='contained'
                 color='primary'
