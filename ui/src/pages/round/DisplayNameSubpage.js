@@ -28,6 +28,8 @@ const DisplayNameSubpage = ({
     const value = localStorage.getItem('displayName')
     if (value) {
       setFormDisplayName(value)
+    } else {
+      setFormDisplayName('');
     }
   }, [])
 
