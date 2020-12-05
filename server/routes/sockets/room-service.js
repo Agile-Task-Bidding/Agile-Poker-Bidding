@@ -65,6 +65,8 @@ class RoomService {
         socket.on('user_cancel_vote', eventInfo => this.clientCancelVoteEvent(eventInfo, socket));
         // Handle a user attempting to fetch the status of a room.
         socket.on('is_room_open', eventInfo => this.clientIsRoomOpenEvent(eventInfo, socket));
+        // Handle a user leaving a room.
+        socket.on('leave_room', eventInfo => this.clientLeaveRoomEvent(eventInfo, socket));
         // Handle a user creating a room. (Host)
         socket.on('create_room', eventInfo => this.clientStartRoomEvent(eventInfo, socket));
         // Handle a user closing a room. (Host)
@@ -79,8 +81,6 @@ class RoomService {
 
     /**
      * Handle a user disconnecting from the room service socket.
-     * 
-     * TODO: Handle if host disconnects from active room; it should close the room in that case.
      */
     onDisconnect(socket) {
         try {
@@ -99,6 +99,29 @@ class RoomService {
             }
             // Remove the socket info from the activeSocketsByID list
             delete this.activeSocketsByID[socket.id];
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /**
+     * Handle a user leaving a room.
+     */
+    clientLeaveRoomEvent(eventInfo, socket) {
+        try {
+            // Remove the user from their connected room if they were in a room
+            const connectedRoomID = this.activeSocketsByID[socket.id].connectedTo;
+            if (
+                connectedRoomID
+                && this.activeRoomsByID[connectedRoomID]
+            ) {
+                const room = this.activeRoomsByID[connectedRoomID];
+                if (socket.id === room.hostSocketID) {
+                    this.closeRoom(room);
+                } else {
+                    room.disconnectUserFromRoom(socket);
+                }
+            }
         } catch (err) {
             console.log(err);
         }
