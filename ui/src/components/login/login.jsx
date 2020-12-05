@@ -4,8 +4,18 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { Typography } from '@material-ui/core'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import { withRouter } from 'react-router-dom'
+import { withSnackbar } from 'notistack'
+import { StyleSheet, css } from 'aphrodite'
 
-export class Login extends React.Component {
+const styles = StyleSheet.create({
+  deleteclass: {
+    margin: '-1px',
+  },
+})
+class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,6 +26,7 @@ export class Login extends React.Component {
         password: '',
         confirmPassword: '',
       },
+      passwordWrong: false,
     }
   }
 
@@ -28,27 +39,69 @@ export class Login extends React.Component {
     // your submit logic
   }
 
+  doLogin = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        this.state.user.email,
+        this.state.user.password
+      )
+      .then((user) => {
+        // Signed in
+        // ...
+        this.props.history.push('/home')
+        this.props.enqueueSnackbar('Logged in successfully', { variant: 'success' })
+      })
+      .catch((error) => {
+        console.log(error)
+        if (
+          error.code === 'auth/user-not-found' ||
+          error.code === 'auth/wrong-password'
+        ) {
+          this.setState({ passwordWrong: true })
+        }
+      })
+  }
+
   render() {
     const { user } = this.state
     return (
       <div className='base-container' ref={this.props.containerRef}>
         <div className='content'>
-          <div className='image'>
+          <Button
+            className='image'
+            component={Link}
+            to={'/'}
+            style={{ marginTop: '10px', width: '55%' }}
+          >
             <img src={loginImg} />
-          </div>
+          </Button>
           <div>
-            <Typography variant='h1' color='primary'>
+            <Typography
+              variant='h1'
+              color='primary'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
               PilePlan
             </Typography>
           </div>
           <div className='form'>
             <ValidatorForm
+              className={css(styles.deleteclass)}
               ref='form'
+              helperText=' '
               onSubmit={this.handleSubmit}
               onError={(errors) => console.log(errors)}
             >
-              <div ClassName='form-group'>
+              <div
+                ClassName='form-group'
+                style={{
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5000,
+                }}
+              >
                 <TextValidator
+                  className={css(styles.deleteclass)}
                   label='E-mail'
                   onChange={this.handleChange}
                   name='email'
@@ -56,6 +109,7 @@ export class Login extends React.Component {
                   validators={['required', 'isEmail']}
                   errorMessages={['Required Field', 'Email is invalid']}
                   variant='filled'
+                  helperText=' '
                   margin='dense'
                   InputProps={{ disableUnderline: true }}
                   fullWidth
@@ -78,6 +132,11 @@ export class Login extends React.Component {
                 />
                 {/* <input type='text' name='password' placeholder='Password' /> */}
               </div>
+              <div style={{ marginTop: 4 }}>
+                <Typography variant='body1' color='error'>
+                  {this.state.passwordWrong ? 'Account does not exist' : ' '}
+                </Typography>
+              </div>
             </ValidatorForm>
           </div>
         </div>
@@ -96,8 +155,9 @@ export class Login extends React.Component {
               //   minHeight: '60px',
               //   fontSize: 28,
               // }}
-              component={Link}
-              to={'/home'}
+              // component={Link}
+              // to={''}
+              onClick={this.doLogin}
             >
               Log In
             </Button>
@@ -117,3 +177,5 @@ export class Login extends React.Component {
     )
   }
 }
+
+export default withSnackbar(withRouter(Login))

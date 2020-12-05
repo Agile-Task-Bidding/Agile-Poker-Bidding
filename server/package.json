@@ -19,5 +19,8 @@
     "joi": "^17.3.0",
     "lodash": "^4.17.20",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "mongoose": "^5.10.14"
   }
 }

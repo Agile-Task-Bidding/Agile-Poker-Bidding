@@ -3,12 +3,13 @@ import io from 'socket.io-client';
 import settings from '../../../config';
 import { roomServiceSocketSelector } from './room-service.selectors';
 import AppState from '../../../services/AppState';
+import { accountSelector } from '../account/account.selector';
 
 export function createRoomServiceConnection() {
     return async (dispatch, getState) => {
         try {
             if (!roomServiceSocketSelector(getState())) {
-                const socket = io(settings.SOCKET_URL, { path: settings.ROOM_SERVICE_SOCKET });
+                const socket = io(window.location.hostname, { path: settings.ROOM_SERVICE_SOCKET });
                 dispatch({ type: types.SET_ROOM_SERVICE_CONNECTION, socket });
                 return socket;
             } else {

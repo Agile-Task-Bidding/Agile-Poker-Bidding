@@ -8,10 +8,10 @@ import {
     emitEvent,
 } from '../data/state/room-service/room-service.actions';
 import firebase from 'firebase';
-import { firebaseConfig } from '../firebaseConfig';
+// import { firebaseConfig } from '../firebaseConfig';
 
-firebase.initializeApp(firebaseConfig);
-console.log('Current User:', firebase.auth().currentUser);
+// firebase.initializeApp(firebaseConfig);
+// console.log('Current User:', firebase.auth().currentUser);
 
 class DemoPage extends Component {
     state = {
