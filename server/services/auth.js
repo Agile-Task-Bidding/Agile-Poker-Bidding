@@ -22,6 +22,10 @@ const AuthService = {
         });
     },
 
+    deleteUser: async (uid) => {
+        return await admin.auth().deleteUser(uid);
+    },
+
     createToken: async (uid) => {
         return await admin.auth().createCustomToken(uid);
     },
