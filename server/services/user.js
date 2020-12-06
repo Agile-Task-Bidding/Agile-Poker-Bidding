@@ -56,6 +56,11 @@ const UserService = {
         return user.uid;
     },
 
+    deleteUser: async (uid) => {
+        AuthService.deleteUser(uid);
+        return await admin.firestore().collection('users').doc(uid).delete(); 
+    },
+
     updateRoomConfig: async (uid, roomConfig) => {
         await admin.firestore()
             .collection('users')
