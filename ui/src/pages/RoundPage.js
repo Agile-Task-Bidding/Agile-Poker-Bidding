@@ -102,7 +102,10 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
         RoomService.emitIsRoomOpen(socket, username);
 
         registerSocketEvents(socket);
-        return () => { unregisterSocketEvents(socket); };
+        return () => { 
+          socket.emit('leave_room');
+          unregisterSocketEvents(socket); 
+        };
       });
     })()
   }, [])
