@@ -27,9 +27,6 @@ test('create account', async () => {
   } catch (err) {
     expect(err.name).toBe('apb/user/not-found');
   }
-  expect(async () => {
-    await UserService.getUser(uid);
-  }).rejects.toThrow('User not found');
 });
 
 test('throw on nonexistent account', async () => {
