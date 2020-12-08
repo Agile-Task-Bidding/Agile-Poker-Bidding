@@ -89,7 +89,14 @@ class Register extends React.Component {
             'Sent verification email to ' + this.state.user.email,
             { variant: 'success' }
           )
-          this.props.history.push('/')
+
+          firebase.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password)
+            .then(() => {
+              this.props.history.push('/')
+            }).catch((error) => {
+              this.props.enqueueSnackbar('There was an error', { variant: 'error' })
+              console.error(error)
+            })
         })
         .catch((error) => {
           this.props.enqueueSnackbar('There was an error', { variant: 'error' })

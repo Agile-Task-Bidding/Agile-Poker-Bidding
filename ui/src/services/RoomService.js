@@ -12,6 +12,7 @@ export const Events = {
   ROOM_INACTIVE: 'room_inactive',
   ROOM_STATUS_FETCHED: 'room_status_fetched',
   HOST_CLOSED_CONNECTION: 'host_closed_connection',
+  HOST_CLOSED_ROOM: 'host_closed_room',
   USER_ALREADY_IN_ROOM: 'user_already_in_room',
   ROOM_STATE_CHANGED: 'room_state_changed',
   JOIN_SUCCESS: 'join_success',
@@ -162,4 +163,8 @@ export function onNotAuthorized(socket, callback) {
 
 export function onRoomAlreadyCreated(socket, callback) {
   return registerOn(socket, Events.ROOM_ALREADY_CREATED, (_) => callback())
+}
+
+export function onHostClosedRoom(socket, callback) {
+  return registerOn(socket, Events.HOST_CLOSED_ROOM, (_) => callback());
 }

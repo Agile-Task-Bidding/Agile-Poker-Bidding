@@ -11,7 +11,7 @@ const CoffeeCard = () => {
           <PilePlanIcon color='primary' fontSize='large'/>
         </Typography>
         <Typography
-          variant='h4'
+          variant='h5'
           // style={{
           //   color: '#223496',
           // }}

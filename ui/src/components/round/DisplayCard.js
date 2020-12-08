@@ -22,7 +22,7 @@ const DisplayCard = ({ card, selected, onClick }) => {
           }
         </Typography>
         <Typography
-          variant='h4'
+          variant='h5'
           style={{
             color: '#223496',
           }}

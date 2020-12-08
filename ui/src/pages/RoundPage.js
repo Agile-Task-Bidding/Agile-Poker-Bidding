@@ -37,6 +37,7 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
   let onVoteSuccess;
   let onVoteCancelSuccess;
   let onCreateSuccess;
+  let onHostClosedRoom;
   let onHostRoomClosedFailure;
   let onHostRoomClosedSuccess;
   let onRickroll;
@@ -58,9 +59,10 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
     onVoteCancelSuccess = RoomService.onVoteCancelSuccess(socket, console.log);
     onCreateSuccess = RoomService.onCreateSuccess(socket, console.log);
     onHostRoomClosedFailure = RoomService.onHostRoomClosedFailure(socket, console.log);
-    onHostRoomClosedSuccess = RoomService.onHostRoomClosedSuccess(socket, () => { 
+    onHostRoomClosedSuccess = RoomService.onHostRoomClosedSuccess(socket, console.log);
+    onHostClosedRoom = RoomService.onHostClosedRoom(socket, () => { 
       setDisplayName(''); 
-      setAppState(AppState.ROOM_CLOSED) 
+      setAppState(AppState.ROOM_CLOSED);
     });
     onRoomStatusFetched = RoomService.onRoomStatusFetched(socket, (status) => {
       if (status === 'INACTIVE') {
@@ -82,6 +84,7 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
     onVoteSuccess.off();
     onVoteCancelSuccess.off();
     onCreateSuccess.off();
+    onHostClosedRoom.off();
     onHostRoomClosedFailure.off();
     onHostRoomClosedSuccess.off();
     onRoomStatusFetched.off();
@@ -90,6 +93,9 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
 
   useEffect(() => {
     (async () => {      
+      setAppState(AppState.PICK_DISPLAY_NAME);
+      setDisplayName('');
+      
       loginUser(async (_) => {
         const socket = await createRoomServiceConnection()
 
