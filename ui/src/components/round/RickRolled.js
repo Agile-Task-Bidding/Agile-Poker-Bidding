@@ -8,18 +8,17 @@ import { setRickRollPlaying } from '../../data/state/rick-rolled/rick-rolled.act
 const RickRolled = ({ rickRollPlaying, setRickRollPlaying }) => {
 
     const [forceWait, setForceWait] = useState(true)
+    const [open, setOpen] = useState(true);
 
     useEffect(() => {
-        if (rickRollPlaying) {
-            setTimeout(() => setForceWait(false), 1.5 * 2000);
-        }
-    }, [rickRollPlaying]);
+        setTimeout(() => setForceWait(false), 1.5 * 2000);
+    }, []);
 
     return (
-        <Dialog open={rickRollPlaying} onClose={() => {
+        <Dialog open={open} onClose={() => {
             if (!forceWait) {
                 setForceWait(true)
-                setRickRollPlaying(false)}
+                setOpen(false)}
             }
         }>
             <ReactPlayer url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" width={560} height={315} playing={true} style={{ overflowX: 'hidden', overflowY: 'hidden' }} />

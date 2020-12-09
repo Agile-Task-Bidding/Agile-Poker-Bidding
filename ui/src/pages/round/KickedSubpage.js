@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core'
 import { TextField, Button, CircularProgress } from '@material-ui/core'
 import mainImg from '../../components/icon/logo.svg'
 import AppState from '../../services/AppState'
+import RickRolled from '../../components/round/RickRolled'
 import { setAppState } from '../../data/state/app-data/app-data.actions'
 import { Link, useHistory } from 'react-router-dom'
 
@@ -13,6 +14,7 @@ const KickedSubpage = ({ setAppState }) => {
 
   return (
     <div className='App '>
+      <RickRolled />
       <div className='radiant-background'>
         <div className='login'>
           <div className='container'>

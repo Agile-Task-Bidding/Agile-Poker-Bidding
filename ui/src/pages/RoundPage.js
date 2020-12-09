@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { connectedToRoomSelector } from '../data/state/room-service/room-service.selectors';
 import { createRoomServiceConnection, emitEvent } from '../data/state/room-service/room-service.actions';
@@ -20,6 +20,12 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { loginUser } from '../data/state/account/account.actions';
 import * as RoomService from '../services/RoomService';
+
+// class RoundPageP extends React.Component {
+//   render() {
+
+//   }
+// }
 
 const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundState, setRickRollPlaying, createRoomServiceConnection, emitEvent }) => {
 
@@ -72,6 +78,8 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
     socket.on('rickroll', onRickroll);
   }
 
+  const callback = useRef(()=>{});
+
   const unregisterSocketEvents = (socket) => {
     onConnect.off();
     onDisconnect.off();
@@ -102,12 +110,16 @@ const RoundPage = ({ appState, loginUser, setAppState, setDisplayName, setRoundS
         RoomService.emitIsRoomOpen(socket, username);
 
         registerSocketEvents(socket);
-        return () => { 
+        callback.current = () => { 
+          console.log('leave_room');
           socket.emit('leave_room');
           unregisterSocketEvents(socket); 
         };
       });
     })()
+    return function cleanup() {
+      callback.current();
+    }
   }, [])
 
   const renderSubpage = () => {

@@ -155,7 +155,6 @@ const RoundSubpage = ({
 
     return (
       <>
-        <RickRolled />
         <HideOnScroll fullWidth>
           <AppBar
             position='fixed'
@@ -400,7 +399,6 @@ const RoundSubpage = ({
 
   return (
     <>
-      <RickRolled rickRollPlaying={true} />
       {roundState.phase === 'RESULTS_PHASE'
         ? renderResultsPhase()
         : renderBiddingPhase()}
