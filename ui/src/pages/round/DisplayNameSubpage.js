@@ -86,7 +86,7 @@ const DisplayNameSubpage = ({
                       onChange={(event) =>
                         setFormDisplayName(event.target.value)
                       }
-                      inputProps={{ maxLength: 16 }}
+                      inputProps={{ maxLength: 9 }}
                       style={{ marginTop: 30, marginBottom: 0 }}
                     />
                     <Button
