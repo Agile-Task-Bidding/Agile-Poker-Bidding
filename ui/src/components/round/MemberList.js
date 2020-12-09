@@ -105,6 +105,7 @@ const MemberList = ({ roundState, account, className, mobileDrawerOpen, onClose,
               displayName={nickname}
               socketID={socketID}
               voted={vote !== null}
+              isHost={(socketID === roundState.hostSocketID)}
             />
           </ListItem>
           <Divider/>

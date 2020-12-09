@@ -27,6 +27,7 @@ const MemberRow = ({
   socketID,
   voted,
   roomServiceSocket,
+  isHost,
   ...thruProps
 }) => {
   const { username } = useParams()
@@ -59,9 +60,11 @@ const MemberRow = ({
             />
           )}
           <ListItemText primary={<Typography variant='h5'>{displayName}</Typography>} />
-          {/* <ListItemIcon>
-            <img src={iconCrown} />
-          </ListItemIcon> */}
+          { isHost &&
+            <ListItemIcon>
+              <img src={iconCrown} />
+            </ListItemIcon>
+          }
 
           {isAdmin ? (
             <ListItemSecondaryAction>
