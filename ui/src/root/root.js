@@ -8,8 +8,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles'
 import withFirebaseAuth from 'react-with-firebase-auth'
 import firebase from 'firebase/app'
-import 'firebase/auth'
-import firebaseConfig from '../firebaseConfig'
+import { firebaseConfig } from '../firebaseConfig'
 import { SnackbarProvider } from 'notistack';
 
 const font = "'Reem Kufi', sans-serif"
